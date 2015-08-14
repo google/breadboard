@@ -28,7 +28,13 @@ LOCAL_EXPORT_C_INCLUDES := $(EVENT_DIR)/include
 
 LOCAL_C_INCLUDES := $(LOCAL_EXPORT_C_INCLUDES) $(EVENT_DIR)/src
 
-LOCAL_SRC_FILES := $(EVENT_RELATIVE_DIR)/src/event_manager.cpp
+LOCAL_SRC_FILES := \
+  $(EVENT_RELATIVE_DIR)/src/event_manager.cpp \
+  $(EVENT_RELATIVE_DIR)/src/event_system.cpp \
+  $(EVENT_RELATIVE_DIR)/src/graph.cpp \
+  $(EVENT_RELATIVE_DIR)/src/module.cpp \
+  $(EVENT_RELATIVE_DIR)/src/node.cpp \
+  $(EVENT_RELATIVE_DIR)/src/node_def.cpp
 
 include $(BUILD_STATIC_LIBRARY)
 

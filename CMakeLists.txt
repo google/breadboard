@@ -20,13 +20,27 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # Temporary files (like object files) created while compiling projects.
 set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
-# AudioEngine source files.
+# Event system source files.
 set(event_SRCS
     include/event/event_listener.h
     include/event/event_manager.h
     include/event/event_payload.h
     include/event/event_registry.h
-    src/event_manager.cpp)
+    include/event/event_system.h
+    include/event/graph.h
+    include/event/io.h
+    include/event/memory_buffer.h
+    include/event/module.h
+    include/event/node.h
+    include/event/node_def.h
+    include/event/node_interface.h
+    include/event/type.h
+    src/event_manager.cpp
+    src/event_system.cpp
+    src/graph.cpp
+    src/module.cpp
+    src/node.cpp
+    src/node_def.cpp)
 
 # Includes for this project.
 include_directories(include)
