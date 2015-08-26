@@ -39,7 +39,7 @@ class MemoryBuffer {
   // resizing would be allowed, so to prevent misuse any attempt to resize it
   // again will assert.
   void Initialize(size_t size) {
-    assert(buffer_.size() == 0 && size != 0);
+    assert(buffer_.size() == 0);
     buffer_.resize(size);
   }
 
