@@ -32,7 +32,7 @@ set(event_SRCS
     include/event/memory_buffer.h
     include/event/module.h
     include/event/node.h
-    include/event/node_def.h
+    include/event/node_signature.h
     include/event/node_interface.h
     include/event/type.h
     src/event_manager.cpp
@@ -40,7 +40,7 @@ set(event_SRCS
     src/graph.cpp
     src/module.cpp
     src/node.cpp
-    src/node_def.cpp)
+    src/node_signature.cpp)
 
 # Includes for this project.
 include_directories(include)

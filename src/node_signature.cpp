@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/node_def.h"
+#include "event/node_signature.h"
 
 namespace fpl {
 namespace event {
 
-NodeInterface* NodeDef::Constructor() const { return constructor_(); }
+NodeInterface* NodeSignature::Constructor() const { return constructor_(); }
 
-void NodeDef::Destructor(NodeInterface* node_interface) const {
+void NodeSignature::Destructor(NodeInterface* node_interface) const {
   return destructor_(node_interface);
 }
 

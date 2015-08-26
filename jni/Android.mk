@@ -34,7 +34,7 @@ LOCAL_SRC_FILES := \
   $(EVENT_RELATIVE_DIR)/src/graph.cpp \
   $(EVENT_RELATIVE_DIR)/src/module.cpp \
   $(EVENT_RELATIVE_DIR)/src/node.cpp \
-  $(EVENT_RELATIVE_DIR)/src/node_def.cpp
+  $(EVENT_RELATIVE_DIR)/src/node_signature.cpp
 
 include $(BUILD_STATIC_LIBRARY)
 

@@ -12,30 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_NODE_DEF_H_
-#define FPL_EVENT_NODE_DEF_H_
+#ifndef FPL_EVENT_NODE_SIGNATURE_H_
+#define FPL_EVENT_NODE_SIGNATURE_H_
 
 #include <functional>
 #include <vector>
 
-#include "event/node_interface.h"
 #include "event/type_registry.h"
 
 namespace fpl {
 namespace event {
 
+class NodeInterface;
+
 typedef std::function<NodeInterface*()> NodeConstructor;
 typedef std::function<void(NodeInterface*)> NodeDestructor;
 
-// A NodeDef defines how many input and ouput edges a Node in a graph is
-// expected to have, and what types those edges are. Additionally, NodeDefs have
-// a constructor callback which constructs an instance the class that implements
-// NodeInterface. The default constructor is used by default, but you may supply
-// your own constructor callback if you need to do any special set up before
-// creating an instance of your class.
-class NodeDef {
+// A NodeSignature defines how many input and ouput edges a Node in a graph is
+// expected to have, and what types those edges are. Additionally,
+// NodeSignatures have a constructor callback which constructs an instance the
+// class that implements NodeInterface. The default constructor is used by
+// default, but you may supply your own constructor callback if you need to do
+// any special set up before creating an instance of your class.
+class NodeSignature {
  public:
-  NodeDef(const NodeConstructor& constructor, const NodeDestructor& destructor)
+  NodeSignature(const NodeConstructor& constructor,
+                const NodeDestructor& destructor)
       : constructor_(constructor), destructor_(destructor) {}
 
   // Adds intput and output edges to a node definition. The order that these
@@ -67,4 +69,4 @@ class NodeDef {
 }  // event
 }  // fpl
 
-#endif  // FPL_EVENT_NODE_DEF_H_
+#endif  // FPL_EVENT_NODE_SIGNATURE_H_

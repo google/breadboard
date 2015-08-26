@@ -27,12 +27,12 @@ namespace event {
 Graph::~Graph() {
   // Destruct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeDef* node_def = node->node_def();
-    for (size_t i = 0; i < node_def->input_types().size(); ++i) {
+    const NodeSignature* node_sig = node->node_sig();
+    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = node_def->input_types()[i];
+        const Type* type = node_sig->input_types()[i];
         uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
         type->operator_delete_func(ptr);
       }
@@ -40,9 +40,9 @@ Graph::~Graph() {
   }
 }
 
-Node* Graph::AddNode(const NodeDef* node_def) {
+Node* Graph::AddNode(const NodeSignature* node_sig) {
   assert(!nodes_finalized_);
-  nodes_.push_back(Node(node_def));
+  nodes_.push_back(Node(node_sig));
   return &nodes_.back();
 }
 
@@ -117,8 +117,8 @@ bool Graph::FinalizeNodes(EventSystem* event_system) {
 
   // Make sure each node has the proper number of output edges.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeDef* node_def = node->node_def();
-    node->output_edges().resize(node_def->output_types().size());
+    const NodeSignature* node_sig = node->node_sig();
+    node->output_edges().resize(node_sig->output_types().size());
   }
 
   // Keep track of the offsets for the input edges and output edges.
@@ -129,9 +129,9 @@ bool Graph::FinalizeNodes(EventSystem* event_system) {
   // use, and so that we know how much memory to allocate for the default
   // values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeDef* node_def = node->node_def();
-    assert(node_def->input_types().size() == node->input_edges().size());
-    for (size_t i = 0; i < node_def->input_types().size(); ++i) {
+    const NodeSignature* node_sig = node->node_sig();
+    assert(node_sig->input_types().size() == node->input_edges().size());
+    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
 
       if (input_edge.connected()) {
@@ -143,7 +143,7 @@ bool Graph::FinalizeNodes(EventSystem* event_system) {
       } else {
         // If this is an input with a default value, keep track of where to
         // allocate it when our blob of memory has been allocated.
-        const Type* type = node_def->input_types()[i];
+        const Type* type = node_sig->input_types()[i];
         ptrdiff_t data_offset = AdvanceOffset(&current_input_offset, type);
         input_edge.SetDataOffset(data_offset);
       }
@@ -155,12 +155,12 @@ bool Graph::FinalizeNodes(EventSystem* event_system) {
 
   // Construct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeDef* node_def = node->node_def();
-    for (size_t i = 0; i < node_def->input_types().size(); ++i) {
+    const NodeSignature* node_sig = node->node_sig();
+    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = node_def->input_types()[i];
+        const Type* type = node_sig->input_types()[i];
         uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
         type->placement_new_func(ptr);
       }
@@ -174,11 +174,11 @@ bool Graph::FinalizeNodes(EventSystem* event_system) {
         AdvanceOffset<Timestamp>(&current_output_offset);
     node->set_timestamp_offset(node_timestamp_offset);
 
-    const NodeDef* node_def = node->node_def();
-    for (size_t i = 0; i < node_def->output_types().size(); ++i) {
+    const NodeSignature* node_sig = node->node_sig();
+    for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
       OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = node_def->output_types()[i];
+        const Type* type = node_sig->output_types()[i];
         ptrdiff_t timestamp_offset =
             AdvanceOffset<Timestamp>(&current_output_offset);
         ptrdiff_t data_offset = AdvanceOffset(&current_output_offset, type);
@@ -203,12 +203,12 @@ GraphState::~GraphState() {
   if (graph_) {
     for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
          ++node) {
-      const NodeDef* node_def = node->node_def();
-      for (size_t i = 0; i < node_def->output_types().size(); ++i) {
+      const NodeSignature* node_sig = node->node_sig();
+      for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
         const OutputEdge& output_edge = node->output_edges()[i];
         if (output_edge.connected()) {
           // If connected, it has a per-graph value.
-          const Type* type = node_def->output_types()[i];
+          const Type* type = node_sig->output_types()[i];
           uint8_t* ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
           type->operator_delete_func(ptr);
         }
@@ -223,11 +223,11 @@ void GraphState::Initialize(Graph* graph) {
   output_buffer_.Initialize(graph_->output_buffer_size());
   for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
        ++node) {
-    const NodeDef* node_def = node->node_def();
-    for (size_t i = 0; i < node_def->output_types().size(); ++i) {
+    const NodeSignature* node_sig = node->node_sig();
+    for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
       const OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = node_def->output_types()[i];
+        const Type* type = node_sig->output_types()[i];
         uint8_t* ptr;
 
         // Initialize timestamp.

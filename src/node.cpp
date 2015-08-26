@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include "event/node.h"
-#include "event/node_def.h"
+#include "event/node_signature.h"
 
 namespace fpl {
 namespace event {
@@ -42,9 +42,9 @@ const OutputEdge& OutputEdgeTarget::GetTargetEdge(
   return GetTargetNode(nodes).output_edges()[edge_index_];
 }
 
-Node::Node(const NodeDef* node_def)
-    : node_def_(node_def),
-      node_interface_(node_def->Constructor()),
+Node::Node(const NodeSignature* node_sig)
+    : node_sig_(node_sig),
+      node_interface_(node_sig->Constructor()),
       input_edges_(),
       output_edges_(),
       inserted_(false),

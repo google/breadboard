@@ -44,9 +44,9 @@ class Graph {
   Graph() : nodes_(), sorted_nodes_(), nodes_finalized_(false) {}
   ~Graph();
 
-  // Add a node with the given NodeDef to the graph. The node that was just
-  // added is returned so that its edges can be set up.
-  Node* AddNode(const NodeDef* node_def);
+  // Add a node with the given NodeSignature to the graph. The node that was
+  // just added is returned so that its edges can be set up.
+  Node* AddNode(const NodeSignature* node_sig);
 
   // Call once after graph is set up. No more node additions or modifications
   // may be performed after this is called. Returns true if successful,

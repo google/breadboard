@@ -18,50 +18,55 @@
 #include <string>
 #include <unordered_map>
 
-#include "event/node_def.h"
+#include "event/node_signature.h"
 #include "event/node_interface.h"
 
 namespace fpl {
 namespace event {
 
-// A module is a collection of related NodeDefs. For example, it may make sense
-// to make a Math module for basic math operations, or an Entity module for
-// entity operations.
+// A module is a collection of related NodeSignatures. For example, it may make
+// sense to make a Math module for basic math operations, or an Entity module
+// for entity operations.
 class Module {
  public:
-  // Add a new NodeDef. The template argument to this function should be a class
-  // that implements NodeInterface. Each NodeInterface registered should have
-  // one NodeDef associated with it. The NodeDef defines how many input and
-  // output edges and the types of those edges.
+  // Add a new NodeSignature. The template argument to this function should be a
+  // class that implements NodeInterface. Each NodeInterface registered should
+  // have one NodeSignature associated with it. The NodeSignature defines how
+  // many input and output edges and the types of those edges.
   template <typename T>
-  NodeDef* AddNodeDef(const std::string& name,
-                      const NodeConstructor& constructor,
-                      const NodeDestructor& destructor) {
-    auto result = node_defs_.insert(std::pair<std::string, NodeDef>(
-        name, NodeDef(constructor, destructor)));
-    if (result.second == false) {
-      // Already have a NodeDef with this name, error!
+  void RegisterNode(const std::string& name, const NodeConstructor& constructor,
+                    const NodeDestructor& destructor) {
+    auto result = node_sigs_.insert(
+        std::make_pair(name, NodeSignature(constructor, destructor)));
+    NodeDictionary::iterator iter = result.first;
+
+    bool success = result.second;
+    if (!success) {
+      // Already have a NodeSignature with this name, error!
       // TODO: Add logging.
-      return nullptr;
+      return;
     }
-    return &result.first->second;
+    NodeSignature* node_sig = &iter->second;
+    T::OnRegister(node_sig);
   }
 
   template <typename T>
-  NodeDef* AddNodeDef(const std::string& name,
-                      const NodeConstructor& constructor) {
-    return AddNodeDef<T>(name, constructor, DefaultDelete);
+  void RegisterNode(const std::string& name,
+                    const NodeConstructor& constructor) {
+    return RegisterNode<T>(name, constructor, DefaultDelete);
   }
 
   template <typename T>
-  NodeDef* AddNodeDef(const std::string& name) {
-    return AddNodeDef<T>(name, DefaultNew<T>);
+  void RegisterNode(const std::string& name) {
+    return RegisterNode<T>(name, DefaultNew<T>);
   }
 
-  NodeDef* GetNodeDef(const std::string& name);
-  const NodeDef* GetNodeDef(const std::string& name) const;
+  NodeSignature* GetNodeSignature(const std::string& name);
+  const NodeSignature* GetNodeSignature(const std::string& name) const;
 
  private:
+  typedef std::unordered_map<std::string, NodeSignature> NodeDictionary;
+
   template <typename T>
   static NodeInterface* DefaultNew() {
     return new T();
@@ -70,9 +75,9 @@ class Module {
   static void DefaultDelete(NodeInterface* object) { delete object; }
 
   // TODO: Consider changing over to using integer keys instead of std::strings.
-  // It's faster to look up, but looking up NodeDefs should only happen during
-  // graph initialization, so it might not be worth it.
-  std::unordered_map<std::string, NodeDef> node_defs_;
+  // It's faster to look up, but looking up NodeSignatures should only happen
+  // during graph initialization, so it might not be worth it.
+  NodeDictionary node_sigs_;
 };
 
 }  // event

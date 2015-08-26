@@ -23,7 +23,7 @@ namespace fpl {
 namespace event {
 
 class Node;
-class NodeDef;
+class NodeSignature;
 class NodeInterface;
 class OutputEdge;
 
@@ -112,13 +112,13 @@ class OutputEdge {
 
 // A Node specifies the connections between nodes in a graph. Graphs consist of
 // any number of interconnected Nodes. Each node may have any number of
-// InputEdges and OutputEdges, and each InputEdge may connect to any
-// OutputEdge (as long as it does not form a cycle between Nodes).
+// InputEdges and OutputEdges, and each InputEdge may connect to any OutputEdge
+// (as long as it does not form a cycle between Nodes).
 class Node {
  public:
-  Node(const NodeDef* node_def);
+  Node(const NodeSignature* node_sig);
 
-  const NodeDef* node_def() const { return node_def_; }
+  const NodeSignature* node_sig() const { return node_sig_; }
   NodeInterface* node_interface() { return node_interface_; }
 
   std::vector<InputEdge>& input_edges() { return input_edges_; }
@@ -139,7 +139,7 @@ class Node {
   bool visited() const { return visited_; }
 
  private:
-  const NodeDef* node_def_;
+  const NodeSignature* node_sig_;
   NodeInterface* node_interface_;
 
   std::vector<InputEdge> input_edges_;

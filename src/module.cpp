@@ -17,20 +17,20 @@
 namespace fpl {
 namespace event {
 
-NodeDef* Module::GetNodeDef(const std::string& name) {
-  auto iter = node_defs_.find(name);
-  if (iter == node_defs_.end()) {
-    // No NodeDefs with this name, error!
+NodeSignature* Module::GetNodeSignature(const std::string& name) {
+  auto iter = node_sigs_.find(name);
+  if (iter == node_sigs_.end()) {
+    // No NodeSignatures with this name, error!
     // TODO: Add logging.
     return nullptr;
   }
   return &iter->second;
 }
 
-const NodeDef* Module::GetNodeDef(const std::string& name) const {
-  auto iter = node_defs_.find(name);
-  if (iter == node_defs_.end()) {
-    // No NodeDefs with this name, error!
+const NodeSignature* Module::GetNodeSignature(const std::string& name) const {
+  auto iter = node_sigs_.find(name);
+  if (iter == node_sigs_.end()) {
+    // No NodeSignatures with this name, error!
     // TODO: Add logging.
     return nullptr;
   }

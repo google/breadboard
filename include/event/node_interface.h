@@ -16,6 +16,7 @@
 #define FPL_EVENT_NODE_INTERFACE_H_
 
 #include "event/io.h"
+#include "event/node_signature.h"
 
 namespace fpl {
 namespace event {
@@ -34,6 +35,12 @@ namespace event {
 class NodeInterface {
  public:
   virtual ~NodeInterface() {}
+
+  // All classes inheriting from NodeInterface must imlement the static Register
+  // function shown here. Because this is a static function it cannot be
+  // virtual.
+  //
+  // static void Register(NodeSignature* node_sig);
 
   // Initialize is called once when a GraphState object is being initialized.
   // You can use this to do any special set up.
