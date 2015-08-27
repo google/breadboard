@@ -45,12 +45,12 @@ class NodeSignature {
   // and outputs in the NodeInterface.
   template <typename T>
   void AddInput() {
-    input_types_.push_back(TypeRegistry<T>::kType);
+    input_types_.push_back(TypeRegistry<T>::GetType());
   }
 
   template <typename T>
   void AddOutput() {
-    output_types_.push_back(TypeRegistry<T>::kType);
+    output_types_.push_back(TypeRegistry<T>::GetType());
   }
 
   const std::vector<const Type*>& input_types() const { return input_types_; }

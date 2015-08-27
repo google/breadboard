@@ -15,6 +15,9 @@
 #ifndef FPL_EVENT_TYPE_REGISTRY_H_
 #define FPL_EVENT_TYPE_REGISTRY_H_
 
+#include <cassert>
+#include <type_traits>
+
 #include "event/type.h"
 
 namespace fpl {
@@ -24,14 +27,48 @@ namespace event {
 // instantiated.
 template <typename T>
 struct TypeRegistry {
-  static const Type* kType;
+  // Register a type with the event system so that it may be used to pass data
+  // from one node to another. By default, placement new with the default
+  // constructor is used. If a custom constructor call is required, you may
+  // supply a PlacementNewFunc.
+  static void RegisterType(const char* name,
+                           const PlacementNewFunc& placement_new_func,
+                           const OperatorDeleteFunc& operator_delete_func) {
+    assert(!initialized_);
+    initialized_ = true;
+    type_ = Type(name, sizeof(T), std::alignment_of<T>::value,
+                 placement_new_func, operator_delete_func);
+  }
+
+  static void RegisterType(const char* name,
+                           const PlacementNewFunc& placement_new_func) {
+    RegisterType(name, placement_new_func, DefaultOperatorDelete);
+  }
+
+  static void RegisterType(const char* name) {
+    RegisterType(name, DefaultPlacementNew);
+  }
+
+  static const Type* GetType() { return &type_; }
 
  private:
+  static Type type_;
+  static bool initialized_;
+
+  static void DefaultPlacementNew(uint8_t* ptr) { new (ptr) T(); }
+
+  static void DefaultOperatorDelete(uint8_t* ptr) {
+    reinterpret_cast<T*>(ptr)->~T();
+  }
+
   TypeRegistry();
 };
 
 template <typename T>
-const Type* TypeRegistry<T>::kType = nullptr;
+Type TypeRegistry<T>::type_;
+
+template <typename T>
+bool TypeRegistry<T>::initialized_ = false;
 
 }  // event
 }  // fpl

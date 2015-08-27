@@ -30,13 +30,18 @@ typedef void (*OperatorDeleteFunc)(uint8_t*);
 // If the default constructor can not be used, custom a PlacementNewFunc may be
 // supplied.
 struct Type {
-  Type(size_t size_, size_t alignment_, PlacementNewFunc placement_new_func_,
+  Type() {}
+
+  Type(const char* name_, size_t size_, size_t alignment_,
+       PlacementNewFunc placement_new_func_,
        OperatorDeleteFunc operator_delete_func_)
-      : size(size_),
+      : name(name_),
+        size(size_),
         alignment(alignment_),
         placement_new_func(placement_new_func_),
         operator_delete_func(operator_delete_func_) {}
 
+  const char* name;
   size_t size;
   size_t alignment;
   PlacementNewFunc placement_new_func;
