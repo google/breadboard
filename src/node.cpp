@@ -50,5 +50,13 @@ Node::Node(const NodeSignature* node_sig)
       inserted_(false),
       visited_(false) {}
 
+const Type* GetInputEdgeType(const Node* node, int index) {
+  return node->node_sig()->input_types()[index];
+}
+
+const Type* GetOutputEdgeType(const Node* node, int index) {
+  return node->node_sig()->output_types()[index];
+}
+
 }  // event
 }  // fpl

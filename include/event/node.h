@@ -19,6 +19,8 @@
 #include <cstddef>
 #include <vector>
 
+#include "event/type.h"
+
 namespace fpl {
 namespace event {
 
@@ -44,6 +46,9 @@ class OutputEdgeTarget {
   // object refers to.
   OutputEdge& GetTargetEdge(std::vector<Node>* nodes) const;
   const OutputEdge& GetTargetEdge(const std::vector<Node>* nodes) const;
+
+  unsigned int node_index() const { return node_index_; }
+  unsigned int edge_index() const { return edge_index_; }
 
  private:
   unsigned int node_index_;
@@ -150,6 +155,12 @@ class Node {
   bool inserted_;
   bool visited_;
 };
+
+// Convenience function to get the type of a node's input edges.
+const Type* GetInputEdgeType(const Node* node, int index);
+
+// Convenience function to get the type of a node's output edges.
+const Type* GetOutputEdgeType(const Node* node, int index);
 
 }  // event
 }  // fpl
