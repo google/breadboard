@@ -19,6 +19,7 @@
 #include <set>
 #include <type_traits>
 
+#include "event/log.h"
 #include "event/node_interface.h"
 
 namespace fpl {
@@ -53,11 +54,20 @@ bool Graph::InsertNode(Node* node) {
       InputEdge& edge = node->input_edges()[i];
       if (edge.connected()) {
         Node& dependency = edge.target().GetTargetNode(&nodes_);
-        if (dependency.visited()) {
+        const Type* input_type = node->node_sig()->input_types()[i];
+        const Type* output_type = dependency.node_sig()->input_types()[i];
+        if (input_type != output_type) {
+          // TODO: Improve this error message to contain more data about which
+          // node is wrong.
+          CallLogFunc(
+              "Could not resolve graph: Type mismatch. Node input was type "
+              "\"%s\" but connected to output node of type \"%s\".",
+              input_type->name, output_type->name);
+          return false;
+        } else if (dependency.visited()) {
           // Circular dependency. This is not currently allowed; must be a
           // directed acyclic graph.
-          // TODO: Log error properly.
-          printf("Graph::InsertNode: Circular dependency\n");
+          CallLogFunc("Could not resolve graph: Circular dependency.");
           return false;
         } else if (!dependency.inserted()) {
           if (!InsertNode(&dependency)) {

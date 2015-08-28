@@ -32,6 +32,7 @@ LOCAL_SRC_FILES := \
   $(EVENT_RELATIVE_DIR)/src/event_manager.cpp \
   $(EVENT_RELATIVE_DIR)/src/event_system.cpp \
   $(EVENT_RELATIVE_DIR)/src/graph.cpp \
+  $(EVENT_RELATIVE_DIR)/src/log.cpp \
   $(EVENT_RELATIVE_DIR)/src/module.cpp \
   $(EVENT_RELATIVE_DIR)/src/node.cpp \
   $(EVENT_RELATIVE_DIR)/src/node_signature.cpp

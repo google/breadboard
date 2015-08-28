@@ -12,29 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/module.h"
+#include "event/log.h"
 
 namespace fpl {
 namespace event {
 
-NodeSignature* Module::GetNodeSignature(const std::string& name) {
-  auto iter = node_sigs_.find(name);
-  if (iter == node_sigs_.end()) {
-    CallLogFunc("A Node named \"%s\" has not been registered in this module.",
-                name.c_str());
-    return nullptr;
-  }
-  return &iter->second;
-}
+LogFunc g_log_func;
 
-const NodeSignature* Module::GetNodeSignature(const std::string& name) const {
-  auto iter = node_sigs_.find(name);
-  if (iter == node_sigs_.end()) {
-    CallLogFunc("A Node named \"%s\" has not been registered in this module.",
-                name.c_str());
-    return nullptr;
+// Register a logging function with the library.
+void RegisterLogFunc(LogFunc log_func) { g_log_func = log_func; }
+
+// Call the registered log function with the provided format string. This does
+// nothing if no logging function has been registered.
+void CallLogFunc(const char* format, ...) {
+  if (g_log_func) {
+    va_list args;
+    va_start(args, format);
+    g_log_func(format, args);
+    va_end(args);
   }
-  return &iter->second;
 }
 
 }  // fpl

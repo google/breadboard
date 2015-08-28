@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "event/event_system.h"
+#include "event/log.h"
 
 namespace fpl {
 namespace event {
@@ -20,8 +21,8 @@ namespace event {
 Module* EventSystem::AddModule(const std::string& name) {
   auto iter = modules_.find(name);
   if (iter != modules_.end()) {
-    // Already have a module with this name, error!
-    // TODO: Add logging.
+    CallLogFunc("A module named \"%s\" has already been registered.",
+                name.c_str());
     return nullptr;
   }
   return &modules_[name];
@@ -30,8 +31,7 @@ Module* EventSystem::AddModule(const std::string& name) {
 const Module* EventSystem::GetModule(const std::string& name) const {
   auto iter = modules_.find(name);
   if (iter == modules_.end()) {
-    // No modules with this name, error!
-    // TODO: Add logging.
+    CallLogFunc("No module named \"%s\" has been registered.", name.c_str());
     return nullptr;
   }
   return &iter->second;

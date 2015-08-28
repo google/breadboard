@@ -18,6 +18,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "event/log.h"
 #include "event/node_signature.h"
 #include "event/node_interface.h"
 
@@ -42,8 +43,9 @@ class Module {
 
     bool success = result.second;
     if (!success) {
-      // Already have a NodeSignature with this name, error!
-      // TODO: Add logging.
+      CallLogFunc(
+          "A Node named \"%s\" has already been registered in this module.",
+          name.c_str());
       return;
     }
     NodeSignature* node_sig = &iter->second;

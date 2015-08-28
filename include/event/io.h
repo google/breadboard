@@ -17,8 +17,9 @@
 
 #include <vector>
 
-#include "memory_buffer.h"
-#include "node.h"
+#include "event/log.h"
+#include "event/memory_buffer.h"
+#include "event/node.h"
 
 namespace fpl {
 namespace event {
@@ -51,31 +52,27 @@ class Inputs {
   // nodes.
   template <typename T>
   T* Get(int argument_index) const {
-    // Assert that the argument index is in range.
-    // TODO: Log error.
-    assert(argument_index >= 0 && argument_index < node_->input_edges().size());
+    if (argument_index >= 0 && argument_index < node_->input_edges().size()) {
+      CallLogFunc(
+          "Attempting to get argument %i when node only has %i input edges.",
+          argument_index, static_cast<int>(node_->input_edges().size()));
+      assert(0);
+    }
+    const Type* requested_type = TypeRegistry<T>::GetType();
+    const Type* expected_type = GetInputEdgeType(node_, argument_index);
+    if (requested_type != expected_type) {
+      CallLogFunc(
+          "Attempting to get input argument %i as type \"%s\" when it expects "
+          "type \"%s\".",
+          argument_index, requested_type->name, expected_type->name);
+      assert(0);
+    }
     const InputEdge& input_edge = node_->input_edges()[argument_index];
     if (input_edge.connected()) {
       const OutputEdgeTarget& target_edge = input_edge.target();
-
-      // Assert that this edge is the expected type.
-      // TODO: Log error.
-      assert(TypeRegistry<T>::GetType() ==
-             GetOutputEdgeType(&target_edge.GetTargetNode(nodes_),
-                               target_edge.edge_index()));
-
-      // Assert that this node is connected.
-      // TODO: Log error.
       const OutputEdge& output_edge = target_edge.GetTargetEdge(nodes_);
-      assert(output_edge.connected());
-
       return output_memory_->GetObject<T>(output_edge.data_offset());
     } else {
-      // Assert that this edge is the right data type.
-      // TODO: Log error.
-      assert(TypeRegistry<T>::GetType() ==
-             GetInputEdgeType(node_, argument_index));
-
       return input_memory_->GetObject<T>(input_edge.data_offset());
     }
   }
@@ -112,15 +109,22 @@ class Outputs {
   // inputs, the value is discarded and this function call does nothing.
   template <typename T>
   void Set(int argument_index, const T& value) {
-    // Assert that the argument index is in range.
-    // TODO: Log error.
-    assert(argument_index >= 0 &&
-           argument_index < node_->output_edges().size());
+    if (argument_index >= 0 && argument_index < node_->output_edges().size()) {
+      CallLogFunc(
+          "Attempting to get argument %i when node only has %i output edges.",
+          argument_index, static_cast<int>(node_->input_edges().size()));
+      assert(0);
+    }
 
-    // Assert that this edge is the right data type.
-    // TODO: Log error.
-    assert(TypeRegistry<T>::GetType() ==
-           GetOutputEdgeType(node_, argument_index));
+    const Type* requested_type = TypeRegistry<T>::GetType();
+    const Type* expected_type = GetInputEdgeType(node_, argument_index);
+    if (requested_type != expected_type) {
+      CallLogFunc(
+          "Attempting to set output argument %i as type \"%s\" when it expects "
+          "type \"%s\".",
+          argument_index, requested_type->name, expected_type->name);
+      assert(0);
+    }
 
     const OutputEdge& output_edge = node_->output_edges()[argument_index];
     if (!output_edge.connected()) {
