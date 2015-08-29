@@ -52,7 +52,7 @@ class Inputs {
   // nodes.
   template <typename T>
   T* Get(int argument_index) const {
-    if (argument_index >= 0 && argument_index < node_->input_edges().size()) {
+    if (argument_index < 0 || argument_index >= node_->input_edges().size()) {
       CallLogFunc(
           "Attempting to get argument %i when node only has %i input edges.",
           argument_index, static_cast<int>(node_->input_edges().size()));
@@ -109,7 +109,7 @@ class Outputs {
   // inputs, the value is discarded and this function call does nothing.
   template <typename T>
   void Set(int argument_index, const T& value) {
-    if (argument_index >= 0 && argument_index < node_->output_edges().size()) {
+    if (argument_index < 0 || argument_index >= node_->output_edges().size()) {
       CallLogFunc(
           "Attempting to get argument %i when node only has %i output edges.",
           argument_index, static_cast<int>(node_->input_edges().size()));
@@ -117,7 +117,7 @@ class Outputs {
     }
 
     const Type* requested_type = TypeRegistry<T>::GetType();
-    const Type* expected_type = GetInputEdgeType(node_, argument_index);
+    const Type* expected_type = GetOutputEdgeType(node_, argument_index);
     if (requested_type != expected_type) {
       CallLogFunc(
           "Attempting to set output argument %i as type \"%s\" when it expects "

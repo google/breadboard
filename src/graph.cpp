@@ -47,6 +47,20 @@ Node* Graph::AddNode(const NodeSignature* node_sig) {
   return &nodes_.back();
 }
 
+// Returns the index of a node in the graph. This takes linear time, but we
+// don't care that much becuase this is only called when there is an error.
+static int NodeIndex(const std::vector<Node>& nodes, const Node& node) {
+  for (size_t i = 0; i < nodes.size(); ++i) {
+    if (&nodes[i] == &node) {
+      return static_cast<int>(i);
+    }
+  }
+  // Should not ever reach this point: that would mean we're looking for a node
+  // in a different graph.
+  assert(0);
+  return -1;
+}
+
 bool Graph::InsertNode(Node* node) {
   if (!node->inserted()) {
     node->set_visited(true);
@@ -55,14 +69,16 @@ bool Graph::InsertNode(Node* node) {
       if (edge.connected()) {
         Node& dependency = edge.target().GetTargetNode(&nodes_);
         const Type* input_type = node->node_sig()->input_types()[i];
-        const Type* output_type = dependency.node_sig()->input_types()[i];
+        const Type* output_type =
+            dependency.node_sig()->output_types()[edge.target().edge_index()];
         if (input_type != output_type) {
-          // TODO: Improve this error message to contain more data about which
-          // node is wrong.
+          int input_node_index = NodeIndex(nodes_, *node);
           CallLogFunc(
-              "Could not resolve graph: Type mismatch. Node input was type "
-              "\"%s\" but connected to output node of type \"%s\".",
-              input_type->name, output_type->name);
+              "Could not resolve graph: Type mismatch. Node %i, input edge %i "
+              "is type \"%s\" but is connected to node %i, output edge %i of "
+              "type \"%s\".",
+              input_node_index, i, edge.target().node_index(),
+              edge.target().edge_index(), input_type->name, output_type->name);
           return false;
         } else if (dependency.visited()) {
           // Circular dependency. This is not currently allowed; must be a
