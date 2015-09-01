@@ -47,12 +47,12 @@ class MemoryBuffer {
   // useful for getting a pointer to use placement new on.
   uint8_t* GetObjectPtr(ptrdiff_t offset) {
     assert(buffer_.size() > 0 &&
-           offset < static_cast<unsigned int>(buffer_.size()));
+           offset < static_cast<ptrdiff_t>(buffer_.size()));
     return buffer_.data() + offset;
   }
   const uint8_t* GetObjectPtr(ptrdiff_t offset) const {
     assert(buffer_.size() > 0 &&
-           offset < static_cast<unsigned int>(buffer_.size()));
+           offset < static_cast<ptrdiff_t>(buffer_.size()));
     return buffer_.data() + offset;
   }
 

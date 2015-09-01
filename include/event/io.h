@@ -185,7 +185,7 @@ class Outputs {
   }
 
   const Node* node_;
-  const Timestamp timestamp_;
+  Timestamp timestamp_;
   MemoryBuffer* memory_;
 };
 
