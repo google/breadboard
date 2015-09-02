@@ -70,6 +70,36 @@ Type TypeRegistry<T>::type_;
 template <typename T>
 bool TypeRegistry<T>::initialized_ = false;
 
+// Specialize on void. There are cases where one might want to force a node to
+// to be marked dirty without passing any data to it. Registering a void type
+// and using that as an input to a node would allow that. However, as void has
+// no sizeof or alignment and should not be allocated or deleted, it needs to be
+// handled specially.
+template <>
+struct TypeRegistry<void> {
+  // Register a type with the event system so that it may be used to pass data
+  // from one node to another. By default, placement new with the default
+  // constructor is used. If a custom constructor call is required, you may
+  // supply a PlacementNewFunc.
+  static void RegisterType(const char* name) {
+    assert(!initialized_);
+    initialized_ = true;
+    type_ = Type(name, 0, 0, VoidPlacementNew, VoidOperatorDelete);
+  }
+
+  static const Type* GetType() { return &type_; }
+
+ private:
+  static Type type_;
+  static bool initialized_;
+
+  // Do nothing.
+  static void VoidPlacementNew(uint8_t*) {}
+  static void VoidOperatorDelete(uint8_t*) {}
+
+  TypeRegistry();
+};
+
 }  // event
 }  // fpl
 

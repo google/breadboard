@@ -35,7 +35,8 @@ LOCAL_SRC_FILES := \
   $(EVENT_RELATIVE_DIR)/src/log.cpp \
   $(EVENT_RELATIVE_DIR)/src/module.cpp \
   $(EVENT_RELATIVE_DIR)/src/node.cpp \
-  $(EVENT_RELATIVE_DIR)/src/node_signature.cpp
+  $(EVENT_RELATIVE_DIR)/src/node_signature.cpp \
+  $(EVENT_RELATIVE_DIR)/src/type_registry.cpp
 
 include $(BUILD_STATIC_LIBRARY)
 

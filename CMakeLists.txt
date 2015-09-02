@@ -42,7 +42,8 @@ set(event_SRCS
     src/log.cpp
     src/module.cpp
     src/node.cpp
-    src/node_signature.cpp)
+    src/node_signature.cpp
+    src/type_registry.cpp)
 
 # Includes for this project.
 include_directories(include)

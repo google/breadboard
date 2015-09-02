@@ -52,21 +52,8 @@ class Inputs {
   // nodes.
   template <typename T>
   T* Get(size_t argument_index) const {
-    if (argument_index >= node_->input_edges().size()) {
-      CallLogFunc(
-          "Attempting to get argument %i when node only has %i input edges.",
-          argument_index, static_cast<int>(node_->input_edges().size()));
-      assert(0);
-    }
-    const Type* requested_type = TypeRegistry<T>::GetType();
-    const Type* expected_type = GetInputEdgeType(node_, argument_index);
-    if (requested_type != expected_type) {
-      CallLogFunc(
-          "Attempting to get input argument %i as type \"%s\" when it expects "
-          "type \"%s\".",
-          argument_index, requested_type->name, expected_type->name);
-      assert(0);
-    }
+    VerifyPreconditions(argument_index, TypeRegistry<T>::GetType());
+
     const InputEdge& input_edge = node_->input_edges()[argument_index];
     if (input_edge.connected()) {
       const OutputEdgeTarget& target_edge = input_edge.target();
@@ -78,6 +65,26 @@ class Inputs {
   }
 
  private:
+  // Check to make sure the argument index is in range and the type being
+  // retrieved is the type expected.
+  void VerifyPreconditions(size_t argument_index,
+                           const Type* requested_type) const {
+    if (argument_index >= node_->input_edges().size()) {
+      CallLogFunc(
+          "Attempting to get argument %i when node only has %i input edges.",
+          argument_index, static_cast<int>(node_->input_edges().size()));
+      assert(0);
+    }
+    const Type* expected_type = GetInputEdgeType(node_, argument_index);
+    if (requested_type != expected_type) {
+      CallLogFunc(
+          "Attempting to get input argument %i as type \"%s\" when it expects "
+          "type \"%s\".",
+          argument_index, requested_type->name, expected_type->name);
+      assert(0);
+    }
+  }
+
   const Node* node_;
   const std::vector<Node>* nodes_;
   MemoryBuffer* input_memory_;
@@ -109,22 +116,7 @@ class Outputs {
   // inputs, the value is discarded and this function call does nothing.
   template <typename T>
   void Set(size_t argument_index, const T& value) {
-    if (argument_index >= node_->output_edges().size()) {
-      CallLogFunc(
-          "Attempting to get argument %i when node only has %i output edges.",
-          argument_index, static_cast<int>(node_->input_edges().size()));
-      assert(0);
-    }
-
-    const Type* requested_type = TypeRegistry<T>::GetType();
-    const Type* expected_type = GetOutputEdgeType(node_, argument_index);
-    if (requested_type != expected_type) {
-      CallLogFunc(
-          "Attempting to set output argument %i as type \"%s\" when it expects "
-          "type \"%s\".",
-          argument_index, requested_type->name, expected_type->name);
-      assert(0);
-    }
+    VerifyPreconditions(argument_index, TypeRegistry<T>::GetType());
 
     const OutputEdge& output_edge = node_->output_edges()[argument_index];
     if (!output_edge.connected()) {
@@ -141,7 +133,57 @@ class Outputs {
     *data = value;
   }
 
+  // Each node has number of typed outputs (specified by the NodeDef). This
+  // function allows you to pass data through an OutputEdge so that it is
+  // accessible to any InputNode that is connected to it.
+  // Typical usage would look like this:
+  //
+  //     Foo foo = ...
+  //     Bar bar = ...
+  //     outputs.Set<Foo>(0, foo);
+  //     outputs.Set<Bar>(1, bar);
+  //
+  // Each ouput is accessed by index, and the types must match the types
+  // declared in the NodeDef. When you set a value, it is given a timestamp
+  // which marks that node as dirty, meaning that any node that relies on it
+  // will re-run its Execute function. If an edge is not connected to any
+  // inputs, the value is discarded and this function call does nothing.
+  void Set(size_t argument_index) {
+    VerifyPreconditions(argument_index, TypeRegistry<void>::GetType());
+
+    const OutputEdge& output_edge = node_->output_edges()[argument_index];
+    if (!output_edge.connected()) {
+      // Nothing is consuming this output, so no need to store it.
+      return;
+    }
+
+    // Mark that this value has changed.
+    Timestamp* timestamp =
+        memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
+    *timestamp = timestamp_;
+  }
+
  private:
+  // Check to make sure the argument index is in range and the type being set is
+  // the type expected.
+  void VerifyPreconditions(size_t argument_index,
+                           const Type* requested_type) const {
+    if (argument_index >= node_->output_edges().size()) {
+      CallLogFunc(
+          "Attempting to get argument %i when node only has %i output edges.",
+          argument_index, static_cast<int>(node_->input_edges().size()));
+      assert(0);
+    }
+    const Type* expected_type = GetOutputEdgeType(node_, argument_index);
+    if (requested_type != expected_type) {
+      CallLogFunc(
+          "Attempting to set output argument %i as type \"%s\" when it expects "
+          "type \"%s\".",
+          argument_index, requested_type->name, expected_type->name);
+      assert(0);
+    }
+  }
+
   const Node* node_;
   const Timestamp timestamp_;
   MemoryBuffer* memory_;
