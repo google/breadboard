@@ -20,8 +20,19 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # Temporary files (like object files) created while compiling projects.
 set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
+# Directory which contains source for FPL libraries.
+if(NOT DEFINED fpl_root)
+  get_filename_component(
+      fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/../../libs" REALPATH)
+endif()
+
+# Configurable locations of dependencies of this project.
+set(dependencies_fplutil_dir "${fpl_root}/fplutil"
+    CACHE PATH "Directory containing the fplutil library.")
+
 # Event system source files.
 set(event_SRCS
+    include/event/event.h
     include/event/event_listener.h
     include/event/event_manager.h
     include/event/event_payload.h
@@ -33,20 +44,23 @@ set(event_SRCS
     include/event/memory_buffer.h
     include/event/module.h
     include/event/node.h
-    include/event/node_interface.h
+    include/event/base_node.h
     include/event/node_signature.h
     include/event/type.h
+    src/event.cpp
     src/event_manager.cpp
     src/event_system.cpp
     src/graph.cpp
     src/log.cpp
     src/module.cpp
     src/node.cpp
+    src/base_node.cpp
     src/node_signature.cpp
     src/type_registry.cpp)
 
 # Includes for this project.
 include_directories(include)
+include_directories(${dependencies_fplutil_dir}/libfplutil/include)
 
 # Detect clang
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")

@@ -26,9 +26,13 @@ EVENT_DIR := $(LOCAL_PATH)/$(EVENT_RELATIVE_DIR)
 
 LOCAL_EXPORT_C_INCLUDES := $(EVENT_DIR)/include
 
-LOCAL_C_INCLUDES := $(LOCAL_EXPORT_C_INCLUDES) $(EVENT_DIR)/src
+LOCAL_C_INCLUDES := \
+  $(DEPENDENCIES_FPLUTIL_DIR)/libfplutil/include \
+  $(EVENT_DIR)/src \
+  $(LOCAL_EXPORT_C_INCLUDES)
 
 LOCAL_SRC_FILES := \
+  $(EVENT_RELATIVE_DIR)/src/event.cpp \
   $(EVENT_RELATIVE_DIR)/src/event_manager.cpp \
   $(EVENT_RELATIVE_DIR)/src/event_system.cpp \
   $(EVENT_RELATIVE_DIR)/src/graph.cpp \
@@ -36,6 +40,7 @@ LOCAL_SRC_FILES := \
   $(EVENT_RELATIVE_DIR)/src/module.cpp \
   $(EVENT_RELATIVE_DIR)/src/node.cpp \
   $(EVENT_RELATIVE_DIR)/src/node_signature.cpp \
+  $(EVENT_RELATIVE_DIR)/src/base_node.cpp \
   $(EVENT_RELATIVE_DIR)/src/type_registry.cpp
 
 include $(BUILD_STATIC_LIBRARY)

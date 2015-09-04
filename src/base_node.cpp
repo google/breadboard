@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/node_signature.h"
+#include "event/base_node.h"
+#include "event/graph.h"
 
 namespace fpl {
 namespace event {
 
-BaseNode* NodeSignature::Constructor() const { return constructor_(); }
-
-void NodeSignature::Destructor(BaseNode* base_node) const {
-  return destructor_(base_node);
+void BaseNode::MarkDirty() {
+  MemoryBuffer* output_buffer = graph_state_->output_buffer();
+  Timestamp* timestamp =
+      output_buffer->GetObject<Timestamp>(node_->timestamp_offset());
+  *timestamp = graph_state_->timestamp();
 }
 
 }  // event

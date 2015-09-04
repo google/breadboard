@@ -20,7 +20,7 @@
 
 #include "event/log.h"
 #include "event/node_signature.h"
-#include "event/node_interface.h"
+#include "event/base_node.h"
 
 namespace fpl {
 namespace event {
@@ -31,9 +31,9 @@ namespace event {
 class Module {
  public:
   // Add a new NodeSignature. The template argument to this function should be a
-  // class that implements NodeInterface. Each NodeInterface registered should
-  // have one NodeSignature associated with it. The NodeSignature defines how
-  // many input and output edges and the types of those edges.
+  // class that implements BaseNode. Each BaseNode registered should have one
+  // NodeSignature associated with it. The NodeSignature defines how many input
+  // and output edges and the types of those edges.
   template <typename T>
   void RegisterNode(const std::string& name, const NodeConstructor& constructor,
                     const NodeDestructor& destructor) {
@@ -70,11 +70,11 @@ class Module {
   typedef std::unordered_map<std::string, NodeSignature> NodeDictionary;
 
   template <typename T>
-  static NodeInterface* DefaultNew() {
+  static BaseNode* DefaultNew() {
     return new T();
   }
 
-  static void DefaultDelete(NodeInterface* object) { delete object; }
+  static void DefaultDelete(BaseNode* object) { delete object; }
 
   // TODO: Consider changing over to using integer keys instead of std::strings.
   // It's faster to look up, but looking up NodeSignatures should only happen

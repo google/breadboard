@@ -23,17 +23,17 @@
 namespace fpl {
 namespace event {
 
-class NodeInterface;
+class BaseNode;
 
-typedef std::function<NodeInterface*()> NodeConstructor;
-typedef std::function<void(NodeInterface*)> NodeDestructor;
+typedef std::function<BaseNode*()> NodeConstructor;
+typedef std::function<void(BaseNode*)> NodeDestructor;
 
 // A NodeSignature defines how many input and ouput edges a Node in a graph is
 // expected to have, and what types those edges are. Additionally,
 // NodeSignatures have a constructor callback which constructs an instance the
-// class that implements NodeInterface. The default constructor is used by
-// default, but you may supply your own constructor callback if you need to do
-// any special set up before creating an instance of your class.
+// class that implements BaseNode. The default constructor is used by default,
+// but you may supply your own constructor callback if you need to do any
+// special set up before creating an instance of your class.
 class NodeSignature {
  public:
   NodeSignature(const NodeConstructor& constructor,
@@ -42,7 +42,7 @@ class NodeSignature {
 
   // Adds intput and output edges to a node definition. The order that these
   // intputs and outputs are added matters. It determines the expected intputs
-  // and outputs in the NodeInterface.
+  // and outputs in the BaseNode.
   template <typename T>
   void AddInput() {
     input_types_.push_back(TypeRegistry<T>::GetType());
@@ -56,8 +56,8 @@ class NodeSignature {
   const std::vector<const Type*>& input_types() const { return input_types_; }
   const std::vector<const Type*>& output_types() const { return output_types_; }
 
-  NodeInterface* Constructor() const;
-  void Destructor(NodeInterface* node_interface) const;
+  BaseNode* Constructor() const;
+  void Destructor(BaseNode* base_node) const;
 
  private:
   NodeConstructor constructor_;

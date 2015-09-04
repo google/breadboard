@@ -54,7 +54,7 @@ class Graph {
   // before attempting to given nodes default values. Until the nodes are
   // finalized, the buffer that holds the default input values is not
   // initialized.
-  bool FinalizeNodes(EventSystem* event_system);
+  bool FinalizeNodes();
 
   // Assign a default value to an unconnected input edge.  Default values may
   // only be set once the nodes are finalized using FinalizeNodes.
@@ -68,7 +68,6 @@ class Graph {
     *default_object = value;
   }
 
-  const EventSystem* event_system() const { return event_system_; }
   std::vector<Node>& nodes() { return nodes_; }
   const std::vector<Node>& nodes() const { return nodes_; }
   std::vector<Node*>& sorted_nodes() { return sorted_nodes_; }
@@ -92,7 +91,6 @@ class Graph {
   bool SortGraphNodes();
   bool InsertNode(Node* node);
 
-  const EventSystem* event_system_;
   std::vector<Node> nodes_;
   std::vector<Node*> sorted_nodes_;
   MemoryBuffer input_buffer_;
@@ -106,7 +104,7 @@ class Graph {
 // and nodes that update each time the graph executes.
 class GraphState {
  public:
-  GraphState() : graph_(nullptr), output_buffer_(), timestamp_(0) {}
+  GraphState() : graph_(nullptr), output_buffer_(), timestamp_(1) {}
   ~GraphState();
 
   // Initialize the GraphState with a graph.
@@ -124,6 +122,13 @@ class GraphState {
   // The order the nodes run Execute is not specified except that nodes that
   // have a dependency on other nodes will always run after their dependencies.
   void Execute();
+
+  // Return the current timestamp.
+  Timestamp timestamp() const { return timestamp_; }
+
+  // Get the internal memory buffer for output edge objects.
+  MemoryBuffer* output_buffer() { return &output_buffer_; }
+  const MemoryBuffer* output_buffer() const { return &output_buffer_; }
 
  private:
   // Return true if any of the input edges on this node point to data that has

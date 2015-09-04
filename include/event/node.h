@@ -26,7 +26,7 @@ namespace event {
 
 class Node;
 class NodeSignature;
-class NodeInterface;
+class BaseNode;
 class OutputEdge;
 
 // An OutputEdgeTarget represents a specific output edge on a node in a graph.
@@ -124,7 +124,7 @@ class Node {
   Node(const NodeSignature* node_sig);
 
   const NodeSignature* node_sig() const { return node_sig_; }
-  NodeInterface* node_interface() { return node_interface_; }
+  BaseNode* base_node() { return base_node_; }
 
   std::vector<InputEdge>& input_edges() { return input_edges_; }
   const std::vector<InputEdge>& input_edges() const { return input_edges_; }
@@ -145,7 +145,7 @@ class Node {
 
  private:
   const NodeSignature* node_sig_;
-  NodeInterface* node_interface_;
+  BaseNode* base_node_;
 
   std::vector<InputEdge> input_edges_;
   std::vector<OutputEdge> output_edges_;

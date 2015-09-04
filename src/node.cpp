@@ -44,7 +44,7 @@ const OutputEdge& OutputEdgeTarget::GetTargetEdge(
 
 Node::Node(const NodeSignature* node_sig)
     : node_sig_(node_sig),
-      node_interface_(node_sig->Constructor()),
+      base_node_(node_sig->Constructor()),
       input_edges_(),
       output_edges_(),
       inserted_(false),

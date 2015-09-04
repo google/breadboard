@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_NODE_INTERFACE_H_
-#define FPL_EVENT_NODE_INTERFACE_H_
+#ifndef FPL_EVENT_BASE_NODE_H_
+#define FPL_EVENT_BASE_NODE_H_
 
+#include "event/event.h"
 #include "event/io.h"
 #include "event/node_signature.h"
 
 namespace fpl {
 namespace event {
 
+class GraphState;
+
 // A node is an abstract base class for all nodes in a graph. Each class that
-// implements NodeInterface must be registered in a Module before it may be used
-// in a graph, and by registering in the Module it will have a NodeDef which
+// implements BaseNode must be registered in a Module before it may be used in a
+// graph, and by registering in the Module it will have a NodeDef which
 // specifies the number of expected Inputs and Outputs that will be passed to
 // it.
 //
@@ -32,28 +35,54 @@ namespace event {
 //
 // They may also specify an initialize function for one time initialization when
 // they are created.
-class NodeInterface {
+class BaseNode {
  public:
-  virtual ~NodeInterface() {}
+  virtual ~BaseNode() {}
 
-  // All classes inheriting from NodeInterface must imlement the static Register
+  // All classes inheriting from BaseNode must imlement the static Register
   // function shown here. Because this is a static function it cannot be
   // virtual.
   //
-  // static void Register(NodeSignature* node_sig);
+  // static void OnRegister(NodeSignature* node_sig);
 
   // Initialize is called once when a GraphState object is being initialized.
-  // You can use this to do any special set up.
-  virtual void Initialize(Inputs* inputs) { (void)inputs; }
+  // You can use this to do any special set up. For example, if this is a node
+  // that has no inputs and only outputs that are unchanging, you can set them
+  // once here and not need to worry about doing anything in Execute.
+  virtual void Initialize(Inputs* inputs, Outputs* outputs) {
+    (void)inputs;
+    (void)outputs;
+  }
 
   // Execute is called any time the GraphState Execute function is called. Only
   // Nodes that are marked dirty or have had one of their inputs change will be
   // run. If there has been no changes to any of a nodes inputs, the call to
   // Execute on this node will be skipped.
-  virtual void Execute(Inputs* inputs, Outputs* outputs) = 0;
+  virtual void Execute(Inputs* inputs, Outputs* outputs) {
+    (void)inputs;
+    (void)outputs;
+  }
+
+  // Marks this node to dirty so that the next time the graph is executed this
+  // node will have its Execute method called. This function has no effect when
+  // called from within Execute.
+  void MarkDirty();
+
+ private:
+  friend class GraphState;
+
+  void InitializeInternal(Node* node, GraphState* graph_state) {
+    node_ = node;
+    graph_state_ = graph_state;
+  }
+
+  // The graph and node associated with this BaseNode. This is needed to mark
+  // the node dirty when events occur.
+  Node* node_;
+  GraphState* graph_state_;
 };
 
 }  // event
 }  // fpl
 
-#endif  // FPL_EVENT_NODE_INTERFACE_H_
+#endif  // FPL_EVENT_BASE_NODE_H_

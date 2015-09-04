@@ -14,13 +14,12 @@
 
 #include "event/graph.h"
 
-#include <cstdio>
 #include <new>
 #include <set>
 #include <type_traits>
 
 #include "event/log.h"
-#include "event/node_interface.h"
+#include "event/base_node.h"
 
 namespace fpl {
 namespace event {
@@ -138,9 +137,7 @@ static ptrdiff_t AdvanceOffset(ptrdiff_t* offset) {
   return AdvanceOffset(offset, sizeof(T), std::alignment_of<T>::value);
 }
 
-bool Graph::FinalizeNodes(EventSystem* event_system) {
-  event_system_ = event_system;
-
+bool Graph::FinalizeNodes() {
   // Make sure each node has the proper number of output edges.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
     const NodeSignature* node_sig = node->node_sig();
@@ -250,6 +247,8 @@ void GraphState::Initialize(Graph* graph) {
   for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
        ++node) {
     const NodeSignature* node_sig = node->node_sig();
+    BaseNode* base_node = node->base_node();
+    base_node->InitializeInternal(&*node, this);
     for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
       const OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
@@ -270,7 +269,8 @@ void GraphState::Initialize(Graph* graph) {
   for (size_t i = 0; i < graph_->sorted_nodes().size(); ++i) {
     Node* node = graph_->sorted_nodes()[i];
     Inputs in(node, &graph_->nodes(), &graph_->input_buffer(), &output_buffer_);
-    node->node_interface()->Initialize(&in);
+    Outputs out(node, &output_buffer_, timestamp_);
+    node->base_node()->Initialize(&in, &out);
   }
 }
 
@@ -282,7 +282,7 @@ void GraphState::Execute() {
       Inputs in(node, &graph_->nodes(), &graph_->input_buffer(),
                 &output_buffer_);
       Outputs out(node, &output_buffer_, timestamp_);
-      node->node_interface()->Execute(&in, &out);
+      node->base_node()->Execute(&in, &out);
     }
   }
   ++timestamp_;

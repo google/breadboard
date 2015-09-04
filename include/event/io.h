@@ -20,6 +20,7 @@
 #include "event/log.h"
 #include "event/memory_buffer.h"
 #include "event/node.h"
+#include "event/type_registry.h"
 
 namespace fpl {
 namespace event {
