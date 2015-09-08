@@ -67,7 +67,7 @@ class NodeEventListener {
 // For example, when the game object moves, it would broadcast an kEntityMoved
 // event (where kEntityMoved is an enum value). All nodes observing that event
 // would then execute the next time the graph itself is executed.
-struct NodeEventBroadcaster {
+class NodeEventBroadcaster {
  public:
   // Associate the given listener with this NodeEventBroadcaster and the given
   // event_id.
