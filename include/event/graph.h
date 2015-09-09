@@ -114,6 +114,9 @@ class GraphState {
   // dependency on other nodes will always run after their dependencies.
   void Initialize(Graph* graph);
 
+  // Check if this GraphState has been initialized.
+  bool IsInitialized() const { return graph_ != nullptr; }
+
   // Execute all Nodes that are considered 'dirty'. A dirty node is any node
   // that has been updated since the last time Execute was called, or one that
   // has an input edge pointing at data that has changed. Nodes that do not meet

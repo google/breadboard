@@ -32,6 +32,7 @@ set(dependencies_fplutil_dir "${fpl_root}/fplutil"
 
 # Event system source files.
 set(event_SRCS
+    include/event/base_node.h
     include/event/event.h
     include/event/event_listener.h
     include/event/event_manager.h
@@ -39,22 +40,23 @@ set(event_SRCS
     include/event/event_registry.h
     include/event/event_system.h
     include/event/graph.h
+    include/event/graph_loader.h
     include/event/io.h
     include/event/log.h
     include/event/memory_buffer.h
     include/event/module.h
     include/event/node.h
-    include/event/base_node.h
     include/event/node_signature.h
     include/event/type.h
+    src/base_node.cpp
     src/event.cpp
     src/event_manager.cpp
     src/event_system.cpp
     src/graph.cpp
+    src/graph_loader.cpp
     src/log.cpp
     src/module.cpp
     src/node.cpp
-    src/base_node.cpp
     src/node_signature.cpp
     src/type_registry.cpp)
 

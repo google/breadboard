@@ -44,8 +44,7 @@ class BaseNode;
 // place multiple listeners on it.
 class NodeEventListener {
  public:
-  NodeEventListener(BaseNode* base_node)
-      : node_(), base_node_(base_node) {}
+  NodeEventListener(BaseNode* base_node) : node_(), base_node_(base_node) {}
 
  private:
   friend class NodeEventBroadcaster;

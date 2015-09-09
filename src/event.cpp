@@ -15,8 +15,8 @@
 #include <algorithm>
 
 #include "event/event.h"
-#include "event/io.h"
 #include "event/graph.h"
+#include "event/io.h"
 
 namespace fpl {
 namespace event {
@@ -25,8 +25,8 @@ void NodeEventBroadcaster::RegisterListener(int event_id,
                                             NodeEventListener* listener) {
   auto list_iter = event_listener_lists_.find(event_id);
   if (list_iter == event_listener_lists_.end()) {
-    auto insert_result = event_listener_lists_.insert(std::make_pair(
-        event_id, ListenerList(&NodeEventListener::node_)));
+    auto insert_result = event_listener_lists_.insert(
+        std::make_pair(event_id, ListenerList(&NodeEventListener::node_)));
     list_iter = insert_result.first;
   }
   intrusive_list<NodeEventListener>* listener_list = &list_iter->second;
