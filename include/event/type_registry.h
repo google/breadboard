@@ -58,6 +58,7 @@ struct TypeRegistry {
   static void DefaultPlacementNew(uint8_t* ptr) { new (ptr) T(); }
 
   static void DefaultOperatorDelete(uint8_t* ptr) {
+    (void)ptr;
     reinterpret_cast<T*>(ptr)->~T();
   }
 
