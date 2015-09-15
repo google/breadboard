@@ -38,7 +38,7 @@ Graph* GraphLoader::LoadGraph(const char* filename) {
     if (!ParseData(event_system_, graph, &data)) {
       return nullptr;
     }
-    iter->second.reset(graph);
+    loaded_graphs_[filename].reset(graph);
     return graph;
   }
 }
