@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_GRAPH_LOADER_H_
-#define FPL_EVENT_GRAPH_LOADER_H_
+#ifndef FPL_EVENT_GRAPH_FACTORY_H_
+#define FPL_EVENT_GRAPH_FACTORY_H_
 
 #include <memory>
 #include <string>
@@ -34,10 +34,10 @@ typedef bool (*LoadFileCallback)(const char* filename, std::string* output);
 // the same file is requested multiple times, the cached graph is returned. To
 // use this class ParseData must be overridden to translate the data into nodes
 // and edges, and to parse default values.
-class GraphLoader {
+class GraphFactory {
  public:
-  GraphLoader(event::EventSystem* event_system,
-              LoadFileCallback load_file_callback)
+  GraphFactory(event::EventSystem* event_system,
+               LoadFileCallback load_file_callback)
       : event_system_(event_system), load_file_callback_(load_file_callback) {}
 
   // Load the graph given it's filename. If this file has already been loaded, a
@@ -62,4 +62,4 @@ class GraphLoader {
 }  // event
 }  // fpl
 
-#endif  // FPL_EVENT_GRAPH_LOADER_H_
+#endif  // FPL_EVENT_GRAPH_FACTORY_H_

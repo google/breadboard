@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/graph_loader.h"
+#include "event/graph_factory.h"
 
 #include <string>
 
@@ -22,7 +22,7 @@
 namespace fpl {
 namespace event {
 
-Graph* GraphLoader::LoadGraph(const char* filename) {
+Graph* GraphFactory::LoadGraph(const char* filename) {
   // Have we loaded this flatbuffer already?
   auto iter = loaded_graphs_.find(filename);
   if (iter != loaded_graphs_.end()) {

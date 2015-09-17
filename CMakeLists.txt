@@ -40,7 +40,7 @@ set(event_SRCS
     include/event/event_registry.h
     include/event/event_system.h
     include/event/graph.h
-    include/event/graph_loader.h
+    include/event/graph_factory.h
     include/event/io.h
     include/event/log.h
     include/event/memory_buffer.h
@@ -53,7 +53,7 @@ set(event_SRCS
     src/event_manager.cpp
     src/event_system.cpp
     src/graph.cpp
-    src/graph_loader.cpp
+    src/graph_factory.cpp
     src/log.cpp
     src/module.cpp
     src/node.cpp
