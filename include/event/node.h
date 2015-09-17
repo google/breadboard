@@ -132,6 +132,11 @@ class Node {
   std::vector<OutputEdge>& output_edges() { return output_edges_; }
   const std::vector<OutputEdge>& output_edges() const { return output_edges_; }
 
+  std::vector<ptrdiff_t>& listener_offsets() { return listener_offsets_; }
+  const std::vector<ptrdiff_t>& listener_offsets() const {
+    return listener_offsets_;
+  }
+
   void set_timestamp_offset(ptrdiff_t timestamp_offset) {
     timestamp_offset_ = timestamp_offset;
   }
@@ -149,6 +154,7 @@ class Node {
 
   std::vector<InputEdge> input_edges_;
   std::vector<OutputEdge> output_edges_;
+  std::vector<ptrdiff_t> listener_offsets_;
 
   ptrdiff_t timestamp_offset_;
 

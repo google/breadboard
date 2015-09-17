@@ -84,8 +84,11 @@ struct TypeRegistry<void> {
   // supply a PlacementNewFunc.
   static void RegisterType(const char* name) {
     assert(!initialized_);
+    static const size_t kVoidSize = 0;
+    static const size_t kVoidAlignment = 1;
     initialized_ = true;
-    type_ = Type(name, 0, 0, VoidPlacementNew, VoidOperatorDelete);
+    type_ = Type(name, kVoidSize, kVoidAlignment, VoidPlacementNew,
+                 VoidOperatorDelete);
   }
 
   static const Type* GetType() { return &type_; }

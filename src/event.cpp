@@ -15,18 +15,17 @@
 #include <algorithm>
 
 #include "event/event.h"
-#include "event/graph.h"
-#include "event/io.h"
+#include "event/graph_state.h"
+#include "event/node_arguments.h"
 
 namespace fpl {
 namespace event {
 
-void NodeEventBroadcaster::RegisterListener(int event_id,
-                                            NodeEventListener* listener) {
-  auto list_iter = event_listener_lists_.find(event_id);
+void NodeEventBroadcaster::RegisterListener(NodeEventListener* listener) {
+  auto list_iter = event_listener_lists_.find(listener->event_id());
   if (list_iter == event_listener_lists_.end()) {
-    auto insert_result = event_listener_lists_.insert(
-        std::make_pair(event_id, ListenerList(&NodeEventListener::node_)));
+    auto insert_result = event_listener_lists_.insert(std::make_pair(
+        listener->event_id(), ListenerList(&NodeEventListener::node_)));
     list_iter = insert_result.first;
   }
   intrusive_list<NodeEventListener>* listener_list = &list_iter->second;
@@ -37,13 +36,17 @@ void NodeEventBroadcaster::RegisterListener(int event_id,
   listener_list->push_back(*listener);
 }
 
-void NodeEventBroadcaster::BroadcastEvent(int event_id) {
+void NodeEventBroadcaster::BroadcastEvent(EventId event_id) {
   auto list_iter = event_listener_lists_.find(event_id);
   if (list_iter != event_listener_lists_.end()) {
     ListenerList& listener_list = list_iter->second;
     for (auto listener_iter = listener_list.begin();
          listener_iter != listener_list.end(); ++listener_iter) {
-      listener_iter->base_node_->MarkDirty();
+      MemoryBuffer* output_buffer =
+          listener_iter->graph_state_->output_buffer();
+      Timestamp* timestamp = output_buffer->GetObject<Timestamp>(
+          listener_iter->target_node_->timestamp_offset());
+      *timestamp = listener_iter->graph_state_->timestamp();
     }
   }
 }

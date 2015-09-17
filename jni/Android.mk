@@ -32,12 +32,12 @@ LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES)
 
 LOCAL_SRC_FILES := \
-  $(EVENT_RELATIVE_DIR)/src/base_node.cpp \
   $(EVENT_RELATIVE_DIR)/src/event.cpp \
   $(EVENT_RELATIVE_DIR)/src/event_manager.cpp \
   $(EVENT_RELATIVE_DIR)/src/event_system.cpp \
   $(EVENT_RELATIVE_DIR)/src/graph.cpp \
   $(EVENT_RELATIVE_DIR)/src/graph_factory.cpp \
+  $(EVENT_RELATIVE_DIR)/src/graph_state.cpp \
   $(EVENT_RELATIVE_DIR)/src/log.cpp \
   $(EVENT_RELATIVE_DIR)/src/module.cpp \
   $(EVENT_RELATIVE_DIR)/src/node.cpp \

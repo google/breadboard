@@ -17,12 +17,16 @@
 
 #include <map>
 
+#include "event/node.h"
 #include "fplutil/intrusive_list.h"
 
 namespace fpl {
 namespace event {
 
 class BaseNode;
+class GraphState;
+
+typedef const char** EventId;
 
 // A NodeEventListener is used to mark graph nodes dirty when a
 // NodeEventBroadcaster nofifies them of an event. NodeEventListeners should be
@@ -44,12 +48,22 @@ class BaseNode;
 // place multiple listeners on it.
 class NodeEventListener {
  public:
-  NodeEventListener(BaseNode* base_node) : node_(), base_node_(base_node) {}
+  NodeEventListener(GraphState* graph_state, Node* target_node,
+                    EventId event_id)
+      : node_(),
+        graph_state_(graph_state),
+        target_node_(target_node),
+        event_id_(event_id) {}
+
+  EventId event_id() const { return event_id_; }
 
  private:
   friend class NodeEventBroadcaster;
+
   intrusive_list_node node_;
-  BaseNode* base_node_;
+  GraphState* graph_state_;
+  Node* target_node_;
+  EventId event_id_;
 };
 
 // A NodeEventBroadcaster is used to notify NodeEventListeners that a specific
@@ -70,20 +84,43 @@ class NodeEventBroadcaster {
  public:
   // Associate the given listener with this NodeEventBroadcaster and the given
   // event_id.
-  void RegisterListener(int event_id, NodeEventListener* listener);
+  void RegisterListener(NodeEventListener* listener);
 
   // For each listener registered with the given event_id on this broadcaster,
   // mark the node associated with the listener dirty so that it will execute
   // the next time the graph is executed.
-  void BroadcastEvent(int event_id);
+  void BroadcastEvent(EventId event_id);
 
  private:
   typedef intrusive_list<NodeEventListener> ListenerList;
 
-  std::map<int, ListenerList> event_listener_lists_;
+  std::map<EventId, ListenerList> event_listener_lists_;
 };
 
 }  // event
 }  // fpl
+
+// Whenever you want to declare a new event ID, the preferred way is to use
+// these macros. In you header file you would put:
+//
+//     FPL_EVENT_DECLARE_EVENT(kMyEventId);
+//
+// And then in your cpp file you would put this:
+//
+//     FPL_EVENT_DEFINE_EVENT(kMyEventId);
+//
+// Once the event has been declared and defined, you can use it to broadcast
+// events to graphs that are listening for those events
+#define FPL_EVENT_DECLARE_EVENT(event_id) extern ::fpl::event::EventId event_id;
+
+#define FPL_EVENT_CONCAT(a, b) a##b
+
+#define FPL_EVENT_DEFINE_EVENT_INTERNAL(event_id, str)            \
+  static const char* FPL_EVENT_CONCAT(FPL_EVENT_VAR, __LINE__) = #str; \
+  ::fpl::event::EventId event_id = &FPL_EVENT_CONCAT(FPL_EVENT_VAR, __LINE__);
+
+#define FPL_EVENT_DEFINE_EVENT(event_id)    \
+  FPL_EVENT_DEFINE_EVENT_INTERNAL(event_id, \
+                                  FPL_EVENT_CONCAT(#event_id, __LINE__))
 
 #endif  // FPL_EVENT_EVENT_H_

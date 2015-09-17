@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_IO_H_
-#define FPL_EVENT_IO_H_
+#ifndef FPL_EVENT_NODE_ARGUMENTS_H_
+#define FPL_EVENT_NODE_ARGUMENTS_H_
 
 #include <vector>
 
@@ -27,24 +27,27 @@ namespace event {
 
 typedef uint32_t Timestamp;
 
-// Inputs is a class that represent the input data passed into a node. This
-// class wraps both the default values passed into a node and the values passed
-// from the output of other nodes.
-class Inputs {
+// NodeArguments is a class that represent the input and output edges connected
+// to a node. Functionality is provided to get inputs and set outputs.
+// Additionally, this contains the list of listeners on a given node so that you
+// can connect a listener to a broadcaster.
+class NodeArguments {
  public:
-  Inputs(const Node* node, const std::vector<Node>* nodes,
-         MemoryBuffer* input_memory, MemoryBuffer* output_memory)
+  NodeArguments(const Node* node, const std::vector<Node>* nodes,
+                MemoryBuffer* input_memory, MemoryBuffer* output_memory,
+                Timestamp timestamp)
       : node_(node),
         nodes_(nodes),
         input_memory_(input_memory),
-        output_memory_(output_memory) {}
+        output_memory_(output_memory),
+        timestamp_(timestamp) {}
 
   // Each node has number of typed inputs (specified by the NodeDef). This
   // function allows you to access the data held in any one of those inputs.
   // Typical usage would look like this:
   //
-  //     Foo* foo = inputs.Get<Foo>(0);
-  //     Bar* bar = inputs.Get<Bar>(1);
+  //     Foo* foo = args->GetInput<Foo>(0);
+  //     Bar* bar = args->GetInput<Bar>(1);
   //
   // Each argument is accessed by index, and the types must match the types
   // declared in the NodeDef. Care must be taken when modifying input values as
@@ -52,8 +55,8 @@ class Inputs {
   // defined, input values may change between calls to Execute on differnet
   // nodes.
   template <typename T>
-  T* Get(size_t argument_index) const {
-    VerifyPreconditions(argument_index, TypeRegistry<T>::GetType());
+  T* GetInput(size_t argument_index) const {
+    VerifyInputPreconditions(argument_index, TypeRegistry<T>::GetType());
 
     const InputEdge& input_edge = node_->input_edges()[argument_index];
     if (input_edge.connected()) {
@@ -65,11 +68,74 @@ class Inputs {
     }
   }
 
+  // Each node has number of typed outputs (specified by the NodeDef). This
+  // function allows you to pass data through an OutputEdge so that it is
+  // accessible to any InputNode that is connected to it.
+  // Typical usage would look like this:
+  //
+  //     Foo foo = ...
+  //     Bar bar = ...
+  //     outputs.SetOutput(0, foo);
+  //     outputs.SetOutput(1, bar);
+  //
+  // Each ouput is accessed by index, and the types must match the types
+  // declared in the NodeDef. When you set a value, it is given a timestamp
+  // which marks that node as dirty, meaning that any node that relies on it
+  // will re-run its Execute function. If an edge is not connected to any
+  // inputs, the value is discarded and this function call does nothing.
+  template <typename T>
+  void SetOutput(size_t argument_index, const T& value) {
+    VerifyOutputPreconditions(argument_index, TypeRegistry<T>::GetType());
+
+    const OutputEdge& output_edge = node_->output_edges()[argument_index];
+    if (!output_edge.connected()) {
+      // Nothing is consuming this output, so no need to store it.
+      return;
+    }
+
+    // Mark that this value has changed.
+    Timestamp* timestamp =
+        output_memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
+    *timestamp = timestamp_;
+
+    T* data = output_memory_->GetObject<T>(output_edge.data_offset());
+    *data = value;
+  }
+
+  // This is a special overload of SetOutput for void output types, which are
+  // typically used just to send a signal to another node but which carry no
+  // data. With this version of the function you do not need to supply any
+  // value. Typical usage would look like this:
+  //
+  //     outputs.SetOutput(0);
+  //     outputs.SetOutput(1);
+  void SetOutput(size_t argument_index) {
+    VerifyOutputPreconditions(argument_index, TypeRegistry<void>::GetType());
+
+    const OutputEdge& output_edge = node_->output_edges()[argument_index];
+    if (!output_edge.connected()) {
+      // Nothing is consuming this output, so no need to store it.
+      return;
+    }
+
+    // Mark that this value has changed.
+    Timestamp* timestamp =
+        output_memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
+    *timestamp = timestamp_;
+  }
+
+  void BindBroadcaster(size_t listener_index,
+                       NodeEventBroadcaster* broadcaster) {
+    NodeEventListener* listener = output_memory_->GetObject<NodeEventListener>(
+        node_->listener_offsets()[listener_index]);
+    broadcaster->RegisterListener(listener);
+  }
+
  private:
   // Check to make sure the argument index is in range and the type being
   // retrieved is the type expected.
-  void VerifyPreconditions(size_t argument_index,
-                           const Type* requested_type) const {
+  void VerifyInputPreconditions(size_t argument_index,
+                                const Type* requested_type) const {
     if (argument_index >= node_->input_edges().size()) {
       CallLogFunc(
           "Attempting to get argument %i when node only has %i input edges.",
@@ -86,89 +152,10 @@ class Inputs {
     }
   }
 
-  const Node* node_;
-  const std::vector<Node>* nodes_;
-  MemoryBuffer* input_memory_;
-  MemoryBuffer* output_memory_;
-};
-
-// Outputs is a class that represent the outputs data passed to other nodes.
-// This class wraps mutable buffer that holds values that other nodes connect
-// to.
-class Outputs {
- public:
-  Outputs(const Node* node, MemoryBuffer* memory, Timestamp timestamp)
-      : node_(node), timestamp_(timestamp), memory_(memory) {}
-
-  // Each node has number of typed outputs (specified by the NodeDef). This
-  // function allows you to pass data through an OutputEdge so that it is
-  // accessible to any InputNode that is connected to it.
-  // Typical usage would look like this:
-  //
-  //     Foo foo = ...
-  //     Bar bar = ...
-  //     outputs.Set<Foo>(0, foo);
-  //     outputs.Set<Bar>(1, bar);
-  //
-  // Each ouput is accessed by index, and the types must match the types
-  // declared in the NodeDef. When you set a value, it is given a timestamp
-  // which marks that node as dirty, meaning that any node that relies on it
-  // will re-run its Execute function. If an edge is not connected to any
-  // inputs, the value is discarded and this function call does nothing.
-  template <typename T>
-  void Set(size_t argument_index, const T& value) {
-    VerifyPreconditions(argument_index, TypeRegistry<T>::GetType());
-
-    const OutputEdge& output_edge = node_->output_edges()[argument_index];
-    if (!output_edge.connected()) {
-      // Nothing is consuming this output, so no need to store it.
-      return;
-    }
-
-    // Mark that this value has changed.
-    Timestamp* timestamp =
-        memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
-    *timestamp = timestamp_;
-
-    T* data = memory_->GetObject<T>(output_edge.data_offset());
-    *data = value;
-  }
-
-  // Each node has number of typed outputs (specified by the NodeDef). This
-  // function allows you to pass data through an OutputEdge so that it is
-  // accessible to any InputNode that is connected to it.
-  // Typical usage would look like this:
-  //
-  //     Foo foo = ...
-  //     Bar bar = ...
-  //     outputs.Set<Foo>(0, foo);
-  //     outputs.Set<Bar>(1, bar);
-  //
-  // Each ouput is accessed by index, and the types must match the types
-  // declared in the NodeDef. When you set a value, it is given a timestamp
-  // which marks that node as dirty, meaning that any node that relies on it
-  // will re-run its Execute function. If an edge is not connected to any
-  // inputs, the value is discarded and this function call does nothing.
-  void Set(size_t argument_index) {
-    VerifyPreconditions(argument_index, TypeRegistry<void>::GetType());
-
-    const OutputEdge& output_edge = node_->output_edges()[argument_index];
-    if (!output_edge.connected()) {
-      // Nothing is consuming this output, so no need to store it.
-      return;
-    }
-
-    // Mark that this value has changed.
-    Timestamp* timestamp =
-        memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
-    *timestamp = timestamp_;
-  }
-
- private:
   // Check to make sure the argument index is in range and the type being set is
   // the type expected.
-  void VerifyPreconditions(size_t argument_index,
-                           const Type* requested_type) const {
+  void VerifyOutputPreconditions(size_t argument_index,
+                                 const Type* requested_type) const {
     if (argument_index >= node_->output_edges().size()) {
       CallLogFunc(
           "Attempting to get argument %i when node only has %i output edges.",
@@ -185,12 +172,15 @@ class Outputs {
     }
   }
 
+ private:
   const Node* node_;
+  const std::vector<Node>* nodes_;
+  MemoryBuffer* input_memory_;
+  MemoryBuffer* output_memory_;
   Timestamp timestamp_;
-  MemoryBuffer* memory_;
 };
 
 }  // event
 }  // fpl
 
-#endif  // FPL_EVENT_IO_H_
+#endif  // FPL_EVENT_NODE_ARGUMENTS_H_

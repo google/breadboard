@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "event/type_registry.h"
+#include "event/event.h"
 
 namespace fpl {
 namespace event {
@@ -53,8 +54,15 @@ class NodeSignature {
     output_types_.push_back(TypeRegistry<T>::GetType());
   }
 
+  void AddListener(const EventId event_id) {
+    event_listeners_.push_back(event_id);
+  }
+
   const std::vector<const Type*>& input_types() const { return input_types_; }
   const std::vector<const Type*>& output_types() const { return output_types_; }
+  const std::vector<EventId>& event_listeners() const {
+    return event_listeners_;
+  }
 
   BaseNode* Constructor() const;
   void Destructor(BaseNode* base_node) const;
@@ -64,6 +72,7 @@ class NodeSignature {
   NodeDestructor destructor_;
   std::vector<const Type*> input_types_;
   std::vector<const Type*> output_types_;
+  std::vector<EventId> event_listeners_;
 };
 
 }  // event

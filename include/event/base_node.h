@@ -15,8 +15,10 @@
 #ifndef FPL_EVENT_BASE_NODE_H_
 #define FPL_EVENT_BASE_NODE_H_
 
+#include <cassert>
+
 #include "event/event.h"
-#include "event/io.h"
+#include "event/node_arguments.h"
 #include "event/node_signature.h"
 
 namespace fpl {
@@ -39,47 +41,28 @@ class BaseNode {
  public:
   virtual ~BaseNode() {}
 
-  // All classes inheriting from BaseNode must imlement the static Register
+  // All classes inheriting from BaseNode must imlement the static OnRegister
   // function shown here. Because this is a static function it cannot be
   // virtual.
-  //
-  // static void OnRegister(NodeSignature* node_sig);
+  static void OnRegister(NodeSignature* /*node_sig*/) {
+    assert(!"This function should be implemented in the derived class");
+  }
 
   // Initialize is called once when a GraphState object is being initialized.
   // You can use this to do any special set up. For example, if this is a node
   // that has no inputs and only outputs that are unchanging, you can set them
   // once here and not need to worry about doing anything in Execute.
-  virtual void Initialize(Inputs* inputs, Outputs* outputs) {
-    (void)inputs;
-    (void)outputs;
+  virtual void Initialize(NodeArguments* args) {
+    (void)args;
   }
 
   // Execute is called any time the GraphState Execute function is called. Only
   // Nodes that are marked dirty or have had one of their inputs change will be
   // run. If there has been no changes to any of a nodes inputs, the call to
   // Execute on this node will be skipped.
-  virtual void Execute(Inputs* inputs, Outputs* outputs) {
-    (void)inputs;
-    (void)outputs;
+  virtual void Execute(NodeArguments* args) {
+    (void)args;
   }
-
-  // Marks this node to dirty so that the next time the graph is executed this
-  // node will have its Execute method called. This function has no effect when
-  // called from within Execute.
-  void MarkDirty();
-
- private:
-  friend class GraphState;
-
-  void InitializeInternal(Node* node, GraphState* graph_state) {
-    node_ = node;
-    graph_state_ = graph_state;
-  }
-
-  // The graph and node associated with this BaseNode. This is needed to mark
-  // the node dirty when events occur.
-  Node* node_;
-  GraphState* graph_state_;
 };
 
 }  // event

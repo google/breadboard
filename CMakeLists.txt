@@ -41,19 +41,20 @@ set(event_SRCS
     include/event/event_system.h
     include/event/graph.h
     include/event/graph_factory.h
-    include/event/io.h
+    include/event/graph_state.h
     include/event/log.h
     include/event/memory_buffer.h
     include/event/module.h
     include/event/node.h
     include/event/node_signature.h
     include/event/type.h
-    src/base_node.cpp
+    include/event/type_registry.h
     src/event.cpp
     src/event_manager.cpp
     src/event_system.cpp
     src/graph.cpp
     src/graph_factory.cpp
+    src/graph_state.cpp
     src/log.cpp
     src/module.cpp
     src/node.cpp

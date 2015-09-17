@@ -76,8 +76,9 @@ bool Graph::InsertNode(Node* node) {
               "Could not resolve graph: Type mismatch. Node %i, input edge %i "
               "is type \"%s\" but is connected to node %i, output edge %i of "
               "type \"%s\".",
-              input_node_index, i, edge.target().node_index(),
-              edge.target().edge_index(), input_type->name, output_type->name);
+              input_node_index, i, input_type->name,
+              edge.target().node_index(), edge.target().edge_index(),
+              output_type->name);
           return false;
         } else if (dependency.visited()) {
           // Circular dependency. This is not currently allowed; must be a
@@ -151,11 +152,16 @@ bool Graph::FinalizeNodes() {
   // Look at each node's input edge so we can mark the output edges that are in
   // use, and so that we know how much memory to allocate for the default
   // values.
-  for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
+  for (size_t i = 0; i < nodes_.size(); ++i) {
+    Node* node = &nodes_[i];
     const NodeSignature* node_sig = node->node_sig();
-    assert(node_sig->input_types().size() == node->input_edges().size());
-    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
-      InputEdge& input_edge = node->input_edges()[i];
+    if (node_sig->input_types().size() != node->input_edges().size()) {
+      CallLogFunc("Node %i got %i edges, but expected %i", i,
+                  node->input_edges().size(), node_sig->input_types().size());
+      return false;
+    }
+    for (size_t j = 0; j < node_sig->input_types().size(); ++j) {
+      InputEdge& input_edge = node->input_edges()[j];
 
       if (input_edge.connected()) {
         // If an input edge is connected to an output edge, mark that edge as
@@ -166,7 +172,7 @@ bool Graph::FinalizeNodes() {
       } else {
         // If this is an input with a default value, keep track of where to
         // allocate it when our blob of memory has been allocated.
-        const Type* type = node_sig->input_types()[i];
+        const Type* type = node_sig->input_types()[j];
         ptrdiff_t data_offset = AdvanceOffset(&current_input_offset, type);
         input_edge.SetDataOffset(data_offset);
       }
@@ -184,6 +190,7 @@ bool Graph::FinalizeNodes() {
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
         const Type* type = node_sig->input_types()[i];
+        assert(type);
         uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
         type->placement_new_func(ptr);
       }
@@ -209,6 +216,13 @@ bool Graph::FinalizeNodes() {
         output_edge.set_data_offset(data_offset);
       }
     }
+
+    // Initialize the listener offsets.
+    for (size_t i = 0; i < node_sig->event_listeners().size(); ++i) {
+      ptrdiff_t listener_offset =
+          AdvanceOffset<NodeEventListener>(&current_output_offset);
+      node->listener_offsets().push_back(listener_offset);
+    }
   }
 
   output_buffer_size_ = current_output_offset;
@@ -219,94 +233,6 @@ bool Graph::FinalizeNodes() {
 
   nodes_finalized_ = true;
   return true;
-}
-
-GraphState::~GraphState() {
-  // Destruct the per-graph values.
-  if (graph_) {
-    for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
-         ++node) {
-      const NodeSignature* node_sig = node->node_sig();
-      for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
-        const OutputEdge& output_edge = node->output_edges()[i];
-        if (output_edge.connected()) {
-          // If connected, it has a per-graph value.
-          const Type* type = node_sig->output_types()[i];
-          uint8_t* ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
-          type->operator_delete_func(ptr);
-        }
-      }
-    }
-  }
-}
-
-void GraphState::Initialize(Graph* graph) {
-  assert(graph->nodes_finalized());
-  graph_ = graph;
-  output_buffer_.Initialize(graph_->output_buffer_size());
-  for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
-       ++node) {
-    const NodeSignature* node_sig = node->node_sig();
-    BaseNode* base_node = node->base_node();
-    base_node->InitializeInternal(&*node, this);
-    for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
-      const OutputEdge& output_edge = node->output_edges()[i];
-      if (output_edge.connected()) {
-        const Type* type = node_sig->output_types()[i];
-        uint8_t* ptr;
-
-        // Initialize timestamp.
-        ptr = output_buffer_.GetObjectPtr(output_edge.timestamp_offset());
-        new (ptr) Timestamp(0);
-
-        // Initialize object.
-        ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
-        type->placement_new_func(ptr);
-      }
-    }
-  }
-
-  for (size_t i = 0; i < graph_->sorted_nodes().size(); ++i) {
-    Node* node = graph_->sorted_nodes()[i];
-    Inputs in(node, &graph_->nodes(), &graph_->input_buffer(), &output_buffer_);
-    Outputs out(node, &output_buffer_, timestamp_);
-    node->base_node()->Initialize(&in, &out);
-  }
-}
-
-void GraphState::Execute() {
-  assert(graph_);
-  for (size_t i = 0; i < graph_->sorted_nodes().size(); ++i) {
-    Node* node = graph_->sorted_nodes()[i];
-    if (IsDirty(*node)) {
-      Inputs in(node, &graph_->nodes(), &graph_->input_buffer(),
-                &output_buffer_);
-      Outputs out(node, &output_buffer_, timestamp_);
-      node->base_node()->Execute(&in, &out);
-    }
-  }
-  ++timestamp_;
-}
-
-bool GraphState::IsDirty(const Node& node) const {
-  const Timestamp* node_timestamp =
-      output_buffer_.GetObject<Timestamp>(node.timestamp_offset());
-  if (*node_timestamp == timestamp_) {
-    return true;
-  }
-  for (size_t i = 0; i < node.input_edges().size(); ++i) {
-    const InputEdge& input_edge = node.input_edges()[i];
-    if (input_edge.connected()) {
-      const OutputEdge& output_edge =
-          input_edge.target().GetTargetEdge(&graph_->nodes());
-      const Timestamp* timestamp =
-          output_buffer_.GetObject<Timestamp>(output_edge.timestamp_offset());
-      if (*timestamp == timestamp_) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
 
 }  // graph
