@@ -34,10 +34,6 @@ set(dependencies_fplutil_dir "${fpl_root}/fplutil"
 set(event_SRCS
     include/event/base_node.h
     include/event/event.h
-    include/event/event_listener.h
-    include/event/event_manager.h
-    include/event/event_payload.h
-    include/event/event_registry.h
     include/event/event_system.h
     include/event/graph.h
     include/event/graph_factory.h
@@ -50,7 +46,6 @@ set(event_SRCS
     include/event/type.h
     include/event/type_registry.h
     src/event.cpp
-    src/event_manager.cpp
     src/event_system.cpp
     src/graph.cpp
     src/graph_factory.cpp
