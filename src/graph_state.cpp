@@ -95,6 +95,7 @@ void GraphState::Initialize(Graph* graph) {
                        &output_buffer_, timestamp_);
     node->base_node()->Initialize(&args);
   }
+  ++timestamp_;
 }
 
 void GraphState::Execute() {

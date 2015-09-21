@@ -32,7 +32,7 @@ namespace event {
 class GraphState {
  public:
   GraphState()
-      : graph_(nullptr), output_buffer_(), timestamp_(kInitialTimestamp) {}
+      : graph_(nullptr), output_buffer_(), timestamp_(0) {}
   ~GraphState();
 
   // Initialize the GraphState with a graph.
@@ -62,13 +62,6 @@ class GraphState {
   const MemoryBuffer* output_buffer() const { return &output_buffer_; }
 
  private:
-  // Nodes are considered dirty when the node's timestamp is equal to the the
-  // graph's timestamp. We don't want nodes considered dirty the first time they
-  // execute as that would trigger every single node behavior at once.  Instead,
-  // we start the graph with a timestamp of 1. Any initial set up that should
-  // happen should be taken care of in the Initalize function.
-  static const Timestamp kInitialTimestamp = 1;
-
   // Disallow copying.
   GraphState(GraphState&);
   GraphState& operator=(GraphState&);
