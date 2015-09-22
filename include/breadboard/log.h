@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_LOG_H_
-#define FPL_EVENT_LOG_H_
+#ifndef BREADBOARD_LOG_H_
+#define BREADBOARD_LOG_H_
 
 #include <stdarg.h>
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // In order to perform logging, the library needs to be provided with a logging
 // function that fits this type signature.
@@ -31,7 +30,6 @@ void RegisterLogFunc(LogFunc log_func);
 // nothing if no logging function has been registered.
 void CallLogFunc(const char* format, ...);
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_LOG_H_
+#endif  // BREADBOARD_LOG_H_

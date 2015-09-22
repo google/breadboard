@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_MODULE_H_
-#define FPL_EVENT_MODULE_H_
+#ifndef BREADBOARD_MODULE_H_
+#define BREADBOARD_MODULE_H_
 
 #include <string>
 #include <unordered_map>
 
-#include "event/log.h"
-#include "event/node_signature.h"
-#include "event/base_node.h"
+#include "breadboard/log.h"
+#include "breadboard/node_signature.h"
+#include "breadboard/base_node.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // A module is a collection of related NodeSignatures. For example, it may make
 // sense to make a Math module for basic math operations, or an Entity module
@@ -82,7 +81,6 @@ class Module {
   NodeDictionary node_sigs_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_MODULE_H_
+#endif  // BREADBOARD_MODULE_H_

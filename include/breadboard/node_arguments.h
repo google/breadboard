@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_NODE_ARGUMENTS_H_
-#define FPL_EVENT_NODE_ARGUMENTS_H_
+#ifndef BREADBOARD_NODE_ARGUMENTS_H_
+#define BREADBOARD_NODE_ARGUMENTS_H_
 
 #include <vector>
 
-#include "event/log.h"
-#include "event/memory_buffer.h"
-#include "event/node.h"
-#include "event/type_registry.h"
+#include "breadboard/log.h"
+#include "breadboard/memory_buffer.h"
+#include "breadboard/node.h"
+#include "breadboard/type_registry.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 typedef uint32_t Timestamp;
 
@@ -180,7 +179,6 @@ class NodeArguments {
   Timestamp timestamp_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_NODE_ARGUMENTS_H_
+#endif  // BREADBOARD_NODE_ARGUMENTS_H_

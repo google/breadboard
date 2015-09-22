@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_EVENT_SYSTEM_H_
-#define FPL_EVENT_EVENT_SYSTEM_H_
+#ifndef BREADBOARD_EVENT_SYSTEM_H_
+#define BREADBOARD_EVENT_SYSTEM_H_
 
 #include <string>
 #include <unordered_map>
 
-#include "event/module.h"
+#include "breadboard/module.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // The event system keeps track of all registered types, modules and nodes that
 // are going to be used to construct graphs.
@@ -39,7 +38,6 @@ class EventSystem {
   std::unordered_map<std::string, Module> modules_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_EVENT_SYSTEM_H_
+#endif  // BREADBOARD_EVENT_SYSTEM_H_

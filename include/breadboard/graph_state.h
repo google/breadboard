@@ -12,27 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_GRAPH_STATE_H_
-#define FPL_EVENT_GRAPH_STATE_H_
+#ifndef BREADBOARD_GRAPH_STATE_H_
+#define BREADBOARD_GRAPH_STATE_H_
 
 #include <cassert>
 #include <memory>
 #include <vector>
 
-#include "event/graph.h"
-#include "event/memory_buffer.h"
-#include "event/node.h"
+#include "breadboard/graph.h"
+#include "breadboard/memory_buffer.h"
+#include "breadboard/node.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // A GraphState is used to execute the nodes on a graph. You can think of it as
 // an instance of the graph. It contains all of the state in the output edges
 // and nodes that update each time the graph executes.
 class GraphState {
  public:
-  GraphState()
-      : graph_(nullptr), output_buffer_(), timestamp_(0) {}
+  GraphState() : graph_(nullptr), output_buffer_(), timestamp_(0) {}
   ~GraphState();
 
   // Initialize the GraphState with a graph.
@@ -77,7 +75,6 @@ class GraphState {
   Timestamp timestamp_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_GRAPH_STATE_H_
+#endif  // BREADBOARD_GRAPH_STATE_H_

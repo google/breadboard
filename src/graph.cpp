@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/graph.h"
+#include "breadboard/graph.h"
 
 #include <new>
 #include <set>
 #include <type_traits>
 
-#include "event/log.h"
-#include "event/base_node.h"
+#include "breadboard/log.h"
+#include "breadboard/base_node.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 Graph::~Graph() {
   // Destruct the default values.
@@ -76,9 +75,8 @@ bool Graph::InsertNode(Node* node) {
               "Could not resolve graph: Type mismatch. Node %i, input edge %i "
               "is type \"%s\" but is connected to node %i, output edge %i of "
               "type \"%s\".",
-              input_node_index, i, input_type->name,
-              edge.target().node_index(), edge.target().edge_index(),
-              output_type->name);
+              input_node_index, i, input_type->name, edge.target().node_index(),
+              edge.target().edge_index(), output_type->name);
           return false;
         } else if (dependency.visited()) {
           // Circular dependency. This is not currently allowed; must be a
@@ -235,5 +233,4 @@ bool Graph::FinalizeNodes() {
   return true;
 }
 
-}  // graph
-}  // fpl
+}  // breadboard

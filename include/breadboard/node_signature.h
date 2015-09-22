@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_NODE_SIGNATURE_H_
-#define FPL_EVENT_NODE_SIGNATURE_H_
+#ifndef BREADBOARD_NODE_SIGNATURE_H_
+#define BREADBOARD_NODE_SIGNATURE_H_
 
 #include <functional>
 #include <vector>
 
-#include "event/type_registry.h"
-#include "event/event.h"
+#include "breadboard/type_registry.h"
+#include "breadboard/event.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 class BaseNode;
 
@@ -75,7 +74,6 @@ class NodeSignature {
   std::vector<EventId> event_listeners_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_NODE_SIGNATURE_H_
+#endif  // BREADBOARD_NODE_SIGNATURE_H_

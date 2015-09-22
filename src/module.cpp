@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/module.h"
+#include "breadboard/module.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 NodeSignature* Module::GetNodeSignature(const std::string& name) {
   auto iter = node_sigs_.find(name);
@@ -37,5 +36,5 @@ const NodeSignature* Module::GetNodeSignature(const std::string& name) const {
   return &iter->second;
 }
 
-}  // fpl
-}  // event
+}  // breadboard
+

@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_MEMORY_BUFFER_H_
-#define FPL_EVENT_MEMORY_BUFFER_H_
+#ifndef BREADBOARD_MEMORY_BUFFER_H_
+#define BREADBOARD_MEMORY_BUFFER_H_
 
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // MemoryBuffer is a simple wrapper around a vector of bytes that makes it easy
 // to convert offsets into concrete types. The buffer size may only be set once.
@@ -72,7 +71,6 @@ class MemoryBuffer {
   std::vector<uint8_t> buffer_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_MEMORY_BUFFER_H_
+#endif  // BREADBOARD_MEMORY_BUFFER_H_

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_BASE_NODE_H_
-#define FPL_EVENT_BASE_NODE_H_
+#ifndef BREADBOARD_BASE_NODE_H_
+#define BREADBOARD_BASE_NODE_H_
 
 #include <cassert>
 
-#include "event/event.h"
-#include "event/node_arguments.h"
-#include "event/node_signature.h"
+#include "breadboard/event.h"
+#include "breadboard/node_arguments.h"
+#include "breadboard/node_signature.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 class GraphState;
 
@@ -52,20 +51,15 @@ class BaseNode {
   // You can use this to do any special set up. For example, if this is a node
   // that has no inputs and only outputs that are unchanging, you can set them
   // once here and not need to worry about doing anything in Execute.
-  virtual void Initialize(NodeArguments* args) {
-    (void)args;
-  }
+  virtual void Initialize(NodeArguments* args) { (void)args; }
 
   // Execute is called any time the GraphState Execute function is called. Only
   // Nodes that are marked dirty or have had one of their inputs change will be
   // run. If there has been no changes to any of a nodes inputs, the call to
   // Execute on this node will be skipped.
-  virtual void Execute(NodeArguments* args) {
-    (void)args;
-  }
+  virtual void Execute(NodeArguments* args) { (void)args; }
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_BASE_NODE_H_
+#endif  // BREADBOARD_BASE_NODE_H_

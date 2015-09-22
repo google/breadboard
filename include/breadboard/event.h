@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_EVENT_H_
-#define FPL_EVENT_EVENT_H_
+#ifndef BREADBOARD_EVENT_H_
+#define BREADBOARD_EVENT_H_
 
 #include <map>
 
-#include "event/node.h"
+#include "breadboard/node.h"
 #include "fplutil/intrusive_list.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 class BaseNode;
 class GraphState;
@@ -34,14 +33,14 @@ typedef const char** EventId;
 // may have a node that should be marked dirty when the player moves You could
 // set up a node as so:
 //
-// class ExampleNode : public event::BaseNode {
+// class ExampleNode : public breadboard::BaseNode {
 //  public:
 //   ExampleNode() : listener_(this) {}
 //
 //   ...
 //
 //  private:
-//   event::NodeEventListener listener_;
+//   breadboard::NodeEventListener listener_;
 // };
 //
 // If you would like a node to respond to more than one kind of event, you may
@@ -60,7 +59,7 @@ class NodeEventListener {
  private:
   friend class NodeEventBroadcaster;
 
-  intrusive_list_node node_;
+  fpl::intrusive_list_node node_;
   GraphState* graph_state_;
   Node* target_node_;
   EventId event_id_;
@@ -92,35 +91,35 @@ class NodeEventBroadcaster {
   void BroadcastEvent(EventId event_id);
 
  private:
-  typedef intrusive_list<NodeEventListener> ListenerList;
+  typedef fpl::intrusive_list<NodeEventListener> ListenerList;
 
   std::map<EventId, ListenerList> event_listener_lists_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
 // Whenever you want to declare a new event ID, the preferred way is to use
 // these macros. In you header file you would put:
 //
-//     FPL_EVENT_DECLARE_EVENT(kMyEventId);
+//     BREADBOARD_DECLARE_EVENT(kMyEventId);
 //
 // And then in your cpp file you would put this:
 //
-//     FPL_EVENT_DEFINE_EVENT(kMyEventId);
+//     BREADBOARD_DEFINE_EVENT(kMyEventId);
 //
 // Once the event has been declared and defined, you can use it to broadcast
 // events to graphs that are listening for those events
-#define FPL_EVENT_DECLARE_EVENT(event_id) extern ::fpl::event::EventId event_id;
+#define BREADBOARD_DECLARE_EVENT(event_id) \
+  extern ::breadboard::EventId event_id;
 
-#define FPL_EVENT_CONCAT(a, b) a##b
+#define BREADBOARD_CONCAT(a, b) a##b
 
-#define FPL_EVENT_DEFINE_EVENT_INTERNAL(event_id, str)            \
-  static const char* FPL_EVENT_CONCAT(FPL_EVENT_VAR, __LINE__) = #str; \
-  ::fpl::event::EventId event_id = &FPL_EVENT_CONCAT(FPL_EVENT_VAR, __LINE__);
+#define BREADBOARD_DEFINE_EVENT_INTERNAL(event_id, str)                  \
+  static const char* BREADBOARD_CONCAT(BREADBOARD_VAR, __LINE__) = #str; \
+  ::breadboard::EventId event_id = &BREADBOARD_CONCAT(BREADBOARD_VAR, __LINE__);
 
-#define FPL_EVENT_DEFINE_EVENT(event_id)    \
-  FPL_EVENT_DEFINE_EVENT_INTERNAL(event_id, \
-                                  FPL_EVENT_CONCAT(#event_id, __LINE__))
+#define BREADBOARD_DEFINE_EVENT(event_id)    \
+  BREADBOARD_DEFINE_EVENT_INTERNAL(event_id, \
+                                   BREADBOARD_CONCAT(#event_id, __LINE__))
 
-#endif  // FPL_EVENT_EVENT_H_
+#endif  // BREADBOARD_EVENT_H_

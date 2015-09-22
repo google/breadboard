@@ -14,12 +14,11 @@
 
 #include <algorithm>
 
-#include "event/event.h"
-#include "event/graph_state.h"
-#include "event/node_arguments.h"
+#include "breadboard/event.h"
+#include "breadboard/graph_state.h"
+#include "breadboard/node_arguments.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 void NodeEventBroadcaster::RegisterListener(NodeEventListener* listener) {
   auto list_iter = event_listener_lists_.find(listener->event_id());
@@ -28,7 +27,7 @@ void NodeEventBroadcaster::RegisterListener(NodeEventListener* listener) {
         listener->event_id(), ListenerList(&NodeEventListener::node_)));
     list_iter = insert_result.first;
   }
-  intrusive_list<NodeEventListener>* listener_list = &list_iter->second;
+  fpl::intrusive_list<NodeEventListener>* listener_list = &list_iter->second;
   // We don't want to insert this node into more than one list, so remove it
   // from whatever list its in before adding it to the new list. This is okay
   // even if we are inserting it into the same list that it's already in.
@@ -51,5 +50,4 @@ void NodeEventBroadcaster::BroadcastEvent(EventId event_id) {
   }
 }
 
-}  // event
-}  // fpl
+}  // breadboard

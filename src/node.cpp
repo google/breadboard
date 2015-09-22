@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/node.h"
-#include "event/node_signature.h"
+#include "breadboard/node.h"
+#include "breadboard/node_signature.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 void OutputEdgeTarget::Initialize(unsigned int node_index,
                                   unsigned int edge_index) {
@@ -58,5 +57,4 @@ const Type* GetOutputEdgeType(const Node* node, int index) {
   return node->node_sig()->output_types()[index];
 }
 
-}  // event
-}  // fpl
+}  // breadboard

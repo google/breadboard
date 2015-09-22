@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_TYPE_REGISTRY_H_
-#define FPL_EVENT_TYPE_REGISTRY_H_
+#ifndef BREADBOARD_TYPE_REGISTRY_H_
+#define BREADBOARD_TYPE_REGISTRY_H_
 
 #include <cassert>
 #include <type_traits>
 
-#include "event/type.h"
+#include "breadboard/type.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // This class acts as a static type id storage, it is not meant to be
 // instantiated.
@@ -104,7 +103,6 @@ struct TypeRegistry<void> {
   TypeRegistry();
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_TYPE_REGISTRY_H_
+#endif  // BREADBOARD_TYPE_REGISTRY_H_

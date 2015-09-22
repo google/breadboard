@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/graph_state.h"
+#include "breadboard/graph_state.h"
 
 #include <new>
 #include <set>
 #include <type_traits>
 
-#include "event/base_node.h"
-#include "event/log.h"
+#include "breadboard/base_node.h"
+#include "breadboard/log.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 GraphState::~GraphState() {
   // Destruct the per-graph values.
@@ -132,5 +131,4 @@ bool GraphState::IsDirty(const Node& node) const {
   return false;
 }
 
-}  // graph
-}  // fpl
+}  // breadboard

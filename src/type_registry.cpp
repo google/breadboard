@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/type_registry.h"
+#include "breadboard/type_registry.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // template <>
 Type TypeRegistry<void>::type_;
@@ -23,5 +22,4 @@ Type TypeRegistry<void>::type_;
 // template <>
 bool TypeRegistry<void>::initialized_ = false;
 
-}  // event
-}  // fpl
+}  // breadboard

@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/node_signature.h"
+#include "breadboard/node_signature.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 BaseNode* NodeSignature::Constructor() const { return constructor_(); }
 
@@ -23,5 +22,4 @@ void NodeSignature::Destructor(BaseNode* base_node) const {
   return destructor_(base_node);
 }
 
-}  // event
-}  // fpl
+}  // breadboard

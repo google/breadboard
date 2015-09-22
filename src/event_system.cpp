@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/event_system.h"
-#include "event/log.h"
+#include "breadboard/event_system.h"
+#include "breadboard/log.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 Module* EventSystem::AddModule(const std::string& name) {
   auto iter = modules_.find(name);
@@ -37,5 +36,4 @@ const Module* EventSystem::GetModule(const std::string& name) const {
   return &iter->second;
 }
 
-}  // fpl
-}  // event
+}  // breadboard

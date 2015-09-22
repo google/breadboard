@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_NODE_H_
-#define FPL_EVENT_NODE_H_
+#ifndef BREADBOARD_NODE_H_
+#define BREADBOARD_NODE_H_
 
 #include <cassert>
 #include <cstddef>
 #include <vector>
 
-#include "event/type.h"
+#include "breadboard/type.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 class Node;
 class NodeSignature;
@@ -168,7 +167,6 @@ const Type* GetInputEdgeType(const Node* node, int index);
 // Convenience function to get the type of a node's output edges.
 const Type* GetOutputEdgeType(const Node* node, int index);
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_NODE_H_
+#endif  // BREADBOARD_NODE_H_

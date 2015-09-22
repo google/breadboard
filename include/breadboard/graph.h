@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_GRAPH_H_
-#define FPL_EVENT_GRAPH_H_
+#ifndef BREADBOARD_GRAPH_H_
+#define BREADBOARD_GRAPH_H_
 
 #include <cassert>
 #include <memory>
 #include <vector>
 
-#include "event/event_system.h"
-#include "event/memory_buffer.h"
-#include "event/node.h"
+#include "breadboard/event_system.h"
+#include "breadboard/memory_buffer.h"
+#include "breadboard/node.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // A Graph is a collection of nodes that are linked together at their edges.
 // Nodes in a graph may connect their input edges to other node output edges, or
@@ -105,7 +104,6 @@ class Graph {
   bool nodes_finalized_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_GRAPH_H_
+#endif  // BREADBOARD_GRAPH_H_

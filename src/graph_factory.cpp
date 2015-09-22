@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/graph_factory.h"
+#include "breadboard/graph_factory.h"
 
 #include <string>
 
-#include "event/event_system.h"
-#include "event/graph.h"
+#include "breadboard/event_system.h"
+#include "breadboard/graph.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 Graph* GraphFactory::LoadGraph(const char* filename) {
   // Have we loaded this flatbuffer already?
@@ -34,7 +33,7 @@ Graph* GraphFactory::LoadGraph(const char* filename) {
     if (!load_file_callback_(filename, &data)) {
       return nullptr;
     }
-    event::Graph* graph = new event::Graph();
+    Graph* graph = new Graph();
     if (!ParseData(event_system_, graph, &data)) {
       return nullptr;
     }
@@ -43,5 +42,4 @@ Graph* GraphFactory::LoadGraph(const char* filename) {
   }
 }
 
-}  // event
-}  // fpl
+}  // breadboard

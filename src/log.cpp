@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "event/log.h"
+#include "breadboard/log.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 LogFunc g_log_func;
 
@@ -33,5 +32,4 @@ void CallLogFunc(const char* format, ...) {
   }
 }
 
-}  // fpl
-}  // event
+}  // breadboard

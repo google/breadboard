@@ -13,7 +13,7 @@
 # limitations under the License.
 cmake_minimum_required(VERSION 2.8.12)
 
-project(event)
+project(breadboard)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
@@ -30,21 +30,21 @@ endif()
 set(dependencies_fplutil_dir "${fpl_root}/fplutil"
     CACHE PATH "Directory containing the fplutil library.")
 
-# Event system source files.
-set(event_SRCS
-    include/event/base_node.h
-    include/event/event.h
-    include/event/event_system.h
-    include/event/graph.h
-    include/event/graph_factory.h
-    include/event/graph_state.h
-    include/event/log.h
-    include/event/memory_buffer.h
-    include/event/module.h
-    include/event/node.h
-    include/event/node_signature.h
-    include/event/type.h
-    include/event/type_registry.h
+# Breadboard files.
+set(breadboard_SRCS
+    include/breadboard/base_node.h
+    include/breadboard/event.h
+    include/breadboard/event_system.h
+    include/breadboard/graph.h
+    include/breadboard/graph_factory.h
+    include/breadboard/graph_state.h
+    include/breadboard/log.h
+    include/breadboard/memory_buffer.h
+    include/breadboard/module.h
+    include/breadboard/node.h
+    include/breadboard/node_signature.h
+    include/breadboard/type.h
+    include/breadboard/type_registry.h
     src/event.cpp
     src/event_system.cpp
     src/graph.cpp
@@ -79,8 +79,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS_WARNINGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_FLAGS_WARNINGS}")
 
 # Executable target.
-add_library(event ${event_SRCS})
+add_library(breadboard ${breadboard_SRCS})
 
 # Dependencies for the executable target.
-target_link_libraries(event)
+target_link_libraries(breadboard)
 

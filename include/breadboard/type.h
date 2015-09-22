@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_TYPE_H_
-#define FPL_EVENT_TYPE_H_
+#ifndef BREADBOARD_TYPE_H_
+#define BREADBOARD_TYPE_H_
 
 #include <cstddef>
 #include <cstdint>
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 typedef void (*PlacementNewFunc)(uint8_t*);
 typedef void (*OperatorDeleteFunc)(uint8_t*);
@@ -48,7 +47,6 @@ struct Type {
   OperatorDeleteFunc operator_delete_func;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_TYPE_H_
+#endif  // BREADBOARD_TYPE_H_

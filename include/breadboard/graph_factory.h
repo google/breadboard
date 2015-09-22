@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_EVENT_GRAPH_FACTORY_H_
-#define FPL_EVENT_GRAPH_FACTORY_H_
+#ifndef BREADBOARD_GRAPH_FACTORY_H_
+#define BREADBOARD_GRAPH_FACTORY_H_
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 
-#include "event/event_system.h"
-#include "event/graph.h"
+#include "breadboard/event_system.h"
+#include "breadboard/graph.h"
 
-namespace fpl {
-namespace event {
+namespace breadboard {
 
 // Different platforms have different ways to load files, so a callback must be
 // supplied to actually load data.
@@ -36,8 +35,7 @@ typedef bool (*LoadFileCallback)(const char* filename, std::string* output);
 // and edges, and to parse default values.
 class GraphFactory {
  public:
-  GraphFactory(event::EventSystem* event_system,
-               LoadFileCallback load_file_callback)
+  GraphFactory(EventSystem* event_system, LoadFileCallback load_file_callback)
       : event_system_(event_system), load_file_callback_(load_file_callback) {}
 
   // Load the graph given it's filename. If this file has already been loaded, a
@@ -45,21 +43,19 @@ class GraphFactory {
   Graph* LoadGraph(const char* filename);
 
  private:
-  typedef std::unordered_map<std::string, std::unique_ptr<event::Graph>>
-      GraphMap;
+  typedef std::unordered_map<std::string, std::unique_ptr<Graph>> GraphMap;
 
   // Parse the data loaded from a file. The data is passed to this function as a
   // std::string. This function is responsible for filling in the graph (both
   // the edges and the nodes) using the nodes registered with the event_system.
-  virtual bool ParseData(event::EventSystem* event_system, event::Graph* graph,
+  virtual bool ParseData(EventSystem* event_system, Graph* graph,
                          const std::string* data) = 0;
 
-  event::EventSystem* event_system_;
+  EventSystem* event_system_;
   LoadFileCallback load_file_callback_;
   GraphMap loaded_graphs_;
 };
 
-}  // event
-}  // fpl
+}  // breadboard
 
-#endif  // FPL_EVENT_GRAPH_FACTORY_H_
+#endif  // BREADBOARD_GRAPH_FACTORY_H_
