@@ -17,6 +17,7 @@
 
 #include <vector>
 
+#include "breadboard/event.h"
 #include "breadboard/log.h"
 #include "breadboard/memory_buffer.h"
 #include "breadboard/node.h"
@@ -66,6 +67,10 @@ class NodeArguments {
       return input_memory_->GetObject<T>(input_edge.data_offset());
     }
   }
+
+  // Returns true if the given input argument index has been modified since the
+  // last execution of this graph.
+  bool IsInputDirty(size_t argument_index) const;
 
   // Each node has number of typed outputs (specified by the NodeDef). This
   // function allows you to pass data through an OutputEdge so that it is
@@ -131,16 +136,13 @@ class NodeArguments {
   }
 
  private:
+
+  void VerifyInputEdgeIndex(size_t argument_index) const;
+
   // Check to make sure the argument index is in range and the type being
   // retrieved is the type expected.
   void VerifyInputPreconditions(size_t argument_index,
                                 const Type* requested_type) const {
-    if (argument_index >= node_->input_edges().size()) {
-      CallLogFunc(
-          "Attempting to get argument %i when node only has %i input edges.",
-          argument_index, static_cast<int>(node_->input_edges().size()));
-      assert(0);
-    }
     const Type* expected_type = GetInputEdgeType(node_, argument_index);
     if (requested_type != expected_type) {
       CallLogFunc(

@@ -40,6 +40,7 @@ LOCAL_SRC_FILES := \
   $(BREADBOARD_RELATIVE_DIR)/src/log.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/module.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/node.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/node_arguments.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/node_signature.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/type_registry.cpp
 

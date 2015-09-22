@@ -42,6 +42,7 @@ set(breadboard_SRCS
     include/breadboard/memory_buffer.h
     include/breadboard/module.h
     include/breadboard/node.h
+    include/breadboard/node_arguments.h
     include/breadboard/node_signature.h
     include/breadboard/type.h
     include/breadboard/type_registry.h
@@ -53,6 +54,7 @@ set(breadboard_SRCS
     src/log.cpp
     src/module.cpp
     src/node.cpp
+    src/node_arguments.cpp
     src/node_signature.cpp
     src/type_registry.cpp)
 
