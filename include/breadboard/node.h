@@ -28,12 +28,18 @@ class NodeSignature;
 class BaseNode;
 class OutputEdge;
 
+static const unsigned int kInvalidNodeIndex = static_cast<unsigned int>(-1);
+static const unsigned int kInvalidEdgeIndex = static_cast<unsigned int>(-1);
+
 // An OutputEdgeTarget represents a specific output edge on a node in a graph.
 // Rather than point to it directly, it refers to it by index. This is necessary
 // because Nodes live in a vector, and as they are loaded they may move around
 // in memory, making it difficult to simply hold a pointer to them.
 class OutputEdgeTarget {
  public:
+  OutputEdgeTarget()
+      : node_index_(kInvalidNodeIndex), edge_index_(kInvalidEdgeIndex) {}
+
   void Initialize(unsigned int node_index, unsigned int edge_index);
 
   // Given a complete list of nodes in the graph, return the node this object
@@ -63,6 +69,7 @@ class OutputEdgeTarget {
 // the value in the buffer of any instance of the graph.
 class InputEdge {
  public:
+  InputEdge() : connected_(false), data_offset_(0) {}
   bool connected() const { return connected_; }
 
   ptrdiff_t data_offset() const { return data_offset_; };
@@ -94,7 +101,7 @@ class InputEdge {
 // will be updated as well.
 class OutputEdge {
  public:
-  OutputEdge() : connected_(false), timestamp_offset_(), data_offset_() {}
+  OutputEdge() : connected_(false), timestamp_offset_(0), data_offset_(0) {}
 
   bool connected() const { return connected_; }
   void set_connected(bool connected) { connected_ = connected; }
@@ -120,7 +127,7 @@ class OutputEdge {
 // (as long as it does not form a cycle between Nodes).
 class Node {
  public:
-  Node(const NodeSignature* node_sig);
+  explicit Node(const NodeSignature* node_sig);
 
   const NodeSignature* node_sig() const { return node_sig_; }
   BaseNode* base_node() { return base_node_; }

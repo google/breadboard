@@ -24,11 +24,13 @@ void OutputEdgeTarget::Initialize(unsigned int node_index,
 }
 
 Node& OutputEdgeTarget::GetTargetNode(std::vector<Node>* nodes) const {
+  assert(node_index_ < nodes->size());
   return (*nodes)[node_index_];
 }
 
 const Node& OutputEdgeTarget::GetTargetNode(
     const std::vector<Node>* nodes) const {
+  assert(node_index_ < nodes->size());
   return (*nodes)[node_index_];
 }
 
@@ -46,6 +48,7 @@ Node::Node(const NodeSignature* node_sig)
       base_node_(node_sig->Constructor()),
       input_edges_(),
       output_edges_(),
+      timestamp_offset_(0),
       inserted_(false),
       visited_(false) {}
 
