@@ -25,8 +25,6 @@
 
 namespace breadboard {
 
-typedef uint32_t Timestamp;
-
 // NodeArguments is a class that represent the input and output edges connected
 // to a node. Functionality is provided to get inputs and set outputs.
 // Additionally, this contains the list of listeners on a given node so that you
@@ -71,6 +69,10 @@ class NodeArguments {
   // Returns true if the given input argument index has been modified since the
   // last execution of this graph.
   bool IsInputDirty(size_t argument_index) const;
+
+  // Returns true if the given listener index has been signaled by a broadcaster
+  // since the last execution of this graph.
+  bool IsListenerDirty(size_t listener_index) const;
 
   // Each node has number of typed outputs (specified by the NodeDef). This
   // function allows you to pass data through an OutputEdge so that it is
@@ -136,44 +138,18 @@ class NodeArguments {
   }
 
  private:
-
-  void VerifyInputEdgeIndex(size_t argument_index) const;
-
   // Check to make sure the argument index is in range and the type being
   // retrieved is the type expected.
   void VerifyInputPreconditions(size_t argument_index,
-                                const Type* requested_type) const {
-    const Type* expected_type = GetInputEdgeType(node_, argument_index);
-    if (requested_type != expected_type) {
-      CallLogFunc(
-          "Attempting to get input argument %i as type \"%s\" when it expects "
-          "type \"%s\".",
-          argument_index, requested_type->name, expected_type->name);
-      assert(0);
-    }
-  }
+                                const Type* requested_type) const;
 
   // Check to make sure the argument index is in range and the type being set is
   // the type expected.
   void VerifyOutputPreconditions(size_t argument_index,
-                                 const Type* requested_type) const {
-    if (argument_index >= node_->output_edges().size()) {
-      CallLogFunc(
-          "Attempting to get argument %i when node only has %i output edges.",
-          argument_index, static_cast<int>(node_->input_edges().size()));
-      assert(0);
-    }
-    const Type* expected_type = GetOutputEdgeType(node_, argument_index);
-    if (requested_type != expected_type) {
-      CallLogFunc(
-          "Attempting to set output argument %i as type \"%s\" when it expects "
-          "type \"%s\".",
-          argument_index, requested_type->name, expected_type->name);
-      assert(0);
-    }
-  }
+                                 const Type* requested_type) const;
 
- private:
+  void VerifyListenerPreconditions(size_t listener_index) const;
+
   const Node* node_;
   const std::vector<Node>* nodes_;
   MemoryBuffer* input_memory_;

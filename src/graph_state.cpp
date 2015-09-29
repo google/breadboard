@@ -19,7 +19,6 @@
 #include <type_traits>
 
 #include "breadboard/base_node.h"
-#include "breadboard/log.h"
 
 namespace breadboard {
 
@@ -84,7 +83,7 @@ void GraphState::Initialize(Graph* graph) {
     for (size_t i = 0; i < node_sig->event_listeners().size(); ++i) {
       EventId event_id = node_sig->event_listeners()[i];
       ptr = output_buffer_.GetObjectPtr(node->listener_offsets()[i]);
-      new (ptr) NodeEventListener(this, &*node, event_id);
+      new (ptr) NodeEventListener(this, event_id);
     }
   }
 
@@ -115,6 +114,13 @@ bool GraphState::IsDirty(const Node& node) const {
       output_buffer_.GetObject<Timestamp>(node.timestamp_offset());
   if (*node_timestamp == timestamp_) {
     return true;
+  }
+  for (size_t i = 0; i < node.listener_offsets().size(); ++i) {
+    const NodeEventListener* listener =
+        output_buffer_.GetObject<NodeEventListener>(node.listener_offsets()[i]);
+    if (listener->timestamp() == timestamp_) {
+      return true;
+    }
   }
   for (size_t i = 0; i < node.input_edges().size(); ++i) {
     const InputEdge& input_edge = node.input_edges()[i];

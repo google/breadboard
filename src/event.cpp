@@ -20,19 +20,38 @@
 
 namespace breadboard {
 
+void NodeEventListener::MarkDirty() { timestamp_ = graph_state_->timestamp(); }
+
 void NodeEventBroadcaster::RegisterListener(NodeEventListener* listener) {
   auto list_iter = event_listener_lists_.find(listener->event_id());
   if (list_iter == event_listener_lists_.end()) {
     auto insert_result = event_listener_lists_.insert(std::make_pair(
-        listener->event_id(), ListenerList(&NodeEventListener::node_)));
+        listener->event_id(), ListenerList(&NodeEventListener::node)));
     list_iter = insert_result.first;
   }
-  fpl::intrusive_list<NodeEventListener>* listener_list = &list_iter->second;
-  // We don't want to insert this node into more than one list, so remove it
-  // from whatever list its in before adding it to the new list. This is okay
-  // even if we are inserting it into the same list that it's already in.
-  listener->node_.remove();
-  listener_list->push_back(*listener);
+
+  // We don't want to insert this node into more than one list, so if its in a
+  // list we remove it before adding it to the new list. If its already in the
+  // list we're going to add it to, we don't need to do anything.
+  ListenerList& listener_list = list_iter->second;
+  bool in_list = listener->node.in_list();
+  if (in_list) {
+    bool found = false;
+    for (auto listener_iter = listener_list.begin();
+         listener_iter != listener_list.end(); ++listener_iter) {
+      if (&*listener_iter == listener) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      listener->node.remove();
+      in_list = false;
+    }
+  }
+  if (!in_list) {
+    listener_list.push_back(*listener);
+  }
 }
 
 void NodeEventBroadcaster::BroadcastEvent(EventId event_id) {
@@ -41,11 +60,8 @@ void NodeEventBroadcaster::BroadcastEvent(EventId event_id) {
     ListenerList& listener_list = list_iter->second;
     for (auto listener_iter = listener_list.begin();
          listener_iter != listener_list.end(); ++listener_iter) {
-      MemoryBuffer* output_buffer =
-          listener_iter->graph_state_->output_buffer();
-      Timestamp* timestamp = output_buffer->GetObject<Timestamp>(
-          listener_iter->target_node_->timestamp_offset());
-      *timestamp = listener_iter->graph_state_->timestamp();
+      listener_iter->MarkDirty();
+      listener_iter->graph_state()->Execute();
     }
   }
 }

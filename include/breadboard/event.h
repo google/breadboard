@@ -25,6 +25,8 @@ namespace breadboard {
 class BaseNode;
 class GraphState;
 
+typedef uint32_t Timestamp;
+
 typedef const char** EventId;
 
 // A NodeEventListener is used to mark graph nodes dirty when a
@@ -47,21 +49,22 @@ typedef const char** EventId;
 // place multiple listeners on it.
 class NodeEventListener {
  public:
-  NodeEventListener(GraphState* graph_state, Node* target_node,
-                    EventId event_id)
-      : node_(),
-        graph_state_(graph_state),
-        target_node_(target_node),
-        event_id_(event_id) {}
+  NodeEventListener(GraphState* graph_state, EventId event_id)
+      : node(), graph_state_(graph_state), timestamp_(0), event_id_(event_id) {}
 
   EventId event_id() const { return event_id_; }
 
- private:
-  friend class NodeEventBroadcaster;
+  GraphState* graph_state() const { return graph_state_; }
 
-  fpl::intrusive_list_node node_;
+  Timestamp timestamp() const { return timestamp_; }
+
+  void MarkDirty();
+
+  fpl::intrusive_list_node node;
+
+ private:
   GraphState* graph_state_;
-  Node* target_node_;
+  Timestamp timestamp_;
   EventId event_id_;
 };
 
@@ -112,14 +115,18 @@ class NodeEventBroadcaster {
 #define BREADBOARD_DECLARE_EVENT(event_id) \
   extern ::breadboard::EventId event_id;
 
-#define BREADBOARD_CONCAT(a, b) a##b
+// We need two of each of these macros to ensure that they expand in the
+// right order becuase of quirks in how the C preprocessor works.
+// See http://stackoverflow.com/a/1597129/63791
+#define BREADBOARD_STRINGIZE(x) #x
+#define BREADBOARD_STRINGIZE2(x) BREADBOARD_STRINGIZE(x)
+#define BREADBOARD_CONCAT(x, y) x##y
+#define BREADBOARD_CONCAT2(x, y) BREADBOARD_CONCAT(x, y)
 
-#define BREADBOARD_DEFINE_EVENT_INTERNAL(event_id, str)                  \
-  static const char* BREADBOARD_CONCAT(BREADBOARD_VAR, __LINE__) = #str; \
-  ::breadboard::EventId event_id = &BREADBOARD_CONCAT(BREADBOARD_VAR, __LINE__);
-
-#define BREADBOARD_DEFINE_EVENT(event_id)    \
-  BREADBOARD_DEFINE_EVENT_INTERNAL(event_id, \
-                                   BREADBOARD_CONCAT(#event_id, __LINE__))
+#define BREADBOARD_DEFINE_EVENT(event_id)                            \
+  static const char* BREADBOARD_CONCAT2(BREADBOARD_VAR_, __LINE__) = \
+      __FILE__ ":" BREADBOARD_STRINGIZE2(__LINE__);                  \
+  ::breadboard::EventId event_id =                                   \
+      &BREADBOARD_CONCAT2(BREADBOARD_VAR_, __LINE__);
 
 #endif  // BREADBOARD_EVENT_H_

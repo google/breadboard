@@ -16,11 +16,42 @@
 
 namespace breadboard {
 
-void NodeArguments::VerifyInputEdgeIndex(size_t argument_index) const {
+// Check to make sure the argument index is in range and the type being
+// retrieved is the type expected.
+void NodeArguments::VerifyInputPreconditions(size_t argument_index,
+                                             const Type* requested_type) const {
   if (argument_index >= node_->input_edges().size()) {
     CallLogFunc(
         "Attempting to get argument %i when node only has %i input edges.",
         argument_index, static_cast<int>(node_->input_edges().size()));
+    assert(0);
+  }
+  const Type* expected_type = GetInputEdgeType(node_, argument_index);
+  if (requested_type != expected_type) {
+    CallLogFunc(
+        "Attempting to get input argument %i as type \"%s\" when it expects "
+        "type \"%s\".",
+        argument_index, requested_type->name, expected_type->name);
+    assert(0);
+  }
+}
+
+// Check to make sure the argument index is in range and the type being set is
+// the type expected.
+void NodeArguments::VerifyOutputPreconditions(
+    size_t argument_index, const Type* requested_type) const {
+  if (argument_index >= node_->output_edges().size()) {
+    CallLogFunc(
+        "Attempting to get argument %i when node only has %i output edges.",
+        argument_index, static_cast<int>(node_->input_edges().size()));
+    assert(0);
+  }
+  const Type* expected_type = GetOutputEdgeType(node_, argument_index);
+  if (requested_type != expected_type) {
+    CallLogFunc(
+        "Attempting to set output argument %i as type \"%s\" when it expects "
+        "type \"%s\".",
+        argument_index, requested_type->name, expected_type->name);
     assert(0);
   }
 }
@@ -40,6 +71,24 @@ bool NodeArguments::IsInputDirty(size_t argument_index) const {
     // and thus is never considered dirty.
     return false;
   }
+}
+
+void NodeArguments::VerifyListenerPreconditions(size_t listener_index) const {
+  if (listener_index >= node_->listener_offsets().size()) {
+    CallLogFunc(
+        "Attempting to get listener %i when node only has %i listeners.",
+        listener_index, static_cast<int>(node_->listener_offsets().size()));
+    assert(0);
+  }
+}
+
+bool NodeArguments::IsListenerDirty(size_t listener_index) const {
+  VerifyListenerPreconditions(listener_index);
+
+  ptrdiff_t listener_offset = node_->listener_offsets()[listener_index];
+  NodeEventListener* listener =
+      output_memory_->GetObject<NodeEventListener>(listener_offset);
+  return listener->timestamp() == timestamp_;
 }
 
 }  // breadboard
