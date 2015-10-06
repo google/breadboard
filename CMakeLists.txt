@@ -20,15 +20,64 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # Temporary files (like object files) created while compiling projects.
 set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
+# Build the common module library.
+option(breadboard_build_module_library
+    "Build a library of standard modules along with Breadboard" ON)
+
+# Include component library modules
+option(breadboard_build_component_library_module
+    "Build a library of standard components along with the entity system" ON)
+
+# Include a pindrop audio module
+option(breadboard_build_pindrop_module
+    "Build a library of standard components along with the entity system" ON)
+
+# Include a mathfu vector module
+option(breadboard_build_mathfu_module
+    "Build a library of standard components along with the entity system" ON)
+
+# Directory which contains the source for 3rd party libraries.
+if(NOT DEFINED third_party_root)
+  get_filename_component(third_party_root
+      "${CMAKE_CURRENT_SOURCE_DIR}/../../../../external" REALPATH)
+endif()
+
 # Directory which contains source for FPL libraries.
 if(NOT DEFINED fpl_root)
-  get_filename_component(
-      fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/../../libs" REALPATH)
+  get_filename_component(fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/../../libs"
+      REALPATH)
+endif()
+
+# If the dependencies directory exists, assume this is the root directory for
+# all libraries required by this project.
+if(NOT DEFINED dependencies_root)
+  set(dependencies_root "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
+  if(EXISTS "${dependencies_root}")
+    set(third_party_root "${dependencies_root}")
+    set(fpl_root "${dependencies_root}")
+  endif()
 endif()
 
 # Configurable locations of dependencies of this project.
-set(dependencies_fplutil_dir "${fpl_root}/fplutil"
-    CACHE PATH "Directory containing the fplutil library.")
+set(dependencies_fplutil_dir "${fpl_root}/fplutil" CACHE PATH
+    "Directory containing the fplutil library.")
+set(dependencies_bulletphysics_distr_dir "${third_party_root}/bulletphysics"
+    CACHE PATH "Directory containing the Bullet Physics distribution.")
+set(dependencies_entity_dir "${fpl_root}/entity" CACHE PATH
+    "Directory containing the Entity library.")
+set(dependencies_component_library_dir
+    "${dependencies_entity_dir}/component_library" CACHE PATH
+    "Directory containing the entity system component library")
+set(dependencies_fplbase_dir "${fpl_root}/fplbase" CACHE PATH
+    "Directory containing the FPLBase library.")
+set(dependencies_mathfu_dir "${fpl_root}/mathfu" CACHE PATH
+    "Directory containing the MathFu library.")
+set(dependencies_motive_dir "${fpl_root}/motive" CACHE PATH
+    "Directory containing the motive animation library.")
+set(dependencies_pindrop_dir "${fpl_root}/pindrop" CACHE PATH
+    "Directory containing the pindrop library.")
+set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
+    "Directory containing the Flatbuffers library.")
 
 # Breadboard files.
 set(breadboard_SRCS
@@ -46,17 +95,17 @@ set(breadboard_SRCS
     include/breadboard/node_signature.h
     include/breadboard/type.h
     include/breadboard/type_registry.h
-    src/event.cpp
-    src/event_system.cpp
-    src/graph.cpp
-    src/graph_factory.cpp
-    src/graph_state.cpp
-    src/log.cpp
-    src/module.cpp
-    src/node.cpp
-    src/node_arguments.cpp
-    src/node_signature.cpp
-    src/type_registry.cpp)
+    src/breadboard/event.cpp
+    src/breadboard/event_system.cpp
+    src/breadboard/graph.cpp
+    src/breadboard/graph_factory.cpp
+    src/breadboard/graph_state.cpp
+    src/breadboard/log.cpp
+    src/breadboard/module.cpp
+    src/breadboard/node.cpp
+    src/breadboard/node_arguments.cpp
+    src/breadboard/node_signature.cpp
+    src/breadboard/type_registry.cpp)
 
 # Includes for this project.
 include_directories(include)
@@ -80,9 +129,91 @@ endif()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS_WARNINGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_FLAGS_WARNINGS}")
 
-# Executable target.
 add_library(breadboard ${breadboard_SRCS})
-
-# Dependencies for the executable target.
 target_link_libraries(breadboard)
 
+if (breadboard_build_module_library)
+  # Include all common modules.
+  include_directories(module_library/include)
+  set(breadboard_module_library_DEPS breadboard)
+  set(breadboard_module_library_SRCS
+      module_library/include/module_library/common.h
+      module_library/include/module_library/debug.h
+      module_library/include/module_library/logic.h
+      module_library/include/module_library/math.h
+      module_library/include/module_library/string.h
+      module_library/src/module_library/common.cpp
+      module_library/src/module_library/debug.cpp
+      module_library/src/module_library/logic.cpp
+      module_library/src/module_library/math.cpp
+      module_library/src/module_library/string.cpp)
+
+  # Include vector module.
+  if (breadboard_build_mathfu_module)
+    set(mathfu_build_benchmarks OFF CACHE BOOL "")
+    set(mathfu_build_tests OFF CACHE BOOL "")
+    add_subdirectory(${dependencies_mathfu_dir} ${tmp_dir}/mathfu)
+    include_directories(${dependencies_mathfu_dir}/include)
+    set(breadboard_module_library_SRCS
+        ${breadboard_module_library_SRCS}
+        module_library/include/module_library/vec3.h
+        module_library/src/module_library/vec3.cpp)
+  endif()
+
+  # Include modules for the components in the component library.
+  if (breadboard_build_component_library_module)
+    if (NOT TARGET fplbase)
+      add_subdirectory(${dependencies_fplbase_dir} ${tmp_dir}/fplbase)
+    endif()
+    set(FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR
+        ${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR} PARENT_SCOPE)
+
+    if (NOT TARGET entity)
+      add_subdirectory(${dependencies_entity_dir} ${tmp_dir}/entity)
+    endif()
+    set(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
+        ${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR} PARENT_SCOPE)
+
+    include_directories(${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+    include_directories(${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+    include_directories(${dependencies_bulletphysics_distr_dir}/src)
+    include_directories(${dependencies_component_library_dir}/include)
+    include_directories(${dependencies_entity_dir}/include)
+    include_directories(${dependencies_flatbuffers_dir}/include)
+    include_directories(${dependencies_fplbase_dir}/include)
+    include_directories(${dependencies_motive_dir}/include)
+
+    set(breadboard_module_library_DEPS
+        ${breadboard_module_library_DEPS}
+        component_library)
+    set(breadboard_module_library_SRCS
+        ${breadboard_module_library_SRCS}
+        module_library/include/module_library/animation.h
+        module_library/include/module_library/entity.h
+        module_library/include/module_library/physics.h
+        module_library/include/module_library/transform.h
+        module_library/src/module_library/animation.cpp
+        module_library/src/module_library/entity.cpp
+        module_library/src/module_library/physics.cpp
+        module_library/src/module_library/transform.cpp)
+  endif()
+
+  # Include pindrop audio module.
+  if (breadboard_build_pindrop_module)
+    include_directories(${dependencies_pindrop_dir}/include)
+    set(breadboard_module_library_DEPS
+        ${breadboard_module_library_DEPS}
+        pindrop)
+    set(breadboard_module_library_SRCS
+        ${breadboard_module_library_SRCS}
+        module_library/include/module_library/audio.h
+        module_library/src/module_library/audio.cpp)
+  endif()
+
+  add_library(module_library ${breadboard_module_library_SRCS})
+  add_dependencies(module_library ${breadboard_module_library_DEPS})
+  if (breadboard_build_mathfu_module)
+    mathfu_configure_flags(module_library)
+  endif()
+  target_link_libraries(module_library ${breadboard_module_library_DEPS})
+endif()

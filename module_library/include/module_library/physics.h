@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BREADBOARD_LOG_H_
-#define BREADBOARD_LOG_H_
+#ifndef FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_
+#define FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_
 
-#include <cstdarg>
+#include "breadboard/event_system.h"
+#include "component_library/graph.h"
+#include "component_library/physics.h"
+#include "module_library/entity.h"
 
-namespace breadboard {
+namespace fpl {
+namespace module_library {
 
-// In order to perform logging, the library needs to be provided with a logging
-// function that fits this type signature.
-typedef void (*LogFunc)(const char* fmt, va_list args);
+void InitializePhysicsModule(
+    breadboard::EventSystem* event_system,
+    component_library::PhysicsComponent* physics_component,
+    component_library::GraphComponent* graph_component);
 
-// Register a logging function with the library.
-void RegisterLogFunc(LogFunc log_func);
+}  // namespace fpl
+}  // namespace module_library
 
-// Call the registered log function with the provided format string. This does
-// nothing if no logging function has been registered.
-void CallLogFunc(const char* format, ...);
-
-}  // breadboard
-
-#endif  // BREADBOARD_LOG_H_
+#endif  // FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_

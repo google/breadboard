@@ -12,24 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BREADBOARD_LOG_H_
-#define BREADBOARD_LOG_H_
+#ifndef FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_
+#define FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_
 
-#include <cstdarg>
+#include "breadboard/event_system.h"
+#include "pindrop/pindrop.h"
 
-namespace breadboard {
+namespace fpl {
+namespace module_library {
 
-// In order to perform logging, the library needs to be provided with a logging
-// function that fits this type signature.
-typedef void (*LogFunc)(const char* fmt, va_list args);
+void InitializeAudioModule(breadboard::EventSystem* event_system,
+                           pindrop::AudioEngine* audio_engine);
 
-// Register a logging function with the library.
-void RegisterLogFunc(LogFunc log_func);
+}  // namespace module_library
+}  // namespace fpl
 
-// Call the registered log function with the provided format string. This does
-// nothing if no logging function has been registered.
-void CallLogFunc(const char* format, ...);
-
-}  // breadboard
-
-#endif  // BREADBOARD_LOG_H_
+#endif  // FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_

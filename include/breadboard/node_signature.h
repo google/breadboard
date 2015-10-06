@@ -18,8 +18,8 @@
 #include <functional>
 #include <vector>
 
-#include "breadboard/type_registry.h"
 #include "breadboard/event.h"
+#include "breadboard/type_registry.h"
 
 namespace breadboard {
 

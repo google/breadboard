@@ -18,8 +18,8 @@
 #include <set>
 #include <type_traits>
 
-#include "breadboard/log.h"
 #include "breadboard/base_node.h"
+#include "breadboard/log.h"
 
 namespace breadboard {
 

@@ -12,24 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BREADBOARD_LOG_H_
-#define BREADBOARD_LOG_H_
+#include "breadboard/event_system.h"
+#include "module_library/debug.h"
+#include "module_library/logic.h"
+#include "module_library/math.h"
+#include "module_library/string.h"
 
-#include <cstdarg>
+namespace fpl {
+namespace module_library {
 
-namespace breadboard {
+void InitializeCommonModules(breadboard::EventSystem* event_system) {
+  InitializeDebugModule(event_system);
+  InitializeLogicModule(event_system);
+  InitializeMathModule(event_system);
+  InitializeStringModule(event_system);
+}
 
-// In order to perform logging, the library needs to be provided with a logging
-// function that fits this type signature.
-typedef void (*LogFunc)(const char* fmt, va_list args);
-
-// Register a logging function with the library.
-void RegisterLogFunc(LogFunc log_func);
-
-// Call the registered log function with the provided format string. This does
-// nothing if no logging function has been registered.
-void CallLogFunc(const char* format, ...);
-
-}  // breadboard
-
-#endif  // BREADBOARD_LOG_H_
+}  // namespace module_library
+}  // namespace fpl

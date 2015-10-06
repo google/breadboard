@@ -18,9 +18,9 @@
 #include <string>
 #include <unordered_map>
 
+#include "breadboard/base_node.h"
 #include "breadboard/log.h"
 #include "breadboard/node_signature.h"
-#include "breadboard/base_node.h"
 
 namespace breadboard {
 

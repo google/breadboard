@@ -24,6 +24,8 @@ LOCAL_SHARED_LIBRARIES :=
 BREADBOARD_RELATIVE_DIR := ..
 BREADBOARD_DIR := $(LOCAL_PATH)/$(BREADBOARD_RELATIVE_DIR)
 
+include $(BREADBOARD_DIR)/jni/android_config.mk
+
 LOCAL_EXPORT_C_INCLUDES := $(BREADBOARD_DIR)/include
 
 LOCAL_C_INCLUDES := \
@@ -32,17 +34,16 @@ LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES)
 
 LOCAL_SRC_FILES := \
-  $(BREADBOARD_RELATIVE_DIR)/src/event.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/event_system.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/graph.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/graph_factory.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/graph_state.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/log.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/module.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/node.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/node_arguments.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/node_signature.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/type_registry.cpp
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/event.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/event_system.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph_factory.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph_state.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/log.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/module.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node_arguments.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node_signature.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/type_registry.cpp
 
 include $(BUILD_STATIC_LIBRARY)
-
