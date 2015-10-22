@@ -33,13 +33,17 @@ DEPENDENCIES_FLATBUFFERS_DIR?=$(FPL_ROOT)/flatbuffers
 DEPENDENCIES_FPLUTIL_DIR?=$(FPL_ROOT)/fplutil
 # Location of the googletest library.
 DEPENDENCIES_GTEST_DIR?=$(FPL_ROOT)/googletest
+# Location of the fplbase library.
+DEPENDENCIES_FPLBASE_DIR?=$(FPL_ROOT)/fplbase
 # Location of the MathFu library.
 DEPENDENCIES_MATHFU_DIR?=$(FPL_ROOT)/mathfu
 # Location of the Breadboard library.
 DEPENDENCIES_BREADBOARD_DIR?=$(FPL_ROOT)/breadboard
 # Location of the Pindrop library.
-DEPENDENCIES_BREADBOARD_DIR?=$(FPL_ROOT)/pindrop
-# Location of the MathFu library.
+DEPENDENCIES_PINDROP_DIR?=$(FPL_ROOT)/pindrop
+# Location of the Motive library.
 DEPENDENCIES_MOTIVE_DIR?=$(FPL_ROOT)/motive
+# Location of the Entity library.
+DEPENDENCIES_ENTITY_DIR?=$(FPL_ROOT)/entity
 # Location of the Bullet Physics library.
 DEPENDENCIES_BULLETPHYSICS_DIR?=$(THIRD_PARTY_ROOT)/bulletphysics
