@@ -40,7 +40,7 @@ class EntityNode : public breadboard::BaseNode {
   }
 
   virtual void Execute(breadboard::NodeArguments* args) {
-    auto entity_id = args->GetInput<std::string>(0);
+    auto entity_id = args->GetInput<std::string>(1);
     EntityRef entity =
         meta_component_->GetEntityFromDictionary(entity_id->c_str());
     assert(entity.IsValid());
