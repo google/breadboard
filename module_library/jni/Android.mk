@@ -29,11 +29,9 @@ include $(MODULES_DIR)/jni/android_config.mk
 LOCAL_EXPORT_C_INCLUDES := \
   $(MODULES_DIR)/include \
   $(DEPENDENCIES_FPLUTIL_DIR)/libfplutil/include \
-	~/src/ub-games-master/vendor/unbundled_google/libs/fplutil/libfplutil/include \
 
 LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES) \
-	~/src/ub-games-master/vendor/unbundled_google/libs/fplutil/libfplutil/include \
   $(DEPENDENCIES_BREADBOARD_DIR)/include \
   $(DEPENDENCIES_BULLETPHYSICS_DIR)/src \
   $(DEPENDENCIES_ENTITY_DIR)/include \
