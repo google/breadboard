@@ -20,10 +20,12 @@
 #include "breadboard/event_system.h"
 #include "component_library/transform.h"
 #include "entity/entity_manager.h"
+#include "mathfu/glsl_mappings.h"
 
 using fpl::component_library::TransformData;
 using fpl::component_library::TransformComponent;
 using fpl::entity::EntityRef;
+using mathfu::vec3;
 
 namespace fpl {
 namespace module_library {
@@ -81,6 +83,27 @@ class ChildNode : public breadboard::BaseNode {
   virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
 };
 
+// Returns the position of the entity in world space.
+class WorldPositionNode : public breadboard::BaseNode {
+ public:
+  static void OnRegister(breadboard::NodeSignature* node_sig) {
+    node_sig->AddInput<void>();
+    node_sig->AddInput<TransformDataRef>();
+    node_sig->AddOutput<vec3>();
+  }
+
+  virtual void Initialize(breadboard::NodeArguments* args) {
+    if (args->IsInputDirty(0)) {
+      auto transform_ref = args->GetInput<TransformDataRef>(1);
+      vec3 position =
+          transform_ref->component()->WorldPosition(transform_ref->entity());
+      args->SetOutput(0, position);
+    }
+  }
+
+  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+};
+
 void InitializeTransformModule(breadboard::EventSystem* event_system,
                                TransformComponent* transform_component) {
   breadboard::Module* module = event_system->AddModule("transform");
@@ -89,6 +112,7 @@ void InitializeTransformModule(breadboard::EventSystem* event_system,
   };
   module->RegisterNode<TransformNode>("transform", transform_ctor);
   module->RegisterNode<ChildNode>("child");
+  module->RegisterNode<WorldPositionNode>("world_position");
 }
 
 }  // namespace module_library

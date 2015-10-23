@@ -56,6 +56,7 @@ void SetGraphEntity(entity::EntityRef entity);
 
 void InitializeEntityModule(
     breadboard::EventSystem* event_system,
+    entity::EntityManager* entity_manager,
     component_library::MetaComponent* meta_component,
     component_library::GraphComponent* graph_component);
 
