@@ -165,16 +165,17 @@ if (breadboard_build_module_library)
     if (NOT TARGET fplbase)
       add_subdirectory(${dependencies_fplbase_dir} ${tmp_dir}/fplbase)
     endif()
-    set(FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR
-        ${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR} PARENT_SCOPE)
 
     if (NOT TARGET entity)
       add_subdirectory(${dependencies_entity_dir} ${tmp_dir}/entity)
     endif()
-    set(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-        ${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR} PARENT_SCOPE)
 
+    get_property(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
+                 TARGET component_library_generated_includes
+                 PROPERTY COMPONENT_LIBRARY_DIR)
     include_directories(${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+    get_property(FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR
+                 TARGET fplbase_generated_includes PROPERTY FPLBASE_DIR)
     include_directories(${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR})
     include_directories(${dependencies_bulletphysics_distr_dir}/src)
     include_directories(${dependencies_component_library_dir}/include)
