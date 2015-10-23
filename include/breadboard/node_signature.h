@@ -16,6 +16,7 @@
 #define BREADBOARD_NODE_SIGNATURE_H_
 
 #include <functional>
+#include <string>
 #include <vector>
 
 #include "breadboard/event.h"
@@ -36,9 +37,16 @@ typedef std::function<void(BaseNode*)> NodeDestructor;
 // special set up before creating an instance of your class.
 class NodeSignature {
  public:
-  NodeSignature(const NodeConstructor& constructor,
+  NodeSignature(const std::string* module_name, const std::string& node_name,
+                const NodeConstructor& constructor,
                 const NodeDestructor& destructor)
-      : constructor_(constructor), destructor_(destructor) {}
+      : module_name_(module_name),
+        node_name_(node_name),
+        constructor_(constructor),
+        destructor_(destructor) {}
+
+  const std::string* module_name() const { return module_name_; }
+  const std::string& node_name() const { return node_name_; }
 
   // Adds intput and output edges to a node definition. The order that these
   // intputs and outputs are added matters. It determines the expected intputs
@@ -67,6 +75,8 @@ class NodeSignature {
   void Destructor(BaseNode* base_node) const;
 
  private:
+  const std::string* module_name_;
+  const std::string node_name_;
   NodeConstructor constructor_;
   NodeDestructor destructor_;
   std::vector<const Type*> input_types_;

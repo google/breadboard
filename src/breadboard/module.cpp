@@ -17,20 +17,20 @@
 namespace breadboard {
 
 NodeSignature* Module::GetNodeSignature(const std::string& name) {
-  auto iter = node_sigs_.find(name);
-  if (iter == node_sigs_.end()) {
-    CallLogFunc("A Node named \"%s\" has not been registered in this module.",
-                name.c_str());
+  auto iter = signatures_.find(name);
+  if (iter == signatures_.end()) {
+    CallLogFunc("A node named \"%s\" has not been registered in module \"%s\".",
+                name.c_str(), module_name_.c_str());
     return nullptr;
   }
   return &iter->second;
 }
 
 const NodeSignature* Module::GetNodeSignature(const std::string& name) const {
-  auto iter = node_sigs_.find(name);
-  if (iter == node_sigs_.end()) {
-    CallLogFunc("A Node named \"%s\" has not been registered in this module.",
-                name.c_str());
+  auto iter = signatures_.find(name);
+  if (iter == signatures_.end()) {
+    CallLogFunc("A node named \"%s\" has not been registered in module \"%s\".",
+                name.c_str(), module_name_.c_str());
     return nullptr;
   }
   return &iter->second;

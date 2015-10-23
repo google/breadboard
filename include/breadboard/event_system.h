@@ -28,14 +28,16 @@ class EventSystem {
  public:
   // Adds a new module with the given name to the EventSystem. A module is
   // simply a collection of related nodes.
-  Module* AddModule(const std::string& name);
+  Module* AddModule(const std::string& module_name);
 
   // Returns a pointer to a module given its name.
-  const Module* GetModule(const std::string& name) const;
+  const Module* GetModule(const std::string& module_name) const;
 
  private:
+  typedef std::unordered_map<std::string, Module> ModuleDictionary;
+
   // TODO: Consider changing over to using integer keys instead of std::strings.
-  std::unordered_map<std::string, Module> modules_;
+  ModuleDictionary modules_;
 };
 
 }  // breadboard

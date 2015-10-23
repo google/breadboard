@@ -127,9 +127,9 @@ class OutputEdge {
 // (as long as it does not form a cycle between Nodes).
 class Node {
  public:
-  explicit Node(const NodeSignature* node_sig);
+  explicit Node(const NodeSignature* signature);
 
-  const NodeSignature* node_sig() const { return node_sig_; }
+  const NodeSignature* signature() const { return signature_; }
   BaseNode* base_node() { return base_node_; }
 
   std::vector<InputEdge>& input_edges() { return input_edges_; }
@@ -155,7 +155,7 @@ class Node {
   bool visited() const { return visited_; }
 
  private:
-  const NodeSignature* node_sig_;
+  const NodeSignature* signature_;
   BaseNode* base_node_;
 
   std::vector<InputEdge> input_edges_;

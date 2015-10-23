@@ -29,26 +29,30 @@ namespace breadboard {
 // for entity operations.
 class Module {
  public:
+  explicit Module(const std::string& module_name) : module_name_(module_name) {}
+
   // Add a new NodeSignature. The template argument to this function should be a
   // class that implements BaseNode. Each BaseNode registered should have one
   // NodeSignature associated with it. The NodeSignature defines how many input
   // and output edges and the types of those edges.
   template <typename T>
-  void RegisterNode(const std::string& name, const NodeConstructor& constructor,
+  void RegisterNode(const std::string& node_name,
+                    const NodeConstructor& constructor,
                     const NodeDestructor& destructor) {
-    auto result = node_sigs_.insert(
-        std::make_pair(name, NodeSignature(constructor, destructor)));
+    auto result = signatures_.insert(std::make_pair(
+        node_name,
+        NodeSignature(&module_name_, node_name, constructor, destructor)));
     NodeDictionary::iterator iter = result.first;
 
     bool success = result.second;
     if (!success) {
       CallLogFunc(
-          "A Node named \"%s\" has already been registered in this module.",
-          name.c_str());
+          "A node named \"%s\" has already been registered in module \"%s\".",
+          node_name.c_str(), module_name_.c_str());
       return;
     }
-    NodeSignature* node_sig = &iter->second;
-    T::OnRegister(node_sig);
+    NodeSignature* signature = &iter->second;
+    T::OnRegister(signature);
   }
 
   template <typename T>
@@ -75,10 +79,8 @@ class Module {
 
   static void DefaultDelete(BaseNode* object) { delete object; }
 
-  // TODO: Consider changing over to using integer keys instead of std::strings.
-  // It's faster to look up, but looking up NodeSignatures should only happen
-  // during graph initialization, so it might not be worth it.
-  NodeDictionary node_sigs_;
+  const std::string module_name_;
+  NodeDictionary signatures_;
 };
 
 }  // breadboard

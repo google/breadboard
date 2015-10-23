@@ -27,12 +27,12 @@ GraphState::~GraphState() {
   if (graph_) {
     for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
          ++node) {
-      const NodeSignature* node_sig = node->node_sig();
-      for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
+      const NodeSignature* signature = node->signature();
+      for (size_t i = 0; i < signature->output_types().size(); ++i) {
         const OutputEdge& output_edge = node->output_edges()[i];
         if (output_edge.connected()) {
           // If connected, it has a per-graph value.
-          const Type* type = node_sig->output_types()[i];
+          const Type* type = signature->output_types()[i];
 
           // Destruct timestamp.
           Timestamp* timestamp = output_buffer_.GetObject<Timestamp>(
@@ -61,13 +61,13 @@ void GraphState::Initialize(Graph* graph) {
   for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
        ++node) {
     uint8_t* ptr;
-    const NodeSignature* node_sig = node->node_sig();
+    const NodeSignature* signature = node->signature();
 
     // Initialize the memory for the output edges.
-    for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
+    for (size_t i = 0; i < signature->output_types().size(); ++i) {
       const OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = node_sig->output_types()[i];
+        const Type* type = signature->output_types()[i];
 
         // Initialize timestamp.
         ptr = output_buffer_.GetObjectPtr(output_edge.timestamp_offset());
@@ -80,8 +80,8 @@ void GraphState::Initialize(Graph* graph) {
     }
 
     // Initialize the memory for the listeners.
-    for (size_t i = 0; i < node_sig->event_listeners().size(); ++i) {
-      EventId event_id = node_sig->event_listeners()[i];
+    for (size_t i = 0; i < signature->event_listeners().size(); ++i) {
+      EventId event_id = signature->event_listeners()[i];
       ptr = output_buffer_.GetObjectPtr(node->listener_offsets()[i]);
       new (ptr) NodeEventListener(this, event_id);
     }

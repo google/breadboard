@@ -43,7 +43,7 @@ class BaseNode {
   // All classes inheriting from BaseNode must imlement the static OnRegister
   // function shown here. Because this is a static function it cannot be
   // virtual.
-  static void OnRegister(NodeSignature* /*node_sig*/) {
+  static void OnRegister(NodeSignature* /*signature*/) {
     assert(!"This function should be implemented in the derived class");
   }
 

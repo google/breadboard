@@ -43,9 +43,9 @@ const OutputEdge& OutputEdgeTarget::GetTargetEdge(
   return GetTargetNode(nodes).output_edges()[edge_index_];
 }
 
-Node::Node(const NodeSignature* node_sig)
-    : node_sig_(node_sig),
-      base_node_(node_sig->Constructor()),
+Node::Node(const NodeSignature* signature)
+    : signature_(signature),
+      base_node_(signature->Constructor()),
       input_edges_(),
       output_edges_(),
       timestamp_offset_(0),
@@ -53,11 +53,11 @@ Node::Node(const NodeSignature* node_sig)
       visited_(false) {}
 
 const Type* GetInputEdgeType(const Node* node, int index) {
-  return node->node_sig()->input_types()[index];
+  return node->signature()->input_types()[index];
 }
 
 const Type* GetOutputEdgeType(const Node* node, int index) {
-  return node->node_sig()->output_types()[index];
+  return node->signature()->output_types()[index];
 }
 
 }  // breadboard

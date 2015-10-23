@@ -40,12 +40,18 @@ namespace breadboard {
 // entities or actors
 class Graph {
  public:
-  Graph() : nodes_(), sorted_nodes_(), nodes_finalized_(false) {}
+  Graph(const std::string& graph_name)
+      : graph_name_(graph_name),
+        nodes_(),
+        sorted_nodes_(),
+        nodes_finalized_(false) {}
   ~Graph();
+
+  const std::string& graph_name() const { return graph_name_; }
 
   // Add a node with the given NodeSignature to the graph. The node that was
   // just added is returned so that its edges can be set up.
-  Node* AddNode(const NodeSignature* node_sig);
+  Node* AddNode(const NodeSignature* signature);
 
   // Call once after graph is set up. No more node additions or modifications
   // may be performed after this is called. Returns true if successful,
@@ -61,7 +67,36 @@ class Graph {
   void SetDefaultValue(unsigned int node_index, unsigned int edge_index,
                        const T& value) {
     assert(nodes_finalized_);
+    if (node_index >= nodes_.size()) {
+      CallLogFunc(
+          "%s: Attempting to assign a default value on node %d when graph only "
+          "has %d nodes.",
+          graph_name_.c_str(), node_index, static_cast<int>(nodes_.size()));
+      return;
+    }
     Node& node = nodes_[node_index];
+    const NodeSignature* signature = node.signature();
+    if (edge_index >= node.input_edges().size()) {
+      CallLogFunc(
+          "%s: Attempting to assign a default value to node %i (%s:%s), edge "
+          "%d when node only has %d input edges.",
+          graph_name_.c_str(), node_index, signature->module_name()->c_str(),
+          signature->node_name().c_str(), edge_index,
+          static_cast<int>(node.input_edges().size()));
+      return;
+    }
+    const Type* type = TypeRegistry<T>::GetType();
+    const Type* expected_type = signature->input_types()[edge_index];
+    if (type != expected_type) {
+      CallLogFunc(
+          "%s: Attempting to assign a default value of the incorrect type to "
+          "node %d (%s:%s), edge %d. Edge got type \"%s\" when it expects type "
+          "\"%s\".",
+          graph_name_.c_str(), node_index, signature->module_name()->c_str(),
+          signature->node_name().c_str(), edge_index, type->name,
+          expected_type->name);
+      return;
+    }
     InputEdge& input_edge = node.input_edges()[edge_index];
     T* default_object = input_buffer_.GetObject<T>(input_edge.data_offset());
     *default_object = value;
@@ -96,6 +131,7 @@ class Graph {
   bool SortGraphNodes();
   bool InsertNode(Node* node);
 
+  const std::string graph_name_;
   std::vector<Node> nodes_;
   std::vector<Node*> sorted_nodes_;
   MemoryBuffer input_buffer_;

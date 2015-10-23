@@ -26,12 +26,12 @@ namespace breadboard {
 Graph::~Graph() {
   // Destruct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeSignature* node_sig = node->node_sig();
-    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
+    const NodeSignature* signature = node->signature();
+    for (size_t i = 0; i < signature->input_types().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = node_sig->input_types()[i];
+        const Type* type = signature->input_types()[i];
         uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
         type->operator_delete_func(ptr);
       }
@@ -39,9 +39,9 @@ Graph::~Graph() {
   }
 }
 
-Node* Graph::AddNode(const NodeSignature* node_sig) {
+Node* Graph::AddNode(const NodeSignature* signature) {
   assert(!nodes_finalized_);
-  nodes_.push_back(Node(node_sig));
+  nodes_.push_back(Node(signature));
   return &nodes_.back();
 }
 
@@ -66,17 +66,18 @@ bool Graph::InsertNode(Node* node) {
       InputEdge& edge = node->input_edges()[i];
       if (edge.connected()) {
         Node& dependency = edge.target().GetTargetNode(&nodes_);
-        const Type* input_type = node->node_sig()->input_types()[i];
+        const Type* input_type = node->signature()->input_types()[i];
         const Type* output_type =
-            dependency.node_sig()->output_types()[edge.target().edge_index()];
+            dependency.signature()->output_types()[edge.target().edge_index()];
         if (input_type != output_type) {
           int input_node_index = NodeIndex(nodes_, *node);
           CallLogFunc(
-              "Could not resolve graph: Type mismatch. Node %i, input edge %i "
-              "is type \"%s\" but is connected to node %i, output edge %i of "
-              "type \"%s\".",
-              input_node_index, i, input_type->name, edge.target().node_index(),
-              edge.target().edge_index(), output_type->name);
+              "Could not resolve graph \"%s\": Type mismatch. Node %d, input "
+              "edge %d is type \"%s\" but is connected to node %d, output edge "
+              "%d of type \"%s\".",
+              graph_name_.c_str(), input_node_index, i, input_type->name,
+              edge.target().node_index(), edge.target().edge_index(),
+              output_type->name);
           return false;
         } else if (dependency.visited()) {
           // Circular dependency. This is not currently allowed; must be a
@@ -139,8 +140,8 @@ static ptrdiff_t AdvanceOffset(ptrdiff_t* offset) {
 bool Graph::FinalizeNodes() {
   // Make sure each node has the proper number of output edges.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeSignature* node_sig = node->node_sig();
-    node->output_edges().resize(node_sig->output_types().size());
+    const NodeSignature* signature = node->signature();
+    node->output_edges().resize(signature->output_types().size());
   }
 
   // Keep track of the offsets for the input edges and output edges.
@@ -152,13 +153,15 @@ bool Graph::FinalizeNodes() {
   // values.
   for (size_t i = 0; i < nodes_.size(); ++i) {
     Node* node = &nodes_[i];
-    const NodeSignature* node_sig = node->node_sig();
-    if (node_sig->input_types().size() != node->input_edges().size()) {
-      CallLogFunc("Node %i got %i edges, but expected %i", i,
-                  node->input_edges().size(), node_sig->input_types().size());
+    const NodeSignature* signature = node->signature();
+    if (signature->input_types().size() != node->input_edges().size()) {
+      CallLogFunc(
+          "Error in graph \"%s\": Node %d got %d edges, but expected %d", i,
+          graph_name_.c_str(), node->input_edges().size(),
+          signature->input_types().size());
       return false;
     }
-    for (size_t j = 0; j < node_sig->input_types().size(); ++j) {
+    for (size_t j = 0; j < signature->input_types().size(); ++j) {
       InputEdge& input_edge = node->input_edges()[j];
 
       if (input_edge.connected()) {
@@ -170,7 +173,7 @@ bool Graph::FinalizeNodes() {
       } else {
         // If this is an input with a default value, keep track of where to
         // allocate it when our blob of memory has been allocated.
-        const Type* type = node_sig->input_types()[j];
+        const Type* type = signature->input_types()[j];
         ptrdiff_t data_offset = AdvanceOffset(&current_input_offset, type);
         input_edge.SetDataOffset(data_offset);
       }
@@ -182,12 +185,12 @@ bool Graph::FinalizeNodes() {
 
   // Construct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
-    const NodeSignature* node_sig = node->node_sig();
-    for (size_t i = 0; i < node_sig->input_types().size(); ++i) {
+    const NodeSignature* signature = node->signature();
+    for (size_t i = 0; i < signature->input_types().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = node_sig->input_types()[i];
+        const Type* type = signature->input_types()[i];
         assert(type);
         uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
         type->placement_new_func(ptr);
@@ -202,11 +205,11 @@ bool Graph::FinalizeNodes() {
         AdvanceOffset<Timestamp>(&current_output_offset);
     node->set_timestamp_offset(node_timestamp_offset);
 
-    const NodeSignature* node_sig = node->node_sig();
-    for (size_t i = 0; i < node_sig->output_types().size(); ++i) {
+    const NodeSignature* signature = node->signature();
+    for (size_t i = 0; i < signature->output_types().size(); ++i) {
       OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = node_sig->output_types()[i];
+        const Type* type = signature->output_types()[i];
         ptrdiff_t timestamp_offset =
             AdvanceOffset<Timestamp>(&current_output_offset);
         ptrdiff_t data_offset = AdvanceOffset(&current_output_offset, type);
@@ -216,7 +219,7 @@ bool Graph::FinalizeNodes() {
     }
 
     // Initialize the listener offsets.
-    for (size_t i = 0; i < node_sig->event_listeners().size(); ++i) {
+    for (size_t i = 0; i < signature->event_listeners().size(); ++i) {
       ptrdiff_t listener_offset =
           AdvanceOffset<NodeEventListener>(&current_output_offset);
       node->listener_offsets().push_back(listener_offset);

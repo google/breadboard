@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "breadboard/node_arguments.h"
+#include "breadboard/node_signature.h"
 
 namespace breadboard {
 
@@ -20,17 +21,21 @@ namespace breadboard {
 // retrieved is the type expected.
 void NodeArguments::VerifyInputPreconditions(size_t argument_index,
                                              const Type* requested_type) const {
+  const NodeSignature* signature = node_->signature();
   if (argument_index >= node_->input_edges().size()) {
     CallLogFunc(
-        "Attempting to get argument %i when node only has %i input edges.",
+        "%s:%s: Attempting to get argument %d when node only has %d input "
+        "edges.",
+        signature->module_name()->c_str(), signature->node_name().c_str(),
         argument_index, static_cast<int>(node_->input_edges().size()));
     assert(0);
   }
   const Type* expected_type = GetInputEdgeType(node_, argument_index);
   if (requested_type != expected_type) {
     CallLogFunc(
-        "Attempting to get input argument %i as type \"%s\" when it expects "
-        "type \"%s\".",
+        "%s:%s: Attempting to get input argument %d as type \"%s\" when it "
+        "expects type \"%s\".",
+        signature->module_name()->c_str(), signature->node_name().c_str(),
         argument_index, requested_type->name, expected_type->name);
     assert(0);
   }
@@ -40,17 +45,21 @@ void NodeArguments::VerifyInputPreconditions(size_t argument_index,
 // the type expected.
 void NodeArguments::VerifyOutputPreconditions(
     size_t argument_index, const Type* requested_type) const {
+  const NodeSignature* signature = node_->signature();
   if (argument_index >= node_->output_edges().size()) {
     CallLogFunc(
-        "Attempting to get argument %i when node only has %i output edges.",
+        "%s:%s: Attempting to get argument %d when node only has %d output "
+        "edges.",
+        signature->module_name()->c_str(), signature->node_name().c_str(),
         argument_index, static_cast<int>(node_->input_edges().size()));
     assert(0);
   }
   const Type* expected_type = GetOutputEdgeType(node_, argument_index);
   if (requested_type != expected_type) {
     CallLogFunc(
-        "Attempting to set output argument %i as type \"%s\" when it expects "
-        "type \"%s\".",
+        "%s:%s: Attempting to set output argument %d as type \"%s\" when it "
+        "expects type \"%s\".",
+        signature->module_name()->c_str(), signature->node_name().c_str(),
         argument_index, requested_type->name, expected_type->name);
     assert(0);
   }
@@ -75,8 +84,10 @@ bool NodeArguments::IsInputDirty(size_t argument_index) const {
 
 void NodeArguments::VerifyListenerPreconditions(size_t listener_index) const {
   if (listener_index >= node_->listener_offsets().size()) {
+    const NodeSignature* signature = node_->signature();
     CallLogFunc(
-        "Attempting to get listener %i when node only has %i listeners.",
+        "%s:%s: Attempting to get listener %d when node only has %d listeners.",
+        signature->module_name()->c_str(), signature->node_name().c_str(),
         listener_index, static_cast<int>(node_->listener_offsets().size()));
     assert(0);
   }

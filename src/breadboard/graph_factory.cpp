@@ -33,7 +33,7 @@ Graph* GraphFactory::LoadGraph(const char* filename) {
     if (!load_file_callback_(filename, &data)) {
       return nullptr;
     }
-    Graph* graph = new Graph();
+    Graph* graph = new Graph(filename);
     if (!ParseData(event_system_, graph, &data)) {
       return nullptr;
     }

@@ -17,20 +17,27 @@
 
 namespace breadboard {
 
-Module* EventSystem::AddModule(const std::string& name) {
-  auto iter = modules_.find(name);
-  if (iter != modules_.end()) {
+Module* EventSystem::AddModule(const std::string& module_name) {
+  auto result =
+      modules_.insert(std::make_pair(module_name, Module(module_name)));
+  ModuleDictionary::iterator iter = result.first;
+
+  bool success = result.second;
+  if (!success) {
     CallLogFunc("A module named \"%s\" has already been registered.",
-                name.c_str());
+                module_name.c_str());
     return nullptr;
   }
-  return &modules_[name];
+
+  Module* module = &iter->second;
+  return module;
 }
 
-const Module* EventSystem::GetModule(const std::string& name) const {
-  auto iter = modules_.find(name);
+const Module* EventSystem::GetModule(const std::string& module_name) const {
+  auto iter = modules_.find(module_name);
   if (iter == modules_.end()) {
-    CallLogFunc("No module named \"%s\" has been registered.", name.c_str());
+    CallLogFunc("No module named \"%s\" has been registered.",
+                module_name.c_str());
     return nullptr;
   }
   return &iter->second;
