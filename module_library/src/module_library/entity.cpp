@@ -15,31 +15,37 @@
 #include "module_library/entity.h"
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/meta.h"
 #include "entity/entity_manager.h"
 #include "mathfu/glsl_mappings.h"
 
-using fpl::entity::EntityRef;
-using fpl::entity::EntityManager;
+using breadboard::BaseNode;
+using breadboard::ModuleRegistry;
+using breadboard::Module;
+using breadboard::NodeArguments;
+using breadboard::NodeSignature;
+using breadboard::TypeRegistry;
 using fpl::component_library::GraphComponent;
 using fpl::component_library::MetaComponent;
+using fpl::entity::EntityManager;
+using fpl::entity::EntityRef;
 
 namespace fpl {
 namespace module_library {
 
 // Given an input string, return the named entity.
-class EntityNode : public breadboard::BaseNode {
+class EntityNode : public BaseNode {
  public:
   EntityNode(MetaComponent* meta_component) : meta_component_(meta_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<std::string>();
     node_sig->AddOutput<EntityRef>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto entity_id = args->GetInput<std::string>(1);
     EntityRef entity =
         meta_component_->GetEntityFromDictionary(entity_id->c_str());
@@ -52,16 +58,16 @@ class EntityNode : public breadboard::BaseNode {
 };
 
 // Return the entity that owns this graph.
-class GraphEntityNode : public breadboard::BaseNode {
+class GraphEntityNode : public BaseNode {
  public:
   GraphEntityNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddOutput<EntityRef>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     args->SetOutput(0, graph_component_->graph_entity());
   }
 
@@ -70,17 +76,17 @@ class GraphEntityNode : public breadboard::BaseNode {
 };
 
 // Delete the given entity.
-class DeleteEntityNode : public breadboard::BaseNode {
+class DeleteEntityNode : public BaseNode {
  public:
-  DeleteEntityNode(entity::EntityManager* entity_manager)
+  DeleteEntityNode(::EntityManager* entity_manager)
       : entity_manager_(entity_manager) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<EntityRef>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     if (args->IsInputDirty(0)) {
       auto entity_ref = args->GetInput<EntityRef>(1);
       entity_manager_->DeleteEntity(*entity_ref);
@@ -91,8 +97,8 @@ class DeleteEntityNode : public breadboard::BaseNode {
   EntityManager* entity_manager_;
 };
 
-void InitializeEntityModule(breadboard::EventSystem* event_system,
-                            entity::EntityManager* entity_manager,
+void InitializeEntityModule(ModuleRegistry* module_registry,
+                            EntityManager* entity_manager,
                             MetaComponent* meta_component,
                             GraphComponent* graph_component) {
   auto entity_ctor = [meta_component]() {
@@ -104,7 +110,8 @@ void InitializeEntityModule(breadboard::EventSystem* event_system,
   auto delete_entity_ctor = [entity_manager]() {
     return new DeleteEntityNode(entity_manager);
   };
-  breadboard::Module* module = event_system->AddModule("entity");
+  TypeRegistry<EntityRef>::RegisterType("Entity");
+  Module* module = module_registry->RegisterModule("entity");
   module->RegisterNode<EntityNode>("entity", entity_ctor);
   module->RegisterNode<GraphEntityNode>("graph_entity", graph_entity_ctor);
   module->RegisterNode<DeleteEntityNode>("delete_entity", delete_entity_ctor);

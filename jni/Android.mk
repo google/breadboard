@@ -35,15 +35,20 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_SRC_FILES := \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/event.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/event_system.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph_factory.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/graph_state.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/log.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/module.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/module_registry.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node_arguments.cpp \
   $(BREADBOARD_RELATIVE_DIR)/src/breadboard/node_signature.cpp \
-  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/type_registry.cpp
+  $(BREADBOARD_RELATIVE_DIR)/src/breadboard/type_registry.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/modules/common.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/modules/debug.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/modules/logic.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/modules/math.cpp \
+  $(BREADBOARD_RELATIVE_DIR)/src/modules/string.cpp
 
 include $(BUILD_STATIC_LIBRARY)

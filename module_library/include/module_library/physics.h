@@ -15,7 +15,7 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/graph.h"
 #include "component_library/physics.h"
 #include "module_library/entity.h"
@@ -24,7 +24,7 @@ namespace fpl {
 namespace module_library {
 
 void InitializePhysicsModule(
-    breadboard::EventSystem* event_system,
+    breadboard::ModuleRegistry* module_registry,
     component_library::PhysicsComponent* physics_component,
     component_library::GraphComponent* graph_component);
 

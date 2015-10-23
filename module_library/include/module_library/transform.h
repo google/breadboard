@@ -15,7 +15,7 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_TRANSFORM_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_TRANSFORM_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/transform.h"
 #include "module_library/entity.h"
 
@@ -26,7 +26,7 @@ typedef ComponentDataRef<component_library::TransformComponent>
     TransformDataRef;
 
 void InitializeTransformModule(
-    breadboard::EventSystem* event_system,
+    breadboard::ModuleRegistry* module_registry,
     component_library::TransformComponent* transform_component);
 
 }  // namespace module_library

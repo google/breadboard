@@ -17,7 +17,7 @@
 #include <string>
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/animation.h"
 #include "component_library/meta.h"
 #include "component_library/transform.h"
@@ -26,6 +26,12 @@
 namespace fpl {
 namespace module_library {
 
+using breadboard::BaseNode;
+using breadboard::ModuleRegistry;
+using breadboard::Module;
+using breadboard::NodeArguments;
+using breadboard::NodeSignature;
+using breadboard::TypeRegistry;
 using fpl::entity::EntityRef;
 using fpl::component_library::AnimationComponent;
 using fpl::component_library::GraphComponent;
@@ -33,25 +39,25 @@ using fpl::component_library::kAnimationCompleteEventId;
 using fpl::component_library::TransformComponent;
 
 // Executes when the animation on the given entity is complete.
-class AnimationCompleteNode : public breadboard::BaseNode {
+class AnimationCompleteNode : public BaseNode {
  public:
   explicit AnimationCompleteNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<EntityRef>();
     node_sig->AddOutput<void>();
     node_sig->AddListener(kAnimationCompleteEventId);
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     EntityRef entity = *args->GetInput<EntityRef>(0);
     if (entity) {
       args->BindBroadcaster(0, graph_component_->GetCreateBroadcaster(entity));
     }
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     Initialize(args);
     if (args->IsListenerDirty(0)) {
       args->SetOutput(0);
@@ -63,14 +69,14 @@ class AnimationCompleteNode : public breadboard::BaseNode {
 };
 
 // Starts the requested animation on the requested entity.
-class PlayAnimationNode : public breadboard::BaseNode {
+class PlayAnimationNode : public BaseNode {
  public:
   PlayAnimationNode(AnimationComponent* anim_component,
                     TransformComponent* transform_component)
       : anim_component_(anim_component),
         transform_component_(transform_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     // Void to trigger the animation,
     // the entity to be animated,
     // and the index into the AnimTable for this entity.
@@ -80,7 +86,7 @@ class PlayAnimationNode : public breadboard::BaseNode {
     node_sig->AddOutput<void>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     EntityRef entity = *args->GetInput<EntityRef>(1);
     EntityRef anim_entity = transform_component_->ChildWithComponent(
         entity, AnimationComponent::GetComponentId());
@@ -94,17 +100,17 @@ class PlayAnimationNode : public breadboard::BaseNode {
   TransformComponent* transform_component_;
 };
 
-void InitializeAnimationModule(breadboard::EventSystem* event_system,
+void InitializeAnimationModule(ModuleRegistry* module_registry,
                                GraphComponent* graph_component,
                                AnimationComponent* anim_component,
                                TransformComponent* transform_component) {
-  breadboard::Module* module = event_system->AddModule("animation");
   auto animation_complete_ctor = [graph_component]() {
     return new AnimationCompleteNode(graph_component);
   };
   auto play_animation_ctor = [anim_component, transform_component]() {
     return new PlayAnimationNode(anim_component, transform_component);
   };
+  Module* module = module_registry->RegisterModule("animation");
   module->RegisterNode<AnimationCompleteNode>("animation_complete",
                                               animation_complete_ctor);
   module->RegisterNode<PlayAnimationNode>("play_animation",

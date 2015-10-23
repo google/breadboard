@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_BREADBOARD_MODULE_LIBRARY_STRING_H_
-#define FPL_BREADBOARD_MODULE_LIBRARY_STRING_H_
+#ifndef BREADBOARD_MODULES_COMMON_H_
+#define BREADBOARD_MODULES_COMMON_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 
-namespace fpl {
-namespace module_library {
+namespace breadboard {
 
-void InitializeStringModule(breadboard::EventSystem* event_system);
+void InitializeCommonModules(ModuleRegistry* module_registry);
 
-}  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard
 
-#endif  // FPL_BREADBOARD_MODULE_LIBRARY_STRING_H_
+#endif  // BREADBOARD_MODULES_COMMON_H_

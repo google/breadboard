@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_BREADBOARD_MODULE_LIBRARY_DEBUG_H_
-#define FPL_BREADBOARD_MODULE_LIBRARY_DEBUG_H_
+#ifndef BREADBOARD_MODULES_MATH_H_
+#define BREADBOARD_MODULES_MATH_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 
-namespace fpl {
-namespace module_library {
+namespace breadboard {
 
-void InitializeDebugModule(breadboard::EventSystem* event_system);
+void InitializeIntegerMathModule(ModuleRegistry* module_registry);
+void InitializeFloatMathModule(ModuleRegistry* module_registry);
 
-}  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard
 
-#endif  // FPL_BREADBOARD_MODULE_LIBRARY_DEBUG_H_
+#endif  // BREADBOARD_MODULES_MATH_H_

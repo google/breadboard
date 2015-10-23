@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BREADBOARD_EVENT_SYSTEM_H_
-#define BREADBOARD_EVENT_SYSTEM_H_
+#ifndef BREADBOARD_MODULE_REGISTRY_H_
+#define BREADBOARD_MODULE_REGISTRY_H_
 
 #include <string>
 #include <unordered_map>
@@ -24,11 +24,11 @@ namespace breadboard {
 
 // The event system keeps track of all registered types, modules and nodes that
 // are going to be used to construct graphs.
-class EventSystem {
+class ModuleRegistry {
  public:
-  // Adds a new module with the given name to the EventSystem. A module is
+  // Adds a new module with the given name to the ModuleRegistry. A module is
   // simply a collection of related nodes.
-  Module* AddModule(const std::string& module_name);
+  Module* RegisterModule(const std::string& module_name);
 
   // Returns a pointer to a module given its name.
   const Module* GetModule(const std::string& module_name) const;
@@ -42,4 +42,4 @@ class EventSystem {
 
 }  // breadboard
 
-#endif  // BREADBOARD_EVENT_SYSTEM_H_
+#endif  // BREADBOARD_MODULE_REGISTRY_H_

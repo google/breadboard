@@ -12,21 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "breadboard/event_system.h"
-#include "module_library/debug.h"
-#include "module_library/logic.h"
-#include "module_library/math.h"
-#include "module_library/string.h"
+#ifndef BREADBOARD_MODULES_STRING_H_
+#define BREADBOARD_MODULES_STRING_H_
 
-namespace fpl {
-namespace module_library {
+#include "breadboard/module_registry.h"
 
-void InitializeCommonModules(breadboard::EventSystem* event_system) {
-  InitializeDebugModule(event_system);
-  InitializeLogicModule(event_system);
-  InitializeMathModule(event_system);
-  InitializeStringModule(event_system);
-}
+namespace breadboard {
 
-}  // namespace module_library
-}  // namespace fpl
+void InitializeStringModule(ModuleRegistry* module_registry);
+
+}  // namespace breadboard
+
+#endif  // BREADBOARD_MODULES_STRING_H_

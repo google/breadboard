@@ -19,8 +19,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "breadboard/event_system.h"
 #include "breadboard/graph.h"
+#include "breadboard/module_registry.h"
 
 namespace breadboard {
 
@@ -35,8 +35,10 @@ typedef bool (*LoadFileCallback)(const char* filename, std::string* output);
 // and edges, and to parse default values.
 class GraphFactory {
  public:
-  GraphFactory(EventSystem* event_system, LoadFileCallback load_file_callback)
-      : event_system_(event_system), load_file_callback_(load_file_callback) {}
+  GraphFactory(ModuleRegistry* module_registry,
+               LoadFileCallback load_file_callback)
+      : module_registry_(module_registry),
+        load_file_callback_(load_file_callback) {}
 
   // Load the graph given it's filename. If this file has already been loaded, a
   // cached copy of the graph is returned.
@@ -47,11 +49,12 @@ class GraphFactory {
 
   // Parse the data loaded from a file. The data is passed to this function as a
   // std::string. This function is responsible for filling in the graph (both
-  // the edges and the nodes) using the nodes registered with the event_system.
-  virtual bool ParseData(EventSystem* event_system, Graph* graph,
+  // the edges and the nodes) using the nodes registered with the
+  // module_registry.
+  virtual bool ParseData(ModuleRegistry* module_registry, Graph* graph,
                          const std::string* data) = 0;
 
-  EventSystem* event_system_;
+  ModuleRegistry* module_registry_;
   LoadFileCallback load_file_callback_;
   GraphMap loaded_graphs_;
 };

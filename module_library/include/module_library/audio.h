@@ -15,13 +15,13 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "pindrop/pindrop.h"
 
 namespace fpl {
 namespace module_library {
 
-void InitializeAudioModule(breadboard::EventSystem* event_system,
+void InitializeAudioModule(breadboard::ModuleRegistry* module_registry,
                            pindrop::AudioEngine* audio_engine);
 
 }  // namespace module_library

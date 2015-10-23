@@ -17,13 +17,19 @@
 #include <string>
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/transform.h"
 #include "entity/entity_manager.h"
 #include "mathfu/glsl_mappings.h"
 
-using fpl::component_library::TransformData;
+using breadboard::BaseNode;
+using breadboard::ModuleRegistry;
+using breadboard::Module;
+using breadboard::NodeArguments;
+using breadboard::NodeSignature;
+using breadboard::TypeRegistry;
 using fpl::component_library::TransformComponent;
+using fpl::component_library::TransformData;
 using fpl::entity::EntityRef;
 using mathfu::vec3;
 
@@ -31,38 +37,38 @@ namespace fpl {
 namespace module_library {
 
 // Returns the transform component data of the given entity.
-class TransformNode : public breadboard::BaseNode {
+class TransformNode : public BaseNode {
  public:
   TransformNode(TransformComponent* transform_component)
       : transform_component_(transform_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<EntityRef>();
     node_sig->AddOutput<TransformDataRef>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     auto entity = args->GetInput<EntityRef>(1);
     args->SetOutput(0, TransformDataRef(transform_component_, *entity));
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
 
  private:
   TransformComponent* transform_component_;
 };
 
 // Returns the child at the given index.
-class ChildNode : public breadboard::BaseNode {
+class ChildNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<TransformDataRef>();
     node_sig->AddInput<int>();
     node_sig->AddOutput<EntityRef>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     auto transform_ref = args->GetInput<TransformDataRef>(0);
     if (transform_ref->entity()) {
       auto child_index = *args->GetInput<int>(1);
@@ -80,19 +86,19 @@ class ChildNode : public breadboard::BaseNode {
     }
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
 };
 
 // Returns the position of the entity in world space.
-class WorldPositionNode : public breadboard::BaseNode {
+class WorldPositionNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<TransformDataRef>();
     node_sig->AddOutput<vec3>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     if (args->IsInputDirty(0)) {
       auto transform_ref = args->GetInput<TransformDataRef>(1);
       vec3 position =
@@ -101,15 +107,16 @@ class WorldPositionNode : public breadboard::BaseNode {
     }
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
 };
 
-void InitializeTransformModule(breadboard::EventSystem* event_system,
+void InitializeTransformModule(ModuleRegistry* module_registry,
                                TransformComponent* transform_component) {
-  breadboard::Module* module = event_system->AddModule("transform");
   auto transform_ctor = [transform_component]() {
     return new TransformNode(transform_component);
   };
+  TypeRegistry<TransformDataRef>::RegisterType("TransformData");
+  Module* module = module_registry->RegisterModule("transform");
   module->RegisterNode<TransformNode>("transform", transform_ctor);
   module->RegisterNode<ChildNode>("child");
   module->RegisterNode<WorldPositionNode>("world_position");

@@ -19,9 +19,10 @@
 #include <memory>
 #include <vector>
 
-#include "breadboard/event_system.h"
+#include "breadboard/log.h"
 #include "breadboard/memory_buffer.h"
 #include "breadboard/node.h"
+#include "breadboard/node_signature.h"
 
 namespace breadboard {
 

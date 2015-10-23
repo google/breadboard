@@ -83,29 +83,41 @@ set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
 set(breadboard_SRCS
     include/breadboard/base_node.h
     include/breadboard/event.h
-    include/breadboard/event_system.h
     include/breadboard/graph.h
     include/breadboard/graph_factory.h
     include/breadboard/graph_state.h
     include/breadboard/log.h
     include/breadboard/memory_buffer.h
     include/breadboard/module.h
+    include/breadboard/module_registry.h
     include/breadboard/node.h
     include/breadboard/node_arguments.h
     include/breadboard/node_signature.h
     include/breadboard/type.h
     include/breadboard/type_registry.h
     src/breadboard/event.cpp
-    src/breadboard/event_system.cpp
     src/breadboard/graph.cpp
     src/breadboard/graph_factory.cpp
     src/breadboard/graph_state.cpp
     src/breadboard/log.cpp
     src/breadboard/module.cpp
+    src/breadboard/module_registry.cpp
     src/breadboard/node.cpp
     src/breadboard/node_arguments.cpp
     src/breadboard/node_signature.cpp
     src/breadboard/type_registry.cpp)
+
+set(breadboard_common_modules_SRCS
+    include/breadboard/modules/common.h
+    include/breadboard/modules/debug.h
+    include/breadboard/modules/logic.h
+    include/breadboard/modules/math.h
+    include/breadboard/modules/string.h
+    src/modules/common.cpp
+    src/modules/debug.cpp
+    src/modules/logic.cpp
+    src/modules/math.cpp
+    src/modules/string.cpp)
 
 # Includes for this project.
 include_directories(include)
@@ -129,24 +141,12 @@ endif()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS_WARNINGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_FLAGS_WARNINGS}")
 
-add_library(breadboard ${breadboard_SRCS})
+add_library(breadboard ${breadboard_SRCS} ${breadboard_common_modules_SRCS})
 target_link_libraries(breadboard)
 
 if (breadboard_build_module_library)
-  # Include all common modules.
   include_directories(module_library/include)
   set(breadboard_module_library_DEPS breadboard)
-  set(breadboard_module_library_SRCS
-      module_library/include/module_library/common.h
-      module_library/include/module_library/debug.h
-      module_library/include/module_library/logic.h
-      module_library/include/module_library/math.h
-      module_library/include/module_library/string.h
-      module_library/src/module_library/common.cpp
-      module_library/src/module_library/debug.cpp
-      module_library/src/module_library/logic.cpp
-      module_library/src/module_library/math.cpp
-      module_library/src/module_library/string.cpp)
 
   # Include vector module.
   if (breadboard_build_mathfu_module)

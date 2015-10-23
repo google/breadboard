@@ -15,12 +15,12 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 
 namespace fpl {
 namespace module_library {
 
-void InitializeVec3Module(breadboard::EventSystem* event_system);
+void InitializeVec3Module(breadboard::ModuleRegistry* module_registry);
 
 }  // namespace module_library
 }  // namespace fpl

@@ -15,7 +15,7 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_ENTITY_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_ENTITY_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/graph.h"
 #include "component_library/meta.h"
 #include "entity/entity_manager.h"
@@ -55,7 +55,7 @@ class ComponentDataRef {
 void SetGraphEntity(entity::EntityRef entity);
 
 void InitializeEntityModule(
-    breadboard::EventSystem* event_system,
+    breadboard::ModuleRegistry* module_registry,
     entity::EntityManager* entity_manager,
     component_library::MetaComponent* meta_component,
     component_library::GraphComponent* graph_component);

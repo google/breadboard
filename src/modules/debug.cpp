@@ -12,37 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "module_library/debug.h"
+#include "breadboard/modules/debug.h"
 
 #include <string>
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "breadboard/log.h"
 
-namespace fpl {
-namespace module_library {
+namespace breadboard {
 
 // Prints a string to the logger.
-class ConsolePrintNode : public breadboard::BaseNode {
+class ConsolePrintNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<std::string>();
     node_sig->AddOutput<std::string>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto str = args->GetInput<std::string>(1);
-    breadboard::CallLogFunc("%s\n", str->c_str());
+    CallLogFunc("%s\n", str->c_str());
     args->SetOutput(0, *str);
   }
 };
 
-void InitializeDebugModule(breadboard::EventSystem* event_system) {
-  breadboard::Module* module = event_system->AddModule("debug");
+void InitializeDebugModule(ModuleRegistry* module_registry) {
+  Module* module = module_registry->RegisterModule("debug");
   module->RegisterNode<ConsolePrintNode>("console_print");
 }
 
-}  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard

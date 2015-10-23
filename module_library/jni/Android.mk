@@ -51,13 +51,8 @@ LOCAL_C_INCLUDES := \
 LOCAL_SRC_FILES := \
   $(MODULES_RELATIVE_DIR)/src/module_library/animation.cpp \
   $(MODULES_RELATIVE_DIR)/src/module_library/audio.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/common.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/debug.cpp \
   $(MODULES_RELATIVE_DIR)/src/module_library/entity.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/logic.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/math.cpp \
   $(MODULES_RELATIVE_DIR)/src/module_library/physics.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/string.cpp \
   $(MODULES_RELATIVE_DIR)/src/module_library/transform.cpp \
   $(MODULES_RELATIVE_DIR)/src/module_library/vec3.cpp
 

@@ -15,7 +15,7 @@
 #ifndef FPL_BREADBOARD_MODULE_LIBRARY_ANIMATION_H_
 #define FPL_BREADBOARD_MODULE_LIBRARY_ANIMATION_H_
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/animation.h"
 #include "component_library/graph.h"
 #include "component_library/transform.h"
@@ -25,7 +25,7 @@ namespace fpl {
 namespace module_library {
 
 void InitializeAnimationModule(
-    breadboard::EventSystem* event_system,
+    breadboard::ModuleRegistry* module_registry,
     component_library::GraphComponent* graph_component,
     component_library::AnimationComponent* anim_component,
     component_library::TransformComponent* transform_component);

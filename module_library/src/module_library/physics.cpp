@@ -17,10 +17,15 @@
 #include <string>
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "component_library/physics.h"
 #include "entity/entity_manager.h"
 
+using breadboard::BaseNode;
+using breadboard::Module;
+using breadboard::ModuleRegistry;
+using breadboard::NodeArguments;
+using breadboard::NodeSignature;
 using fpl::component_library::CollisionData;
 using fpl::component_library::GraphComponent;
 using fpl::component_library::PhysicsComponent;
@@ -30,23 +35,23 @@ using fpl::entity::EntityRef;
 namespace fpl {
 namespace module_library {
 
-class OnCollisionNode : public breadboard::BaseNode {
+class OnCollisionNode : public BaseNode {
  public:
   OnCollisionNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<EntityRef>();
     node_sig->AddOutput<void>();
     node_sig->AddListener(kCollisionEventId);
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     auto entity = args->GetInput<EntityRef>(0);
     args->BindBroadcaster(0, graph_component_->GetCreateBroadcaster(*entity));
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     Initialize(args);
     if (args->IsListenerDirty(0)) {
       args->SetOutput(0);
@@ -57,12 +62,12 @@ class OnCollisionNode : public breadboard::BaseNode {
   GraphComponent* graph_component_;
 };
 
-class CollisionDataNode : public breadboard::BaseNode {
+class CollisionDataNode : public BaseNode {
  public:
   CollisionDataNode(PhysicsComponent* physics_component)
       : physics_component_(physics_component) {}
 
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     // Fetch the collision data when triggered
     node_sig->AddInput<void>();
 
@@ -79,7 +84,7 @@ class CollisionDataNode : public breadboard::BaseNode {
     node_sig->AddOutput<std::string>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     CollisionData& collision_data = physics_component_->collision_data();
     args->SetOutput(0, collision_data.this_entity);
     args->SetOutput(1, collision_data.this_position);
@@ -89,16 +94,16 @@ class CollisionDataNode : public breadboard::BaseNode {
     args->SetOutput(5, collision_data.other_tag);
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
 
  private:
   PhysicsComponent* physics_component_;
 };
 
-void InitializePhysicsModule(breadboard::EventSystem* event_system,
+void InitializePhysicsModule(ModuleRegistry* module_registry,
                              PhysicsComponent* physics_component,
                              GraphComponent* graph_component) {
-  breadboard::Module* module = event_system->AddModule("physics");
+  Module* module = module_registry->RegisterModule("physics");
   auto on_collision_ctor = [graph_component]() {
     return new OnCollisionNode(graph_component);
   };

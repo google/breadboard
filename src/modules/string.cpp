@@ -12,44 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "module_library/string.h"
+#include "breadboard/modules/string.h"
 
 #include <string>
 #include <sstream>
 
 #include "breadboard/base_node.h"
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 
-namespace fpl {
-namespace module_library {
+namespace breadboard {
 
 // Compares two strings.
-class EqualsNode : public breadboard::BaseNode {
+class EqualsNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<std::string>();
     node_sig->AddInput<std::string>();
     node_sig->AddOutput<bool>();
   }
 
-  virtual void Initialize(breadboard::NodeArguments* args) {
+  virtual void Initialize(NodeArguments* args) {
     auto str_a = args->GetInput<std::string>(0);
     auto str_b = args->GetInput<std::string>(1);
     args->SetOutput(0, *str_a == *str_b);
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) { Initialize(args); }
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
 };
 
 // Converts the given int to a string.
-class IntToStringNode : public breadboard::BaseNode {
+class IntToStringNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<int>();
     node_sig->AddOutput<std::string>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto i = args->GetInput<int>(0);
     std::stringstream stream;
     stream << *i;
@@ -58,14 +57,14 @@ class IntToStringNode : public breadboard::BaseNode {
 };
 
 // Converts the given float to a string.
-class FloatToStringNode : public breadboard::BaseNode {
+class FloatToStringNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<float>();
     node_sig->AddOutput<std::string>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto f = args->GetInput<float>(0);
     std::stringstream stream;
     stream << *f;
@@ -74,28 +73,27 @@ class FloatToStringNode : public breadboard::BaseNode {
 };
 
 // Contactenates the given strings.
-class ConcatNode : public breadboard::BaseNode {
+class ConcatNode : public BaseNode {
  public:
-  static void OnRegister(breadboard::NodeSignature* node_sig) {
+  static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<std::string>();
     node_sig->AddInput<std::string>();
     node_sig->AddOutput<std::string>();
   }
 
-  virtual void Execute(breadboard::NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto str_a = args->GetInput<std::string>(0);
     auto str_b = args->GetInput<std::string>(1);
     args->SetOutput(0, *str_a + *str_b);
   }
 };
 
-void InitializeStringModule(breadboard::EventSystem* event_system) {
-  breadboard::Module* module = event_system->AddModule("string");
+void InitializeStringModule(ModuleRegistry* module_registry) {
+  Module* module = module_registry->RegisterModule("string");
   module->RegisterNode<EqualsNode>("equals");
   module->RegisterNode<IntToStringNode>("int_to_string");
   module->RegisterNode<FloatToStringNode>("float_to_string");
   module->RegisterNode<ConcatNode>("concat");
 }
 
-}  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard

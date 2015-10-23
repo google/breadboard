@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "breadboard/event_system.h"
+#include "breadboard/module_registry.h"
 #include "breadboard/log.h"
 
 namespace breadboard {
 
-Module* EventSystem::AddModule(const std::string& module_name) {
+Module* ModuleRegistry::RegisterModule(const std::string& module_name) {
   auto result =
       modules_.insert(std::make_pair(module_name, Module(module_name)));
   ModuleDictionary::iterator iter = result.first;
@@ -33,7 +33,7 @@ Module* EventSystem::AddModule(const std::string& module_name) {
   return module;
 }
 
-const Module* EventSystem::GetModule(const std::string& module_name) const {
+const Module* ModuleRegistry::GetModule(const std::string& module_name) const {
   auto iter = modules_.find(module_name);
   if (iter == modules_.end()) {
     CallLogFunc("No module named \"%s\" has been registered.",

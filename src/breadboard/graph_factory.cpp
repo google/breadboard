@@ -16,8 +16,8 @@
 
 #include <string>
 
-#include "breadboard/event_system.h"
 #include "breadboard/graph.h"
+#include "breadboard/module_registry.h"
 
 namespace breadboard {
 
@@ -34,7 +34,7 @@ Graph* GraphFactory::LoadGraph(const char* filename) {
       return nullptr;
     }
     Graph* graph = new Graph(filename);
-    if (!ParseData(event_system_, graph, &data)) {
+    if (!ParseData(module_registry_, graph, &data)) {
       return nullptr;
     }
     loaded_graphs_[filename].reset(graph);
