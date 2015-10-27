@@ -156,8 +156,8 @@ bool Graph::FinalizeNodes() {
     const NodeSignature* signature = node->signature();
     if (signature->input_types().size() != node->input_edges().size()) {
       CallLogFunc(
-          "Error in graph \"%s\": Node %d got %d edges, but expected %d", i,
-          graph_name_.c_str(), node->input_edges().size(),
+          "Error in graph \"%s\": Node %d got %d edges, but expected %d",
+          graph_name_.c_str(), i, node->input_edges().size(),
           signature->input_types().size());
       return false;
     }
