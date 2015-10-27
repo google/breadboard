@@ -25,7 +25,7 @@ option(breadboard_build_module_library
     "Build a library of standard modules along with Breadboard" ON)
 
 # Include component library modules
-option(breadboard_build_component_library_module
+option(breadboard_build_corgi_component_library_module
     "Build a library of standard components along with the entity system" ON)
 
 # Include a pindrop audio module
@@ -145,8 +145,38 @@ add_library(breadboard ${breadboard_SRCS} ${breadboard_common_modules_SRCS})
 target_link_libraries(breadboard)
 
 if (breadboard_build_module_library)
+  # Generate rules to build the set of output files from the set of input
+  # schema files.
+  set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
+  file(GLOB_RECURSE
+    MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
+    module_library/schemas/*.fbs)
+  unset(FLATBUFFERS_GENERATED_INCLUDES)
+  foreach(flatbuffers_schema ${MODULE_LIBRARY_FLATBUFFERS_SCHEMAS})
+    get_filename_component(filename ${flatbuffers_schema} NAME_WE)
+    set(flatbuffers_include
+      ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR}/${filename}_generated.h)
+    add_custom_command(
+      OUTPUT ${flatbuffers_include}
+      COMMAND flatc
+          -o ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR}
+          -I ${dependencies_fplbase_dir}/schemas
+          -c ${flatbuffers_schema}
+      DEPENDS flatc ${flatbuffers_schema})
+    list(APPEND FLATBUFFERS_GENERATED_INCLUDES ${flatbuffers_include})
+  endforeach()
+  add_custom_target(breadboard_module_library_generated_includes DEPENDS
+                    ${FLATBUFFERS_GENERATED_INCLUDES})
+  set_property(TARGET breadboard_module_library_generated_includes
+               PROPERTY BREADBOARD_MODULE_LIBRARY_DIR
+               ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+
   include_directories(module_library/include)
   set(breadboard_module_library_DEPS breadboard)
+  set(breadboard_module_library_SRCS
+      ${breadboard_module_library_SRCS}
+      module_library/include/module_library/default_graph_factory.h)
 
   # Include vector module.
   if (breadboard_build_mathfu_module)
@@ -157,19 +187,17 @@ if (breadboard_build_module_library)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
         module_library/include/module_library/vec3.h
-        module_library/src/module_library/vec3.cpp)
+        module_library/src/vec3.cpp)
   endif()
 
   # Include modules for the components in the component library.
-  if (breadboard_build_component_library_module)
+  if (breadboard_build_corgi_component_library_module)
     if (NOT TARGET fplbase)
       add_subdirectory(${dependencies_fplbase_dir} ${tmp_dir}/fplbase)
     endif()
-
     if (NOT TARGET entity)
       add_subdirectory(${dependencies_entity_dir} ${tmp_dir}/entity)
     endif()
-
     get_property(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
                  TARGET component_library_generated_includes
                  PROPERTY COMPONENT_LIBRARY_DIR)
@@ -193,10 +221,10 @@ if (breadboard_build_module_library)
         module_library/include/module_library/entity.h
         module_library/include/module_library/physics.h
         module_library/include/module_library/transform.h
-        module_library/src/module_library/animation.cpp
-        module_library/src/module_library/entity.cpp
-        module_library/src/module_library/physics.cpp
-        module_library/src/module_library/transform.cpp)
+        module_library/src/animation.cpp
+        module_library/src/entity.cpp
+        module_library/src/physics.cpp
+        module_library/src/transform.cpp)
   endif()
 
   # Include pindrop audio module.
@@ -208,7 +236,7 @@ if (breadboard_build_module_library)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
         module_library/include/module_library/audio.h
-        module_library/src/module_library/audio.cpp)
+        module_library/src/audio.cpp)
   endif()
 
   add_library(module_library ${breadboard_module_library_SRCS})
@@ -217,4 +245,23 @@ if (breadboard_build_module_library)
     mathfu_configure_flags(module_library)
   endif()
   target_link_libraries(module_library ${breadboard_module_library_DEPS})
+
+  # Macro defined here so that it can be used by all projects included
+  function(breadboard_module_library_configure_flags project)
+    if (breadboard_build_mathfu)
+      set_property(TARGET ${project}
+          APPEND PROPERTY COMPILE_DEFINITIONS
+          BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU)
+    endif()
+    if (breadboard_build_corgi_component_library_module)
+      set_property(TARGET ${project}
+          APPEND PROPERTY COMPILE_DEFINITIONS
+          BREADBOARD_MODULE_LIBRARY_BUILD_CORGI_COMPONENT_LIBRARY)
+    endif()
+    if (breadboard_build_pindrop_module)
+      set_property(TARGET ${project}
+          APPEND PROPERTY COMPILE_DEFINITIONS
+          BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP)
+    endif()
+  endfunction(breadboard_module_library_configure_flags)
 endif()

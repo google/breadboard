@@ -25,15 +25,27 @@ LOCAL_STATIC_LIBRARIES := \
   libmathfu
 LOCAL_SHARED_LIBRARIES :=
 
-MODULES_RELATIVE_DIR := ..
-MODULES_DIR := $(LOCAL_PATH)/$(MODULES_RELATIVE_DIR)
+LOCAL_CPPFLAGS := \
+  -DBREADBOARD_MODULE_LIBRARY_BUILD_MATHFU \
+  -DBREADBOARD_MODULE_LIBRARY_BUILD_CORGI_COMPONENT_LIBRARY \
+  -DBREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
 
-include $(MODULES_DIR)/jni/android_config.mk
+LOCAL_EXPORT_CPPFLAGS := $(LOCAL_CPPFLAGS)
+
+BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR := ..
+BREADBOARD_MODULE_LIBRARY_DIR := \
+    $(LOCAL_PATH)/$(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)
+
+include $(BREADBOARD_MODULE_LIBRARY_DIR)/jni/android_config.mk
 include $(DEPENDENCIES_FLATBUFFERS_DIR)/android/jni/include.mk
 
+BREADBOARD_MODULE_LIBRARY_GENERATED_OUTPUT_DIR := \
+    $(BREADBOARD_MODULE_LIBRARY_DIR)/gen/include
+
 LOCAL_EXPORT_C_INCLUDES := \
-  $(MODULES_DIR)/include \
-  $(DEPENDENCIES_FPLUTIL_DIR)/libfplutil/include
+  $(DEPENDENCIES_FPLUTIL_DIR)/libfplutil/include \
+  $(BREADBOARD_MODULE_LIBRARY_DIR)/include \
+  $(BREADBOARD_MODULE_LIBRARY_GENERATED_OUTPUT_DIR)
 
 LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES) \
@@ -45,21 +57,36 @@ LOCAL_C_INCLUDES := \
   $(DEPENDENCIES_MATHFU_DIR)/include \
   $(DEPENDENCIES_MOTIVE_DIR)/include \
   $(DEPENDENCIES_PINDROP_DIR)/include \
-  $(DEPENDENCIES_FPLBASE_DIR)/include \
-  $(MODULES_DIR)/src
+  $(DEPENDENCIES_FPLBASE_DIR)/include
 
 LOCAL_SRC_FILES := \
-  $(MODULES_RELATIVE_DIR)/src/module_library/animation.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/audio.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/entity.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/physics.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/transform.cpp \
-  $(MODULES_RELATIVE_DIR)/src/module_library/vec3.cpp
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/animation.cpp \
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/audio.cpp \
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/entity.cpp \
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/physics.cpp \
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/transform.cpp \
+  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/vec3.cpp
 
-ifeq (,$(BREADBOARD_RUN_ONCE))
-BREADBOARD_RUN_ONCE := 1
-$(call flatbuffers_header_build_rules,,,,,$(LOCAL_SRC_FILES),,\
-  component_library_generated_includes)
+BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR := $(BREADBOARD_MODULE_LIBRARY_DIR)/schemas
+BREADBOARD_MODULE_LIBRARY_SCHEMA_INCLUDE_DIRS := \
+    $(DEPENDENCIES_FPLBASE_DIR)/schemas
+
+BREADBOARD_MODULE_LIBRARY_SCHEMA_FILES := \
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR)/common_modules.fbs \
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR)/corgi_module.fbs \
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR)/mathfu_module.fbs \
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR)/pindrop_module.fbs
+
+ifeq (,$(BREADBOARD_MODULE_LIBRARY_RUN_ONCE))
+BREADBOARD_MODULE_LIBRARY_RUN_ONCE := 1
+$(call flatbuffers_header_build_rules,\
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_FILES),\
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR),\
+  $(BREADBOARD_MODULE_LIBRARY_GENERATED_OUTPUT_DIR),\
+  $(BREADBOARD_MODULE_LIBRARY_SCHEMA_INCLUDE_DIRS),\
+  $(LOCAL_SRC_FILES),\
+  breadboard_module_library_generated_includes,\
+  fplbase_generated_includes)
 endif
 
 include $(BUILD_STATIC_LIBRARY)
@@ -70,6 +97,7 @@ $(call import-add-path,$(DEPENDENCIES_MATHFU_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_PINDROP_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_ENTITY_DIR)/..)
 
+$(call import-module,fplbase/jni)
 $(call import-module,flatbuffers/android/jni)
 $(call import-module,mathfu/jni)
 $(call import-module,breadboard/jni)

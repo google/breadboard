@@ -4,4 +4,6 @@ Makefile
 assets/
 bin/
 cmake_install.cmake
+gen/
+module_library/gen/
 obj/

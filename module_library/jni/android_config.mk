@@ -13,12 +13,13 @@
 # limitations under the License.
 
 # Locations of 3rd party and FPL libraries.
-FPL_ROOT:=$(MODULES_DIR)/../../../libs
+FPL_ROOT:=$(BREADBOARD_MODULE_LIBRARY_DIR)/../../../libs
 # If the dependencies directory exists either as a subdirectory or as the
 # container of this project directory, assume the dependencies directory is
 # the root directory for all libraries required by this project.
-$(foreach dep_dir,$(wildcard $(MODULES_DIR)/dependencies) \
-                  $(wildcard $(MODULES_DIR)/../../dependencies),\
+$(foreach dep_dir,\
+          $(wildcard $(BREADBOARD_MODULE_LIBRARY_DIR)/dependencies) \
+          $(wildcard $(BREADBOARD_MODULE_LIBRARY_DIR)/../../dependencies),\
   $(eval DEPENDENCIES_ROOT?=$(dep_dir)))
 ifneq ($(DEPENDENCIES_ROOT),)
   THIRD_PARTY_ROOT:=$(DEPENDENCIES_ROOT)
