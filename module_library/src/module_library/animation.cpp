@@ -38,6 +38,14 @@ using fpl::component_library::GraphComponent;
 using fpl::component_library::kAnimationCompleteEventId;
 using fpl::component_library::TransformComponent;
 
+static inline EntityRef ChildAnimEntity(TransformComponent* transform_component,
+                                        const EntityRef& entity) {
+  EntityRef anim_entity = transform_component->ChildWithComponent(
+      entity, AnimationComponent::GetComponentId());
+  assert(anim_entity.IsValid());
+  return anim_entity;
+}
+
 // Executes when the animation on the given entity is complete.
 class AnimationCompleteNode : public BaseNode {
  public:
@@ -88,11 +96,38 @@ class PlayAnimationNode : public BaseNode {
 
   virtual void Execute(NodeArguments* args) {
     EntityRef entity = *args->GetInput<EntityRef>(1);
-    EntityRef anim_entity = transform_component_->ChildWithComponent(
-        entity, AnimationComponent::GetComponentId());
-    assert(anim_entity.IsValid());
+    EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
     int anim_idx = *args->GetInput<int>(2);
     anim_component_->AnimateFromTable(anim_entity, anim_idx);
+  }
+
+ private:
+  AnimationComponent* anim_component_;
+  TransformComponent* transform_component_;
+};
+
+// Returns the index of the last animation played.
+class AnimationIndexNode : public breadboard::BaseNode {
+ public:
+  AnimationIndexNode(AnimationComponent* anim_component,
+                     TransformComponent* transform_component)
+      : anim_component_(anim_component),
+        transform_component_(transform_component) {}
+
+  static void OnRegister(breadboard::NodeSignature* node_sig) {
+    // Void to trigger the animation,
+    // the entity to be animated,
+    // and the index into the AnimTable for this entity.
+    node_sig->AddInput<void>();
+    node_sig->AddInput<EntityRef>();
+    node_sig->AddOutput<int>();
+  }
+
+  virtual void Execute(breadboard::NodeArguments* args) {
+    EntityRef entity = *args->GetInput<EntityRef>(1);
+    EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
+    const int anim_idx = anim_component_->LastAnimIdx(anim_entity);
+    args->SetOutput(0, anim_idx);
   }
 
  private:
@@ -110,11 +145,17 @@ void InitializeAnimationModule(ModuleRegistry* module_registry,
   auto play_animation_ctor = [anim_component, transform_component]() {
     return new PlayAnimationNode(anim_component, transform_component);
   };
+  auto animation_index_ctor = [anim_component, transform_component]() {
+    return new AnimationIndexNode(anim_component, transform_component);
+  };
+
   Module* module = module_registry->RegisterModule("animation");
   module->RegisterNode<AnimationCompleteNode>("animation_complete",
                                               animation_complete_ctor);
   module->RegisterNode<PlayAnimationNode>("play_animation",
                                           play_animation_ctor);
+  module->RegisterNode<AnimationIndexNode>("animation_index",
+                                           animation_index_ctor);
 }
 
 }  // namespace module_library
