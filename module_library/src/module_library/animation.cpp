@@ -95,10 +95,16 @@ class PlayAnimationNode : public BaseNode {
   }
 
   virtual void Execute(NodeArguments* args) {
-    EntityRef entity = *args->GetInput<EntityRef>(1);
-    EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
-    int anim_idx = *args->GetInput<int>(2);
-    anim_component_->AnimateFromTable(anim_entity, anim_idx);
+    if (args->IsInputDirty(0)) {
+      EntityRef entity = *args->GetInput<EntityRef>(1);
+      EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
+      const int current_anim_idx = anim_component_->LastAnimIdx(anim_entity);
+      int anim_idx = *args->GetInput<int>(2);
+      if (current_anim_idx != anim_idx) {
+        anim_component_->AnimateFromTable(anim_entity, anim_idx);
+      }
+      args->SetOutput(0);
+    }
   }
 
  private:
@@ -124,10 +130,12 @@ class AnimationIndexNode : public breadboard::BaseNode {
   }
 
   virtual void Execute(breadboard::NodeArguments* args) {
-    EntityRef entity = *args->GetInput<EntityRef>(1);
-    EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
-    const int anim_idx = anim_component_->LastAnimIdx(anim_entity);
-    args->SetOutput(0, anim_idx);
+    if (args->IsInputDirty(0)) {
+      EntityRef entity = *args->GetInput<EntityRef>(1);
+      EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
+      const int anim_idx = anim_component_->LastAnimIdx(anim_entity);
+      args->SetOutput(0, anim_idx);
+    }
   }
 
  private:
