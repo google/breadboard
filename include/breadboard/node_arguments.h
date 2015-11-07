@@ -23,14 +23,37 @@
 #include "breadboard/node.h"
 #include "breadboard/type_registry.h"
 
+/// @file breadboard/node_arguments.h
+///
+/// @brief NodeArguments is a class representing the state of all inputs and
+/// outpus to a given node.
+
 namespace breadboard {
 
-// NodeArguments is a class that represent the input and output edges connected
-// to a node. Functionality is provided to get inputs and set outputs.
-// Additionally, this contains the list of listeners on a given node so that you
-// can connect a listener to a broadcaster.
+/// @class NodeArguments
+///
+/// @brief NodeArguments is a class that represents the state of all input and
+/// output edges connected to a node.
+///
+/// Functionality is provided to get inputs and set outputs. Additionally, this
+/// contains the list of listeners on a given node so that you can connect a
+/// listener to a broadcaster.
 class NodeArguments {
  public:
+  /// @cond BREADBOARD_INTERNAL
+  /// @brief Construct a NodeArguments object for the given node.
+  ///
+  /// @note For internal use only.
+  ///
+  /// @param[in] node The node these arguments refer to.
+  ///
+  /// @param[in] nodes The list of nodes on the graph.
+  ///
+  /// @param[in] input_memory The MemoryBuffer for the input edges.
+  ///
+  /// @param[in] output_memory The MemoryBuffer for the output edges.
+  ///
+  /// @param[in] timestamp The current timestamp.
   NodeArguments(const Node* node, const std::vector<Node>* nodes,
                 MemoryBuffer* input_memory, MemoryBuffer* output_memory,
                 Timestamp timestamp)
@@ -39,59 +62,86 @@ class NodeArguments {
         input_memory_(input_memory),
         output_memory_(output_memory),
         timestamp_(timestamp) {}
+  /// @endcond BREADBOARD_INTERNAL
 
-  // Each node has number of typed inputs (specified by the NodeDef). This
-  // function allows you to access the data held in any one of those inputs.
-  // Typical usage would look like this:
-  //
-  //     Foo* foo = args->GetInput<Foo>(0);
-  //     Bar* bar = args->GetInput<Bar>(1);
-  //
-  // Each argument is accessed by index, and the types must match the types
-  // declared in the NodeDef. Care must be taken when modifying input values as
-  // they will *not* be marked dirty. Since the execution order of nodes is not
-  // defined, input values may change between calls to Execute on differnet
-  // nodes.
-  template <typename T>
-  T* GetInput(size_t argument_index) const {
-    VerifyInputPreconditions(argument_index, TypeRegistry<T>::GetType());
+  /// @brief Returns the value of this input edge.
+  ///
+  /// Each node has number of typed inputs (specified by the
+  /// NodeSignature). This function allows you to access the data held in any
+  /// one of those inputs.  Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     Foo* foo = args->GetInput<Foo>(0);
+  ///     Bar* bar = args->GetInput<Bar>(1);
+  /// ~~~
+  ///
+  /// Each argument is accessed by index, and the types must match the types
+  /// declared in the NodeSignature. Care must be taken when modifying input
+  /// values as they will *not* be marked dirty. Since the execution order of
+  /// nodes is not defined, input values may change between calls to Execute on
+  /// different nodes.
+  ///
+  /// @param argument_index The index of the input edge. Node that the template
+  /// argument of this index must match the one specified in the NodeSignature.
+  ///
+  /// @return A pointer to the value of the given input edge.
+  template <typename EdgeType>
+  EdgeType* GetInput(size_t argument_index) const {
+    VerifyInputPreconditions(argument_index, TypeRegistry<EdgeType>::GetType());
 
     const InputEdge& input_edge = node_->input_edges()[argument_index];
     if (input_edge.connected()) {
       const OutputEdgeTarget& target_edge = input_edge.target();
       const OutputEdge& output_edge = target_edge.GetTargetEdge(nodes_);
-      return output_memory_->GetObject<T>(output_edge.data_offset());
+      return output_memory_->GetObject<EdgeType>(output_edge.data_offset());
     } else {
-      return input_memory_->GetObject<T>(input_edge.data_offset());
+      return input_memory_->GetObject<EdgeType>(input_edge.data_offset());
     }
   }
 
-  // Returns true if the given input argument index has been modified since the
-  // last execution of this graph.
+  /// @brief Returns true if the given input argument index has been modified
+  /// since the last execution of this graph.
+  ///
+  /// @return True if the given input argument index has been modified since the
+  /// last execution of this graph.
   bool IsInputDirty(size_t argument_index) const;
 
-  // Returns true if the given listener index has been signaled by a broadcaster
-  // since the last execution of this graph.
+  /// @brief Returns true if the given listener index has been signaled by a
+  /// broadcaster since the last execution of this graph.
+  ///
+  /// @return True if the given listener index has been signaled by a
+  /// broadcaster since the last execution of this graph.
   bool IsListenerDirty(size_t listener_index) const;
 
-  // Each node has number of typed outputs (specified by the NodeDef). This
-  // function allows you to pass data through an OutputEdge so that it is
-  // accessible to any InputNode that is connected to it.
-  // Typical usage would look like this:
-  //
-  //     Foo foo = ...
-  //     Bar bar = ...
-  //     outputs.SetOutput(0, foo);
-  //     outputs.SetOutput(1, bar);
-  //
-  // Each ouput is accessed by index, and the types must match the types
-  // declared in the NodeDef. When you set a value, it is given a timestamp
-  // which marks that node as dirty, meaning that any node that relies on it
-  // will re-run its Execute function. If an edge is not connected to any
-  // inputs, the value is discarded and this function call does nothing.
-  template <typename T>
-  void SetOutput(size_t argument_index, const T& value) {
-    VerifyOutputPreconditions(argument_index, TypeRegistry<T>::GetType());
+  /// @brief Sets the value of the specified output edge.
+  ///
+  /// Each node has number of typed outputs (specified by the NodeSignature).
+  /// This function allows you to pass data through an output edge so that it is
+  /// accessible to any input edge that is connected to it.
+  ///
+  /// Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     Foo foo = ...
+  ///     Bar bar = ...
+  ///     outputs.SetOutput(0, foo);
+  ///     outputs.SetOutput(1, bar);
+  /// ~~~
+  ///
+  /// Each output is accessed by index, and the types must match the types
+  /// declared in the NodeSignature. When you set a value that edge is marked
+  /// dirty, meaning that any node that relies on it will re-run its Execute
+  /// function. If an edge is not connected to any inputs, the value is
+  /// discarded and this function call does nothing.
+  ///
+  /// @param argument_index The index of the input edge. Node that the template
+  /// argument of this index must match the one specified in the NodeSignature.
+  ///
+  /// @param value The value to set this output edge to.
+  template <typename EdgeType>
+  void SetOutput(size_t argument_index, const EdgeType& value) {
+    VerifyOutputPreconditions(argument_index,
+                              TypeRegistry<EdgeType>::GetType());
 
     const OutputEdge& output_edge = node_->output_edges()[argument_index];
     if (!output_edge.connected()) {
@@ -104,17 +154,25 @@ class NodeArguments {
         output_memory_->GetObject<Timestamp>(output_edge.timestamp_offset());
     *timestamp = timestamp_;
 
-    T* data = output_memory_->GetObject<T>(output_edge.data_offset());
+    EdgeType* data =
+        output_memory_->GetObject<EdgeType>(output_edge.data_offset());
     *data = value;
   }
 
-  // This is a special overload of SetOutput for void output types, which are
-  // typically used just to send a signal to another node but which carry no
-  // data. With this version of the function you do not need to supply any
-  // value. Typical usage would look like this:
-  //
-  //     outputs.SetOutput(0);
-  //     outputs.SetOutput(1);
+  /// @brief Marks an output edge as dirty without updating its value.
+  ///
+  /// This is a special overload of SetOutput for void output types, which are
+  /// typically used just to send a signal to another node but which carry no
+  /// data. With this version of the function you do not need to supply any
+  /// value. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     outputs.SetOutput(0);
+  ///     outputs.SetOutput(1);
+  /// ~~~
+  ///
+  /// @param argument_index The index of the input edge. Node that the template
+  /// argument of this index must be `void`.
   void SetOutput(size_t argument_index) {
     VerifyOutputPreconditions(argument_index, TypeRegistry<void>::GetType());
 
@@ -130,6 +188,15 @@ class NodeArguments {
     *timestamp = timestamp_;
   }
 
+  /// @brief Binds the given broadcasater to the listener at the given index.
+  ///
+  /// An NodeEventListener cannot respond to events until it has been bound to a
+  /// NodeEventBroadcaster. Use this function to bind a broadcaster to a
+  /// listener.
+  ///
+  /// @param listener_index The index of the listener.
+  ///
+  /// @param broadcaster The broadcaster to bind the given listener to.
   void BindBroadcaster(size_t listener_index,
                        NodeEventBroadcaster* broadcaster) {
     NodeEventListener* listener = output_memory_->GetObject<NodeEventListener>(

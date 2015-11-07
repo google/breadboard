@@ -17,9 +17,22 @@
 
 #include "breadboard/module_registry.h"
 
+/// @file breadboard/modules/math.h
+///
+/// @brief Initialize the integer and floating point math modules.
+
 namespace breadboard {
 
+/// @brief Initialize the integer math module.
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the module
+/// registered by this function.
 void InitializeIntegerMathModule(ModuleRegistry* module_registry);
+
+/// @brief Initialize the floating point math module.
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the module
+/// registered by this function.
 void InitializeFloatMathModule(ModuleRegistry* module_registry);
 
 }  // namespace breadboard

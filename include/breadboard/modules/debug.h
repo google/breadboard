@@ -17,8 +17,16 @@
 
 #include "breadboard/module_registry.h"
 
+/// @file breadboard/modules/debug.h
+///
+/// @brief Initialize the debug modules.
+
 namespace breadboard {
 
+/// @brief Initialize the debug module.
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the module
+/// registered by this function.
 void InitializeDebugModule(ModuleRegistry* module_registry);
 
 }  // namespace breadboard

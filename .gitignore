@@ -7,3 +7,5 @@ cmake_install.cmake
 gen/
 module_library/gen/
 obj/
+docs/html/
+docs/linklint_results/

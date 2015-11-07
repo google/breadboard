@@ -17,8 +17,16 @@
 
 #include "breadboard/module_registry.h"
 
+/// @file breadboard/modules/logic.h
+///
+/// @brief Initialize the logic module.
+
 namespace breadboard {
 
+/// @brief Initialize the logic module.
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the module
+/// registered by this function.
 void InitializeLogicModule(ModuleRegistry* module_registry);
 
 }  // namespace breadboard

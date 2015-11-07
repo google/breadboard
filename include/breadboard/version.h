@@ -15,22 +15,31 @@
 #ifndef BREADBOARD_VERSION_H_
 #define BREADBOARD_VERSION_H_
 
+/// @file breadboard/version.h
+/// @brief A structure containing the version number of the Breadboard library.
+
 namespace breadboard {
 
+/// @struct BreadboardVersion
+///
+/// @brief A structure containing the version number of the Breadboard library.
 struct BreadboardVersion {
-  // Version number, updated only on major releases.
+  /// @brief Version number, updated only on major releases.
   unsigned char major;
 
-  // Version number, updated for point releases.
+  /// @brief Version number, updated for point releases.
   unsigned char minor;
 
-  // Version number, updated for tiny releases, for example, bug fixes.
+  /// @brief Version number, updated for tiny releases, for example, bug fixes.
   unsigned char revision;
 
-  // Text string holding the name and version of library.
+  /// @brief Text string holding the name and version of library.
   const char* text;
 };
 
+/// @brief Returns the version struct.
+///
+/// @return The version struct.
 const BreadboardVersion& Version();
 
 }  // namespace breadboard

@@ -17,17 +17,32 @@
 
 #include <cstdarg>
 
+/// @file breadboard/log.h
+///
+/// @brief This file contains functions to register and call logging function.
+///        The log function is used for various debug logging.
+
 namespace breadboard {
 
-// In order to perform logging, the library needs to be provided with a logging
-// function that fits this type signature.
+/// @typedef LogFunc
+///
+/// @brief The function signature of the logging function.
+///
+/// In order to perform logging, the library needs to be provided with a logging
+/// function that fits this type signature.
 typedef void (*LogFunc)(const char* fmt, va_list args);
 
-// Register a logging function with the library.
+/// @brief Register a logging function with the library.
+///
+/// @param[in] The function to use for logging.
 void RegisterLogFunc(LogFunc log_func);
 
-// Call the registered log function with the provided format string. This does
-// nothing if no logging function has been registered.
+/// @brief Call the registered log function with the provided format string.
+///
+/// This does nothing if no logging function has been registered.
+///
+/// @param[in] format The format string to print.
+/// @param[in] ... The arguments to format.
 void CallLogFunc(const char* format, ...);
 
 }  // namespace breadboard

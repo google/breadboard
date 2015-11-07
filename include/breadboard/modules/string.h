@@ -17,8 +17,16 @@
 
 #include "breadboard/module_registry.h"
 
+/// @file breadboard/modules/string.h
+///
+/// @brief Initialize the string module.
+
 namespace breadboard {
 
+/// @brief Initialize the string module.
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the module
+/// registered by this function.
 void InitializeStringModule(ModuleRegistry* module_registry);
 
 }  // namespace breadboard
