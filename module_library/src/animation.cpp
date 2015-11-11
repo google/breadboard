@@ -31,7 +31,6 @@ using breadboard::ModuleRegistry;
 using breadboard::Module;
 using breadboard::NodeArguments;
 using breadboard::NodeSignature;
-using breadboard::TypeRegistry;
 using fpl::entity::EntityRef;
 using fpl::component_library::AnimationComponent;
 using fpl::component_library::GraphComponent;

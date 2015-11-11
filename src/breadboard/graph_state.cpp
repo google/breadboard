@@ -40,8 +40,14 @@ GraphState::~GraphState() {
           timestamp->~Timestamp();
 
           // Destruct object.
-          uint8_t* ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
-          type->operator_delete_func(ptr);
+          // Only do this on non-void objects. Attempting to access a void edge
+          // can be troublesome in the case where the last edge listed is of
+          // type void.
+          if (type->size > 0) {
+            uint8_t* ptr =
+                output_buffer_.GetObjectPtr(output_edge.data_offset());
+            type->operator_delete_func(ptr);
+          }
         }
       }
       for (size_t i = 0; i < node->listener_offsets().size(); ++i) {
@@ -74,8 +80,13 @@ void GraphState::Initialize(Graph* graph) {
         new (ptr) Timestamp(0);
 
         // Initialize object.
-        ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
-        type->placement_new_func(ptr);
+        // Only do this on non-void objects. Attempting to access a void edge
+        // can be troublesome in the case where the last edge listed is of
+        // type void.
+        if (type->size > 0) {
+          ptr = output_buffer_.GetObjectPtr(output_edge.data_offset());
+          type->placement_new_func(ptr);
+        }
       }
     }
 

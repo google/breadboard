@@ -100,6 +100,29 @@ class CollisionDataNode : public BaseNode {
   PhysicsComponent* physics_component_;
 };
 
+class VelocityNode : public BaseNode {
+ public:
+  VelocityNode(PhysicsComponent* physics_component)
+      : physics_component_(physics_component) {}
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<void>();
+    node_sig->AddInput<EntityRef>();
+    node_sig->AddOutput<mathfu::vec3>();
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    if (args->IsInputDirty(0)) {
+      auto entity = args->GetInput<EntityRef>(1);
+      auto physics_data = physics_component_->GetComponentData(*entity);
+      args->SetOutput(0, physics_data->Velocity());
+    }
+  }
+
+ private:
+  PhysicsComponent* physics_component_;
+};
+
 void InitializePhysicsModule(ModuleRegistry* module_registry,
                              PhysicsComponent* physics_component,
                              GraphComponent* graph_component) {
@@ -110,9 +133,13 @@ void InitializePhysicsModule(ModuleRegistry* module_registry,
   auto collision_data_ctor = [physics_component]() {
     return new CollisionDataNode(physics_component);
   };
+  auto velocity_ctor = [physics_component]() {
+    return new VelocityNode(physics_component);
+  };
   module->RegisterNode<OnCollisionNode>("on_collision", on_collision_ctor);
   module->RegisterNode<CollisionDataNode>("collision_data",
                                           collision_data_ctor);
+  module->RegisterNode<VelocityNode>("velocity", velocity_ctor);
 }
 
 }  // namespace module_library

@@ -22,9 +22,6 @@
 namespace fpl {
 namespace module_library {
 
-typedef ComponentDataRef<component_library::TransformComponent>
-    TransformDataRef;
-
 void InitializeTransformModule(
     breadboard::ModuleRegistry* module_registry,
     component_library::TransformComponent* transform_component);

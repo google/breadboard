@@ -157,6 +157,19 @@ class DotProductNode : public BaseNode {
   }
 };
 
+class LengthNode : public BaseNode {
+ public:
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<vec3>();
+    node_sig->AddOutput<float>();
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    auto vec = args->GetInput<vec3>(0);
+    args->SetOutput(0, vec->Length());
+  }
+};
+
 void InitializeVec3Module(ModuleRegistry* module_registry) {
   TypeRegistry<vec3>::RegisterType("Vec3");
   Module* module = module_registry->RegisterModule("vec3");
@@ -168,6 +181,7 @@ void InitializeVec3Module(ModuleRegistry* module_registry) {
   module->RegisterNode<ScalarDivideNode>("scalar_divide");
   module->RegisterNode<CrossProductNode>("cross_product");
   module->RegisterNode<DotProductNode>("dot_product");
+  module->RegisterNode<LengthNode>("length");
 }
 
 }  // namespace module_library

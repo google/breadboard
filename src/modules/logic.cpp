@@ -57,12 +57,30 @@ class IfNode : public BaseNode {
     node_sig->AddOutput<void>();  // Fires a pulse when input is false.
   }
 
-  virtual void Initialize(NodeArguments* args) {
+  virtual void Execute(NodeArguments* args) {
     auto value = args->GetInput<bool>(0);
     args->SetOutput(*value ? 0 : 1);
   }
+};
 
-  virtual void Execute(NodeArguments* args) { Initialize(args); }
+// Convert a boolean value to a pulse. The result is only propagated when the
+// first argument is pulsed. The first edge is triggered when the result
+// evaluates true, the second is triggered when the result evaluates false.
+class IfGateNode : public BaseNode {
+ public:
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<void>();
+    node_sig->AddInput<bool>();
+    node_sig->AddOutput<void>();  // Fires a pulse when input is true.
+    node_sig->AddOutput<void>();  // Fires a pulse when input is false.
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    if (args->IsInputDirty(0)) {
+      auto value = args->GetInput<bool>(1);
+      args->SetOutput(*value ? 0 : 1);
+    }
+  }
 };
 
 // Logical Not.
@@ -85,6 +103,7 @@ class NotNode : public BaseNode {
 void InitializeLogicModule(ModuleRegistry* module_registry) {
   Module* module = module_registry->RegisterModule("logic");
   module->RegisterNode<IfNode>("if");
+  module->RegisterNode<IfGateNode>("if_gate");
   module->RegisterNode<AndNode>("and");
   module->RegisterNode<OrNode>("or");
   module->RegisterNode<XorNode>("xor");

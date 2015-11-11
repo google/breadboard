@@ -23,35 +23,6 @@
 namespace fpl {
 namespace module_library {
 
-class ServicesComponent;
-
-template <typename T>
-class ComponentDataRef {
- public:
-  ComponentDataRef() : component_(nullptr), entity_() {}
-
-  ComponentDataRef(T* component, entity::EntityRef entity)
-      : component_(component), entity_(entity) {}
-
-  // Convenience accessors.
-  typename T::value_type* GetComponentData() {
-    return component_->GetComponentData(entity_);
-  }
-  const typename T::value_type* GetComponentData() const {
-    return component_->GetComponentData(entity_);
-  }
-
-  T* component() { return component_; }
-  const T* component() const { return component_; }
-
-  entity::EntityRef entity() { return entity_; }
-  const entity::EntityRef entity() const { return entity_; }
-
- private:
-  T* component_;
-  entity::EntityRef entity_;
-};
-
 void SetGraphEntity(entity::EntityRef entity);
 
 void InitializeEntityModule(
