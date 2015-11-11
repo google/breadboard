@@ -248,7 +248,7 @@ if (breadboard_build_module_library)
 
   # Macro defined here so that it can be used by all projects included
   function(breadboard_module_library_configure_flags project)
-    if (breadboard_build_mathfu)
+    if (breadboard_build_mathfu_module)
       set_property(TARGET ${project}
           APPEND PROPERTY COMPILE_DEFINITIONS
           BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU)
