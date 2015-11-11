@@ -13,13 +13,14 @@
 # limitations under the License.
 
 # Locations of 3rd party and FPL libraries.
+BREADBOARD_DIR:=$(BREADBOARD_MODULE_LIBRARY_DIR)/..
 FPL_ROOT:=$(BREADBOARD_MODULE_LIBRARY_DIR)/../../../libs
 # If the dependencies directory exists either as a subdirectory or as the
 # container of this project directory, assume the dependencies directory is
 # the root directory for all libraries required by this project.
 $(foreach dep_dir,\
-          $(wildcard $(BREADBOARD_MODULE_LIBRARY_DIR)/dependencies) \
-          $(wildcard $(BREADBOARD_MODULE_LIBRARY_DIR)/../../dependencies),\
+          $(wildcard $(BREADBOARD_DIR)/dependencies) \
+          $(wildcard $(BREADBOARD_DIR)/../../dependencies),\
   $(eval DEPENDENCIES_ROOT?=$(dep_dir)))
 ifneq ($(DEPENDENCIES_ROOT),)
   THIRD_PARTY_ROOT:=$(DEPENDENCIES_ROOT)
@@ -39,7 +40,7 @@ DEPENDENCIES_FPLBASE_DIR?=$(FPL_ROOT)/fplbase
 # Location of the MathFu library.
 DEPENDENCIES_MATHFU_DIR?=$(FPL_ROOT)/mathfu
 # Location of the Breadboard library.
-DEPENDENCIES_BREADBOARD_DIR?=$(FPL_ROOT)/breadboard
+DEPENDENCIES_BREADBOARD_DIR?=$(BREADBOARD_DIR)
 # Location of the Pindrop library.
 DEPENDENCIES_PINDROP_DIR?=$(FPL_ROOT)/pindrop
 # Location of the Motive library.

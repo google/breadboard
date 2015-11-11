@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LOCAL_PATH := $(call my-dir)
+LOCAL_PATH := $(call my-dir)/..
 
 include $(CLEAR_VARS)
 
@@ -32,9 +32,7 @@ LOCAL_CPPFLAGS := \
 
 LOCAL_EXPORT_CPPFLAGS := $(LOCAL_CPPFLAGS)
 
-BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR := ..
-BREADBOARD_MODULE_LIBRARY_DIR := \
-    $(LOCAL_PATH)/$(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)
+BREADBOARD_MODULE_LIBRARY_DIR := $(LOCAL_PATH)
 
 include $(BREADBOARD_MODULE_LIBRARY_DIR)/jni/android_config.mk
 include $(DEPENDENCIES_FLATBUFFERS_DIR)/android/jni/include.mk
@@ -49,7 +47,6 @@ LOCAL_EXPORT_C_INCLUDES := \
 
 LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES) \
-  $(DEPENDENCIES_BREADBOARD_DIR)/include \
   $(DEPENDENCIES_BULLETPHYSICS_DIR)/src \
   $(DEPENDENCIES_ENTITY_DIR)/include \
   $(DEPENDENCIES_ENTITY_DIR)/component_library/include \
@@ -60,14 +57,15 @@ LOCAL_C_INCLUDES := \
   $(DEPENDENCIES_FPLBASE_DIR)/include
 
 LOCAL_SRC_FILES := \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/animation.cpp \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/audio.cpp \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/entity.cpp \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/physics.cpp \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/transform.cpp \
-  $(BREADBOARD_MODULE_LIBRARY_RELATIVE_DIR)/src/vec3.cpp
+  src/animation.cpp \
+  src/audio.cpp \
+  src/entity.cpp \
+  src/physics.cpp \
+  src/transform.cpp \
+  src/vec3.cpp
 
-BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR := $(BREADBOARD_MODULE_LIBRARY_DIR)/schemas
+BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR := \
+    $(BREADBOARD_MODULE_LIBRARY_DIR)/schemas
 BREADBOARD_MODULE_LIBRARY_SCHEMA_INCLUDE_DIRS := \
     $(DEPENDENCIES_FPLBASE_DIR)/schemas
 
@@ -91,6 +89,7 @@ endif
 
 include $(BUILD_STATIC_LIBRARY)
 
+$(call import-add-path,$(DEPENDENCIES_BREADBOARD_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_FPLBASE_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_FLATBUFFERS_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_MATHFU_DIR)/..)

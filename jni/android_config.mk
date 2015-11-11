@@ -29,3 +29,8 @@ endif
 
 # Location of the fplutil library.
 DEPENDENCIES_FPLUTIL_DIR?=$(FPL_ROOT)/fplutil
+# Location of the Breadboard library
+# This intentionally overrides any prior setting.
+# NOTE: This is only required as the breadboard module library and CORGI's
+# component library have a circular dependency.
+DEPENDENCIES_BREADBOARD_DIR:=$(BREADBOARD_DIR)
