@@ -32,8 +32,13 @@ Graph::~Graph() {
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
         const Type* type = signature->input_types()[i];
-        uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
-        type->operator_delete_func(ptr);
+        // Only do this on non-void objects. Attempting to access a void edge
+        // can be troublesome in the case where the last edge listed is of type
+        // void.
+        if (type->size > 0) {
+          uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
+          type->operator_delete_func(ptr);
+        }
       }
     }
   }

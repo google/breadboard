@@ -21,6 +21,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
 # Build the common module library.
+set(breadboard_standalone_mode OFF)
+if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+  set(breadboard_standalone_mode ON)
+  message(STATUS "breadboard standalone: building library and samples")
+else()
+  message(STATUS "breadboard library: not building samples")
+endif()
+option(breadboard_build_samples "Build the breadboard sample executables."
+       ${breadboard_standalone_mode})
+
 option(breadboard_build_module_library
     "Build a library of standard modules along with Breadboard" ON)
 
@@ -78,6 +88,10 @@ set(dependencies_pindrop_dir "${fpl_root}/pindrop" CACHE PATH
     "Directory containing the pindrop library.")
 set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
     "Directory containing the Flatbuffers library.")
+# NOTE: This is only required as the breadboard module library and CORGI's
+# component library have a circular dependency.
+set(dependencies_breadboard_dir "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH
+    "Directory containing the breadboard library.")
 
 # Breadboard files.
 set(breadboard_SRCS
@@ -172,7 +186,6 @@ if (breadboard_build_module_library)
                PROPERTY BREADBOARD_MODULE_LIBRARY_DIR
                ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
 
-  include_directories(module_library/include)
   set(breadboard_module_library_DEPS breadboard)
   set(breadboard_module_library_SRCS
       ${breadboard_module_library_SRCS}
@@ -211,6 +224,7 @@ if (breadboard_build_module_library)
     include_directories(${dependencies_flatbuffers_dir}/include)
     include_directories(${dependencies_fplbase_dir}/include)
     include_directories(${dependencies_motive_dir}/include)
+    include_directories(module_library/include)
 
     set(breadboard_module_library_DEPS
         ${breadboard_module_library_DEPS}
@@ -239,6 +253,7 @@ if (breadboard_build_module_library)
         module_library/src/audio.cpp)
   endif()
 
+  include_directories(module_library/include)
   add_library(module_library ${breadboard_module_library_SRCS})
   add_dependencies(module_library ${breadboard_module_library_DEPS})
   if (breadboard_build_mathfu_module)
@@ -264,4 +279,8 @@ if (breadboard_build_module_library)
           BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP)
     endif()
   endfunction(breadboard_module_library_configure_flags)
+endif()
+
+if(breadboard_build_samples)
+  add_subdirectory(samples)
 endif()
