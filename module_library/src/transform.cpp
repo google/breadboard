@@ -27,12 +27,12 @@ using breadboard::ModuleRegistry;
 using breadboard::Module;
 using breadboard::NodeArguments;
 using breadboard::NodeSignature;
-using fpl::component_library::TransformComponent;
-using fpl::component_library::TransformData;
-using fpl::entity::EntityRef;
+using corgi::component_library::TransformComponent;
+using corgi::component_library::TransformData;
+using corgi::EntityRef;
 using mathfu::vec3;
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 // Returns the child at the given index.
@@ -113,4 +113,4 @@ void InitializeTransformModule(ModuleRegistry* module_registry,
 }
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard

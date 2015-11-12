@@ -20,15 +20,15 @@
 #include "component_library/physics.h"
 #include "module_library/entity.h"
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 void InitializePhysicsModule(
     breadboard::ModuleRegistry* module_registry,
-    component_library::PhysicsComponent* physics_component,
-    component_library::GraphComponent* graph_component);
+    corgi::component_library::PhysicsComponent* physics_component,
+    corgi::component_library::GraphComponent* graph_component);
 
-}  // namespace fpl
 }  // namespace module_library
+}  // namespace breadboard
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_

@@ -23,7 +23,7 @@
 #include "component_library/transform.h"
 #include "entity/entity_manager.h"
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 using breadboard::BaseNode;
@@ -31,11 +31,11 @@ using breadboard::ModuleRegistry;
 using breadboard::Module;
 using breadboard::NodeArguments;
 using breadboard::NodeSignature;
-using fpl::entity::EntityRef;
-using fpl::component_library::AnimationComponent;
-using fpl::component_library::GraphComponent;
-using fpl::component_library::kAnimationCompleteEventId;
-using fpl::component_library::TransformComponent;
+using corgi::EntityRef;
+using corgi::component_library::AnimationComponent;
+using corgi::component_library::GraphComponent;
+using corgi::component_library::kAnimationCompleteEventId;
+using corgi::component_library::TransformComponent;
 
 static inline EntityRef ChildAnimEntity(TransformComponent* transform_component,
                                         const EntityRef& entity) {
@@ -166,4 +166,4 @@ void InitializeAnimationModule(ModuleRegistry* module_registry,
 }
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard
