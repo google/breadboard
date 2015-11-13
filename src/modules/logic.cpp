@@ -100,6 +100,28 @@ class NotNode : public BaseNode {
   virtual void Execute(NodeArguments* args) { Initialize(args); }
 };
 
+// Stay Latch, to store boolean results.
+class StayLatchNode : public BaseNode {
+ public:
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<void>(); // Set to True
+    node_sig->AddInput<void>(); // Set to False
+    node_sig->AddOutput<bool>();
+  }
+
+  virtual void Initialize(NodeArguments* args) {
+    args->SetOutput(0, false);
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    if (args->IsInputDirty(0)) {
+      args->SetOutput(0, true);
+    } else if (args->IsInputDirty(1)) {
+      args->SetOutput(0, false);
+    }
+  }
+};
+
 void InitializeLogicModule(ModuleRegistry* module_registry) {
   Module* module = module_registry->RegisterModule("logic");
   module->RegisterNode<IfNode>("if");
@@ -108,6 +130,7 @@ void InitializeLogicModule(ModuleRegistry* module_registry) {
   module->RegisterNode<OrNode>("or");
   module->RegisterNode<XorNode>("xor");
   module->RegisterNode<NotNode>("not");
+  module->RegisterNode<StayLatchNode>("stay_latch");
 }
 
 }  // namespace breadboard

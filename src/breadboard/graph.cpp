@@ -197,8 +197,10 @@ bool Graph::FinalizeNodes() {
         // If not connected, it has a default value.
         const Type* type = signature->input_types()[i];
         assert(type);
-        uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
-        type->placement_new_func(ptr);
+        if (type->size > 0) {
+          uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
+          type->placement_new_func(ptr);
+        }
       }
     }
   }
