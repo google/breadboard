@@ -79,7 +79,7 @@ class Module {
 
   static void DefaultDelete(BaseNode* object) { delete object; }
 
-  const std::string module_name_;
+  std::string module_name_;
   NodeDictionary signatures_;
 };
 

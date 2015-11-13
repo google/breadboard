@@ -75,8 +75,10 @@ class NodeSignature {
   void Destructor(BaseNode* base_node) const;
 
  private:
+  NodeSignature();
+
   const std::string* module_name_;
-  const std::string node_name_;
+  std::string node_name_;
   NodeConstructor constructor_;
   NodeDestructor destructor_;
   std::vector<const Type*> input_types_;
