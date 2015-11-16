@@ -21,16 +21,16 @@
 #include "component_library/transform.h"
 #include "module_library/entity.h"
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 void InitializeAnimationModule(
     breadboard::ModuleRegistry* module_registry,
-    component_library::GraphComponent* graph_component,
-    component_library::AnimationComponent* anim_component,
-    component_library::TransformComponent* transform_component);
+    corgi::component_library::GraphComponent* graph_component,
+    corgi::component_library::AnimationComponent* anim_component,
+    corgi::component_library::TransformComponent* transform_component);
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_ANIMATION_H_
