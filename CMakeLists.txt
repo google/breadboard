@@ -167,24 +167,16 @@ if (breadboard_build_module_library)
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
   unset(FLATBUFFERS_GENERATED_INCLUDES)
-  foreach(flatbuffers_schema ${MODULE_LIBRARY_FLATBUFFERS_SCHEMAS})
-    get_filename_component(filename ${flatbuffers_schema} NAME_WE)
-    set(flatbuffers_include
-      ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR}/${filename}_generated.h)
-    add_custom_command(
-      OUTPUT ${flatbuffers_include}
-      COMMAND flatc
-          -o ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR}
-          -I ${dependencies_fplbase_dir}/schemas
-          -c ${flatbuffers_schema}
-      DEPENDS flatc ${flatbuffers_schema})
-    list(APPEND FLATBUFFERS_GENERATED_INCLUDES ${flatbuffers_include})
-  endforeach()
-  add_custom_target(breadboard_module_library_generated_includes DEPENDS
-                    ${FLATBUFFERS_GENERATED_INCLUDES})
-  set_property(TARGET breadboard_module_library_generated_includes
-               PROPERTY BREADBOARD_MODULE_LIBRARY_DIR
-               ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+
+  set(module_library_flatbuffer_dependencies
+      "${dependencies_fplbase_dir}/schemas")
+  build_flatbuffers("${MODULE_LIBRARY_FLATBUFFERS_SCHEMAS}"
+                    "${module_library_flatbuffer_dependencies}"
+                    breadboard_module_library_generated_includes
+                    ""
+                    ${MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR}
+                    ""
+                    "")
 
   set(breadboard_module_library_DEPS breadboard)
   set(breadboard_module_library_SRCS
@@ -213,10 +205,11 @@ if (breadboard_build_module_library)
     endif()
     get_property(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
                  TARGET component_library_generated_includes
-                 PROPERTY COMPONENT_LIBRARY_DIR)
+                 PROPERTY GENERATED_INCLUDES_DIR)
     include_directories(${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
     get_property(FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR
-                 TARGET fplbase_generated_includes PROPERTY FPLBASE_DIR)
+                 TARGET fplbase_generated_includes
+                 PROPERTY GENERATED_INCLUDES_DIR)
     include_directories(${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR})
     include_directories(${dependencies_bulletphysics_distr_dir}/src)
     include_directories(${dependencies_component_library_dir}/include)
