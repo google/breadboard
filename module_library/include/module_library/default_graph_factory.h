@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_BREADBOARD_DEFAULT_GRAPH_FACTORY_H_
-#define FPL_BREADBOARD_DEFAULT_GRAPH_FACTORY_H_
+#ifndef FPL_ZOOSHI_ZOOSHI_GRAPH_FACTORY_H_
+#define FPL_ZOOSHI_ZOOSHI_GRAPH_FACTORY_H_
 
 #include <string>
 
@@ -22,7 +22,7 @@
 #include "breadboard/module_registry.h"
 #include "pindrop/pindrop.h"
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 class DefaultGraphFactory : public breadboard::GraphFactory {
@@ -49,7 +49,7 @@ class DefaultGraphFactory : public breadboard::GraphFactory {
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
 };
 
-}  // module_library
-}  // breadboard
+}  // zooshi
+}  // fpl
 
-#endif  // FPL_BREADBOARD_DEFAULT_GRAPH_FACTORY_H_
+#endif  // FPL_ZOOSHI_ZOOSHI_GRAPH_FACTORY_H_

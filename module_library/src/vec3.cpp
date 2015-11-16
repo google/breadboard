@@ -26,7 +26,7 @@ using breadboard::NodeSignature;
 using breadboard::TypeRegistry;
 using mathfu::vec3;
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 // Creates a vector from 3 floats.
@@ -185,4 +185,4 @@ void InitializeVec3Module(ModuleRegistry* module_registry) {
 }
 
 }  // namespace module_library
-}  // namespace breadboard
+}  // namespace fpl
