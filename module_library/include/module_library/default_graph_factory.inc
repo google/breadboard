@@ -95,7 +95,7 @@
 #include "mathfu/vector_3.h"
 #include "pindrop/pindrop.h"
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 static bool ParseType(
@@ -184,9 +184,8 @@ static bool ParseType(
     default: {
       // Not all types can necessarily be loaded from data. Error out if
       // attempting to load these types.
-      fplbase::LogError(
-        "Cannot load data of unknown type from data files. (Got %i)",
-        edge_def->edge_type());
+      LogError("Cannot load data of unknown type from data files. (Got %i)",
+               edge_def->edge_type());
       return false;
     }
   }
@@ -254,4 +253,4 @@ bool DefaultGraphFactory::ParseData(breadboard::ModuleRegistry* module_registry,
 }
 
 }  // module_library
-}  // breadboard
+}  // fpl

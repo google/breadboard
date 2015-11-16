@@ -17,5 +17,5 @@ include "common.fbs";
 namespace breadboard.module_library;
 
 table Vec3 {
-  value:fplbase.Vec3;
+  value:fpl.Vec3;
 }

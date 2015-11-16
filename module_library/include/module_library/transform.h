@@ -19,14 +19,14 @@
 #include "component_library/transform.h"
 #include "module_library/entity.h"
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 void InitializeTransformModule(
     breadboard::ModuleRegistry* module_registry,
-    corgi::component_library::TransformComponent* transform_component);
+    component_library::TransformComponent* transform_component);
 
 }  // namespace module_library
-}  // namespace breadboard
+}  // namespace fpl
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_TRANSFORM_H_

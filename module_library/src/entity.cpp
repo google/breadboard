@@ -26,12 +26,12 @@ using breadboard::Module;
 using breadboard::NodeArguments;
 using breadboard::NodeSignature;
 using breadboard::TypeRegistry;
-using corgi::component_library::GraphComponent;
-using corgi::component_library::MetaComponent;
-using corgi::EntityManager;
-using corgi::EntityRef;
+using fpl::component_library::GraphComponent;
+using fpl::component_library::MetaComponent;
+using fpl::entity::EntityManager;
+using fpl::entity::EntityRef;
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 // Given an input string, return the named entity.
@@ -118,4 +118,4 @@ void InitializeEntityModule(ModuleRegistry* module_registry,
 }
 
 }  // namespace module_library
-}  // namespace breadboard
+}  // namespace fpl

@@ -18,13 +18,13 @@
 #include "breadboard/module_registry.h"
 #include "pindrop/pindrop.h"
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
 void InitializeAudioModule(breadboard::ModuleRegistry* module_registry,
                            pindrop::AudioEngine* audio_engine);
 
 }  // namespace module_library
-}  // namespace breadboard
+}  // namespace fpl
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_AUDIO_H_

@@ -20,18 +20,18 @@
 #include "component_library/meta.h"
 #include "entity/entity_manager.h"
 
-namespace breadboard {
+namespace fpl {
 namespace module_library {
 
-void SetGraphEntity(::corgi::EntityRef entity);
+void SetGraphEntity(entity::EntityRef entity);
 
 void InitializeEntityModule(
     breadboard::ModuleRegistry* module_registry,
-    ::corgi::EntityManager* entity_manager,
-    ::corgi::component_library::MetaComponent* meta_component,
-    ::corgi::component_library::GraphComponent* graph_component);
+    entity::EntityManager* entity_manager,
+    component_library::MetaComponent* meta_component,
+    component_library::GraphComponent* graph_component);
 
 }  // namespace module_library
-}  // namespace breadboard
+}  // namespace fpl
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_ENTITY_H_
