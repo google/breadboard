@@ -16,9 +16,9 @@
 #define FPL_BREADBOARD_MODULE_LIBRARY_ENTITY_H_
 
 #include "breadboard/module_registry.h"
-#include "component_library/graph.h"
-#include "component_library/meta.h"
-#include "entity/entity_manager.h"
+#include "corgi_component_library/graph.h"
+#include "corgi_component_library/meta.h"
+#include "corgi/entity_manager.h"
 
 namespace breadboard {
 namespace module_library {

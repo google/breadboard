@@ -45,7 +45,7 @@ DEPENDENCIES_BREADBOARD_DIR?=$(BREADBOARD_DIR)
 DEPENDENCIES_PINDROP_DIR?=$(FPL_ROOT)/pindrop
 # Location of the Motive library.
 DEPENDENCIES_MOTIVE_DIR?=$(FPL_ROOT)/motive
-# Location of the Entity library.
-DEPENDENCIES_ENTITY_DIR?=$(FPL_ROOT)/entity
+# Location of the CORGI library.
+DEPENDENCIES_CORGI_DIR?=$(FPL_ROOT)/corgi
 # Location of the Bullet Physics library.
 DEPENDENCIES_BULLETPHYSICS_DIR?=$(THIRD_PARTY_ROOT)/bulletphysics

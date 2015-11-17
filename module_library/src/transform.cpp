@@ -18,8 +18,8 @@
 
 #include "breadboard/base_node.h"
 #include "breadboard/module_registry.h"
-#include "component_library/transform.h"
-#include "entity/entity_manager.h"
+#include "corgi_component_library/transform.h"
+#include "corgi/entity_manager.h"
 #include "mathfu/glsl_mappings.h"
 
 using breadboard::BaseNode;
