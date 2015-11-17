@@ -60,7 +60,7 @@ class NodeEventListener {
 
   void MarkDirty();
 
-  fpl::intrusive_list_node node;
+  fplutil::intrusive_list_node node;
 
  private:
   GraphState* graph_state_;
@@ -94,7 +94,7 @@ class NodeEventBroadcaster {
   void BroadcastEvent(EventId event_id);
 
  private:
-  typedef fpl::intrusive_list<NodeEventListener> ListenerList;
+  typedef fplutil::intrusive_list<NodeEventListener> ListenerList;
 
   std::map<EventId, ListenerList> event_listener_lists_;
 };

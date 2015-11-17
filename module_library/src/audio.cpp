@@ -31,7 +31,7 @@ using pindrop::AudioEngine;
 using pindrop::Channel;
 using pindrop::SoundHandle;
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 // Plays the given sound. Also takes a gain and location arguments.
@@ -177,4 +177,4 @@ void InitializeAudioModule(ModuleRegistry* module_registry,
 }
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard

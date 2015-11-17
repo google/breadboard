@@ -26,13 +26,13 @@ using breadboard::Module;
 using breadboard::ModuleRegistry;
 using breadboard::NodeArguments;
 using breadboard::NodeSignature;
-using fpl::component_library::CollisionData;
-using fpl::component_library::GraphComponent;
-using fpl::component_library::PhysicsComponent;
-using fpl::component_library::kCollisionEventId;
-using fpl::entity::EntityRef;
+using corgi::component_library::CollisionData;
+using corgi::component_library::GraphComponent;
+using corgi::component_library::PhysicsComponent;
+using corgi::component_library::kCollisionEventId;
+using corgi::EntityRef;
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 class OnCollisionNode : public BaseNode {
@@ -143,4 +143,4 @@ void InitializePhysicsModule(ModuleRegistry* module_registry,
 }
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard

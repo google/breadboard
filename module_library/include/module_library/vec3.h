@@ -17,12 +17,12 @@
 
 #include "breadboard/module_registry.h"
 
-namespace fpl {
+namespace breadboard {
 namespace module_library {
 
 void InitializeVec3Module(breadboard::ModuleRegistry* module_registry);
 
 }  // namespace module_library
-}  // namespace fpl
+}  // namespace breadboard
 
 #endif  // FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
