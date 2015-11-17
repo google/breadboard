@@ -48,6 +48,8 @@ class CaptureEvent : public BaseNode {
  public:
   CaptureEvent(breadboard::NodeEventBroadcaster *broadcaster)
       : broadcaster_(broadcaster) {}
+  virtual ~CaptureEvent() {}
+
   static void OnRegister(NodeSignature *node_sig) {
     node_sig->AddOutput<int>();
     node_sig->AddListener(kCounterEvent);
@@ -70,6 +72,8 @@ class CaptureEvent : public BaseNode {
 //    pass counter value to output as std::string
 class CountEvent : public BaseNode {
  public:
+  virtual ~CountEvent() {}
+
   static void OnRegister(NodeSignature *node_sig) {
     node_sig->AddInput<int>();
     node_sig->AddOutput<std::string>();
@@ -91,6 +95,8 @@ class CountEvent : public BaseNode {
 //   Print string from input to debug window
 class PrintEvent : public BaseNode {
  public:
+  virtual ~PrintEvent() {}
+
   static void OnRegister(NodeSignature *node_sig) {
     node_sig->AddInput<std::string>();
   }

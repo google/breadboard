@@ -39,6 +39,7 @@ class GraphFactory {
                LoadFileCallback load_file_callback)
       : module_registry_(module_registry),
         load_file_callback_(load_file_callback) {}
+  virtual ~GraphFactory() {}
 
   // Load the graph given it's filename. If this file has already been loaded, a
   // cached copy of the graph is returned.

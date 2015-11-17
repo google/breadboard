@@ -25,6 +25,8 @@ namespace breadboard {
 // Compares two strings.
 class EqualsNode : public BaseNode {
  public:
+  virtual ~EqualsNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<std::string>();
     node_sig->AddInput<std::string>();
@@ -43,6 +45,8 @@ class EqualsNode : public BaseNode {
 // Converts the given int to a string.
 class IntToStringNode : public BaseNode {
  public:
+  virtual ~IntToStringNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<int>();
     node_sig->AddOutput<std::string>();
@@ -59,6 +63,8 @@ class IntToStringNode : public BaseNode {
 // Converts the given float to a string.
 class FloatToStringNode : public BaseNode {
  public:
+  virtual ~FloatToStringNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<float>();
     node_sig->AddOutput<std::string>();
@@ -75,6 +81,8 @@ class FloatToStringNode : public BaseNode {
 // Contactenates the given strings.
 class ConcatNode : public BaseNode {
  public:
+  virtual ~ConcatNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<std::string>();
     node_sig->AddInput<std::string>();

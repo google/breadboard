@@ -23,6 +23,8 @@ namespace breadboard {
 #define LOGICAL_NODE(name, op)                        \
   class name : public BaseNode {                      \
    public:                                            \
+    virtual ~name() {}                                \
+                                                      \
     static void OnRegister(NodeSignature* node_sig) { \
       node_sig->AddInput<bool>();                     \
       node_sig->AddInput<bool>();                     \
@@ -51,6 +53,8 @@ LOGICAL_NODE(XorNode, ^);
 // false.
 class IfNode : public BaseNode {
  public:
+  virtual ~IfNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<bool>();
     node_sig->AddOutput<void>();  // Fires a pulse when input is true.
@@ -68,6 +72,8 @@ class IfNode : public BaseNode {
 // evaluates true, the second is triggered when the result evaluates false.
 class IfGateNode : public BaseNode {
  public:
+  virtual ~IfGateNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<bool>();
@@ -86,6 +92,8 @@ class IfGateNode : public BaseNode {
 // Logical Not.
 class NotNode : public BaseNode {
  public:
+  virtual ~NotNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<bool>();
     node_sig->AddOutput<bool>();
@@ -103,6 +111,8 @@ class NotNode : public BaseNode {
 // Stay Latch, to store boolean results.
 class StayLatchNode : public BaseNode {
  public:
+  virtual ~StayLatchNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>(); // Set to True
     node_sig->AddInput<void>(); // Set to False

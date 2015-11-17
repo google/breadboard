@@ -25,6 +25,8 @@ namespace breadboard {
 // Prints a string to the logger.
 class ConsolePrintNode : public BaseNode {
  public:
+  virtual ~ConsolePrintNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
     node_sig->AddInput<std::string>();

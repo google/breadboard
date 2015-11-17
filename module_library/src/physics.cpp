@@ -39,6 +39,7 @@ class OnCollisionNode : public BaseNode {
  public:
   OnCollisionNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
+  virtual ~OnCollisionNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<EntityRef>();
@@ -66,6 +67,7 @@ class CollisionDataNode : public BaseNode {
  public:
   CollisionDataNode(PhysicsComponent* physics_component)
       : physics_component_(physics_component) {}
+  virtual ~CollisionDataNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     // Fetch the collision data when triggered
@@ -104,6 +106,7 @@ class VelocityNode : public BaseNode {
  public:
   VelocityNode(PhysicsComponent* physics_component)
       : physics_component_(physics_component) {}
+  virtual ~VelocityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();

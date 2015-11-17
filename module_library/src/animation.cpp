@@ -50,6 +50,7 @@ class AnimationCompleteNode : public BaseNode {
  public:
   explicit AnimationCompleteNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
+  virtual ~AnimationCompleteNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<EntityRef>();
@@ -82,6 +83,7 @@ class PlayAnimationNode : public BaseNode {
                     TransformComponent* transform_component)
       : anim_component_(anim_component),
         transform_component_(transform_component) {}
+  virtual ~PlayAnimationNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     // Void to trigger the animation,
@@ -118,6 +120,7 @@ class AnimationIndexNode : public breadboard::BaseNode {
                      TransformComponent* transform_component)
       : anim_component_(anim_component),
         transform_component_(transform_component) {}
+  virtual ~AnimationIndexNode() {}
 
   static void OnRegister(breadboard::NodeSignature* node_sig) {
     // Void to trigger the animation,

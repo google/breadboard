@@ -26,6 +26,8 @@ namespace breadboard {
   template <typename T>                               \
   class name : public BaseNode {                      \
    public:                                            \
+    virtual ~name() {}                                \
+                                                      \
     static void OnRegister(NodeSignature* node_sig) { \
       node_sig->AddInput<T>();                        \
       node_sig->AddInput<T>();                        \
@@ -48,6 +50,8 @@ namespace breadboard {
   template <typename T>                               \
   class name : public BaseNode {                      \
    public:                                            \
+    virtual ~name() {}                                \
+                                                      \
     static void OnRegister(NodeSignature* node_sig) { \
       node_sig->AddInput<T>();                        \
       node_sig->AddInput<T>();                        \
@@ -100,6 +104,8 @@ ARITHMETIC_NODE(DivideNode, /);
 template <typename T>
 class MaxNode : public BaseNode {
  public:
+  virtual ~MaxNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<T>();
     node_sig->AddInput<T>();
@@ -116,6 +122,8 @@ class MaxNode : public BaseNode {
 template <typename T>
 class MinNode : public BaseNode {
  public:
+  virtual ~MinNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<T>();
     node_sig->AddInput<T>();

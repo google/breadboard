@@ -32,6 +32,8 @@ namespace module_library {
 // Creates a vector from 3 floats.
 class Vec3Node : public BaseNode {
  public:
+  virtual ~Vec3Node() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<float>();
     node_sig->AddInput<float>();
@@ -50,6 +52,8 @@ class Vec3Node : public BaseNode {
 // Returns the individual elements of the given vector.
 class ElementsNode : public BaseNode {
  public:
+  virtual ~ElementsNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddOutput<float>();
@@ -68,6 +72,8 @@ class ElementsNode : public BaseNode {
 // Adds the two given vectors.
 class AddNode : public BaseNode {
  public:
+  virtual ~AddNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<vec3>();
@@ -84,6 +90,8 @@ class AddNode : public BaseNode {
 // Subtracts the two given vectors.
 class SubtractNode : public BaseNode {
  public:
+  virtual ~SubtractNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<vec3>();
@@ -99,6 +107,8 @@ class SubtractNode : public BaseNode {
 
 class ScalarMultiplyNode : public BaseNode {
  public:
+  virtual ~ScalarMultiplyNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<float>();
@@ -114,6 +124,8 @@ class ScalarMultiplyNode : public BaseNode {
 
 class ScalarDivideNode : public BaseNode {
  public:
+  virtual ~ScalarDivideNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<float>();
@@ -129,6 +141,8 @@ class ScalarDivideNode : public BaseNode {
 
 class CrossProductNode : public BaseNode {
  public:
+  virtual ~CrossProductNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<vec3>();
@@ -144,6 +158,8 @@ class CrossProductNode : public BaseNode {
 
 class DotProductNode : public BaseNode {
  public:
+  virtual ~DotProductNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddInput<vec3>();
@@ -159,6 +175,8 @@ class DotProductNode : public BaseNode {
 
 class LengthNode : public BaseNode {
  public:
+  virtual ~LengthNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<vec3>();
     node_sig->AddOutput<float>();

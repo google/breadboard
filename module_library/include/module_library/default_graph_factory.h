@@ -30,6 +30,7 @@ class DefaultGraphFactory : public breadboard::GraphFactory {
   DefaultGraphFactory(breadboard::ModuleRegistry* module_registry,
                       breadboard::LoadFileCallback load_file_callback)
       : breadboard::GraphFactory(module_registry, load_file_callback) {}
+  virtual ~DefaultGraphFactory() {}
 
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
   void set_audio_engine(pindrop::AudioEngine* audio_engine) {

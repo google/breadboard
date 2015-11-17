@@ -38,6 +38,7 @@ namespace module_library {
 class EntityNode : public BaseNode {
  public:
   EntityNode(MetaComponent* meta_component) : meta_component_(meta_component) {}
+  virtual ~EntityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
@@ -62,6 +63,7 @@ class GraphEntityNode : public BaseNode {
  public:
   GraphEntityNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
+  virtual ~GraphEntityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddOutput<EntityRef>();
@@ -80,6 +82,7 @@ class DeleteEntityNode : public BaseNode {
  public:
   DeleteEntityNode(::EntityManager* entity_manager)
       : entity_manager_(entity_manager) {}
+  virtual ~DeleteEntityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();

@@ -39,6 +39,7 @@ namespace module_library {
 class PlaySoundNode : public BaseNode {
  public:
   PlaySoundNode(AudioEngine* audio_engine) : audio_engine_(audio_engine) {}
+  virtual ~PlaySoundNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();         // Play the sound.
@@ -65,6 +66,8 @@ class PlaySoundNode : public BaseNode {
 // Checks if a given audio channel is playing.
 class PlayingNode : public BaseNode {
  public:
+  virtual ~PlayingNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<Channel>();
     node_sig->AddOutput<Channel>();
@@ -96,6 +99,8 @@ class StopNode : public BaseNode {
 // Set the gain on the given audio channel.
 class SetGainNode : public BaseNode {
  public:
+  virtual ~SetGainNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<Channel>();
     node_sig->AddInput<float>();
@@ -113,6 +118,8 @@ class SetGainNode : public BaseNode {
 // Returns the gain of the given audio channel.
 class GainNode : public BaseNode {
  public:
+  virtual ~GainNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<Channel>();
     node_sig->AddOutput<Channel>();
@@ -129,6 +136,8 @@ class GainNode : public BaseNode {
 // Sets the location of the given sound channel.
 class SetLocationNode : public BaseNode {
  public:
+  virtual ~SetLocationNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<Channel>();
     node_sig->AddInput<vec3>();
@@ -146,6 +155,8 @@ class SetLocationNode : public BaseNode {
 // Returns the location of the given audio channel.
 class LocationNode : public BaseNode {
  public:
+  virtual ~LocationNode() {}
+
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<Channel>();
     node_sig->AddOutput<Channel>();

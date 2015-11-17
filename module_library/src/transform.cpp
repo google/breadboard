@@ -40,6 +40,7 @@ class ChildNode : public BaseNode {
  public:
   ChildNode(TransformComponent* transform_component)
       : transform_component_(transform_component) {}
+  virtual ~ChildNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<EntityRef>();
@@ -77,6 +78,7 @@ class WorldPositionNode : public BaseNode {
  public:
   WorldPositionNode(TransformComponent* transform_component)
       : transform_component_(transform_component) {}
+  virtual ~WorldPositionNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     node_sig->AddInput<void>();
