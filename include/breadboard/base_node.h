@@ -60,6 +60,6 @@ class BaseNode {
   virtual void Execute(NodeArguments* args) { (void)args; }
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_BASE_NODE_H_

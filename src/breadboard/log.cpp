@@ -32,4 +32,4 @@ void CallLogFunc(const char* format, ...) {
   }
 }
 
-}  // breadboard
+}  // namespace breadboard

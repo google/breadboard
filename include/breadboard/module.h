@@ -83,6 +83,6 @@ class Module {
   NodeDictionary signatures_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_MODULE_H_

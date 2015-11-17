@@ -46,4 +46,4 @@ const Module* ModuleRegistry::GetModule(const std::string& module_name) const {
   return &iter->second;
 }
 
-}  // breadboard
+}  // namespace breadboard

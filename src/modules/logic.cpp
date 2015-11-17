@@ -114,8 +114,8 @@ class StayLatchNode : public BaseNode {
   virtual ~StayLatchNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>(); // Set to True
-    node_sig->AddInput<void>(); // Set to False
+    node_sig->AddInput<void>();  // Set to True
+    node_sig->AddInput<void>();  // Set to False
     node_sig->AddOutput<bool>();
   }
 

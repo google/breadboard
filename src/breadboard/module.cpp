@@ -36,5 +36,4 @@ const NodeSignature* Module::GetNodeSignature(const std::string& name) const {
   return &iter->second;
 }
 
-}  // breadboard
-
+}  // namespace breadboard

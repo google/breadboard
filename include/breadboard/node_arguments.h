@@ -157,6 +157,6 @@ class NodeArguments {
   Timestamp timestamp_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_NODE_ARGUMENTS_H_

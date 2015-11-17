@@ -30,6 +30,6 @@ void RegisterLogFunc(LogFunc log_func);
 // nothing if no logging function has been registered.
 void CallLogFunc(const char* format, ...);
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_LOG_H_

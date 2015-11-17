@@ -243,4 +243,4 @@ bool Graph::FinalizeNodes() {
   return true;
 }
 
-}  // breadboard
+}  // namespace breadboard

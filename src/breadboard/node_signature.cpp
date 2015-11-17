@@ -22,4 +22,4 @@ void NodeSignature::Destructor(BaseNode* base_node) const {
   return destructor_(base_node);
 }
 
-}  // breadboard
+}  // namespace breadboard

@@ -75,6 +75,6 @@ class GraphState {
   Timestamp timestamp_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_GRAPH_STATE_H_

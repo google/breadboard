@@ -103,6 +103,6 @@ struct TypeRegistry<void> {
   TypeRegistry();
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_TYPE_REGISTRY_H_

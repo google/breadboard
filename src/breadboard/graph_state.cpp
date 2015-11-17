@@ -148,4 +148,4 @@ bool GraphState::IsDirty(const Node& node) const {
   return false;
 }
 
-}  // breadboard
+}  // namespace breadboard

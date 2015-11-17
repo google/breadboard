@@ -60,4 +60,4 @@ const Type* GetOutputEdgeType(const Node* node, int index) {
   return node->signature()->output_types()[index];
 }
 
-}  // breadboard
+}  // namespace breadboard

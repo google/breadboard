@@ -60,6 +60,6 @@ class GraphFactory {
   GraphMap loaded_graphs_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_GRAPH_FACTORY_H_

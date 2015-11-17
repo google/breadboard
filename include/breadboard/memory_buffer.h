@@ -71,6 +71,6 @@ class MemoryBuffer {
   std::vector<uint8_t> buffer_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_MEMORY_BUFFER_H_

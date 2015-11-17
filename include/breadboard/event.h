@@ -99,7 +99,7 @@ class NodeEventBroadcaster {
   std::map<EventId, ListenerList> event_listener_lists_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 // Whenever you want to declare a new event ID, the preferred way is to use
 // these macros. In you header file you would put:

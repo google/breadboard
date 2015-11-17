@@ -102,4 +102,4 @@ bool NodeArguments::IsListenerDirty(size_t listener_index) const {
   return listener->timestamp() == timestamp_;
 }
 
-}  // breadboard
+}  // namespace breadboard

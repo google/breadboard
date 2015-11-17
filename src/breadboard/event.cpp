@@ -66,4 +66,4 @@ void NodeEventBroadcaster::BroadcastEvent(EventId event_id) {
   }
 }
 
-}  // breadboard
+}  // namespace breadboard

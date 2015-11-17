@@ -72,8 +72,8 @@ class InputEdge {
   InputEdge() : connected_(false), data_offset_(0) {}
   bool connected() const { return connected_; }
 
-  ptrdiff_t data_offset() const { return data_offset_; };
-  const OutputEdgeTarget& target() const { return target_; };
+  ptrdiff_t data_offset() const { return data_offset_; }
+  const OutputEdgeTarget& target() const { return target_; }
 
   void SetTarget(unsigned int node_index, unsigned int output_index) {
     connected_ = true;
@@ -174,6 +174,6 @@ const Type* GetInputEdgeType(const Node* node, int index);
 // Convenience function to get the type of a node's output edges.
 const Type* GetOutputEdgeType(const Node* node, int index);
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_NODE_H_

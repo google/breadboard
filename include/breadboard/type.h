@@ -47,6 +47,6 @@ struct Type {
   OperatorDeleteFunc operator_delete_func;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_TYPE_H_

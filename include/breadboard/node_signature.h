@@ -86,6 +86,6 @@ class NodeSignature {
   std::vector<EventId> event_listeners_;
 };
 
-}  // breadboard
+}  // namespaced breadboard
 
 #endif  // BREADBOARD_NODE_SIGNATURE_H_

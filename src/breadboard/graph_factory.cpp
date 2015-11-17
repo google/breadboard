@@ -42,4 +42,4 @@ Graph* GraphFactory::LoadGraph(const char* filename) {
   }
 }
 
-}  // breadboard
+}  // namespace breadboard

@@ -42,13 +42,13 @@ class ModuleRegistry {
  private:
   typedef std::unordered_map<std::string, Module> ModuleDictionary;
 
-  // TODO: Consider changing over to using integer keys instead of std::strings.
+  // The dictionary of modules, keyed by name.
   ModuleDictionary modules_;
 
   // Current version of Breadboard.
   const BreadboardVersion* version_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_MODULE_REGISTRY_H_

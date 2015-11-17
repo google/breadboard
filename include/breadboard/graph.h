@@ -41,7 +41,7 @@ namespace breadboard {
 // entities or actors
 class Graph {
  public:
-  Graph(const std::string& graph_name)
+  explicit Graph(const std::string& graph_name)
       : graph_name_(graph_name),
         nodes_(),
         sorted_nodes_(),
@@ -141,6 +141,6 @@ class Graph {
   bool nodes_finalized_;
 };
 
-}  // breadboard
+}  // namespace breadboard
 
 #endif  // BREADBOARD_GRAPH_H_
