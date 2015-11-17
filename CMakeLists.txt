@@ -168,6 +168,10 @@ if (breadboard_build_module_library)
     module_library/schemas/*.fbs)
   unset(FLATBUFFERS_GENERATED_INCLUDES)
 
+  if (NOT TARGET flatc)
+    add_subdirectory("${dependencies_flatbuffers_dir}" ${tmp_dir}/flatbuffers)
+  endif()
+
   set(module_library_flatbuffer_dependencies
       "${dependencies_fplbase_dir}/schemas")
   build_flatbuffers("${MODULE_LIBRARY_FLATBUFFERS_SCHEMAS}"
@@ -187,7 +191,7 @@ if (breadboard_build_module_library)
   if (breadboard_build_mathfu_module)
     set(mathfu_build_benchmarks OFF CACHE BOOL "")
     set(mathfu_build_tests OFF CACHE BOOL "")
-    add_subdirectory(${dependencies_mathfu_dir} ${tmp_dir}/mathfu)
+    add_subdirectory("${dependencies_mathfu_dir}" ${tmp_dir}/mathfu)
     include_directories(${dependencies_mathfu_dir}/include)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
@@ -198,10 +202,10 @@ if (breadboard_build_module_library)
   # Include modules for the components in the component library.
   if (breadboard_build_corgi_component_library_module)
     if (NOT TARGET fplbase)
-      add_subdirectory(${dependencies_fplbase_dir} ${tmp_dir}/fplbase)
+      add_subdirectory("${dependencies_fplbase_dir}" ${tmp_dir}/fplbase)
     endif()
     if (NOT TARGET entity)
-      add_subdirectory(${dependencies_entity_dir} ${tmp_dir}/entity)
+      add_subdirectory("${dependencies_entity_dir}" ${tmp_dir}/entity)
     endif()
     get_property(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
                  TARGET component_library_generated_includes
