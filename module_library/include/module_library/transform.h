@@ -16,7 +16,7 @@
 #define FPL_BREADBOARD_MODULE_LIBRARY_TRANSFORM_H_
 
 #include "breadboard/module_registry.h"
-#include "component_library/transform.h"
+#include "corgi_component_library/transform.h"
 #include "module_library/entity.h"
 
 namespace breadboard {

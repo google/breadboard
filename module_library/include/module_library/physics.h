@@ -16,8 +16,8 @@
 #define FPL_BREADBOARD_MODULE_LIBRARY_PHYSICS_H_
 
 #include "breadboard/module_registry.h"
-#include "component_library/graph.h"
-#include "component_library/physics.h"
+#include "corgi_component_library/graph.h"
+#include "corgi_component_library/physics.h"
 #include "module_library/entity.h"
 
 namespace breadboard {

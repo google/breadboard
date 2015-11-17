@@ -73,11 +73,11 @@ set(dependencies_fplutil_dir "${fpl_root}/fplutil" CACHE PATH
     "Directory containing the fplutil library.")
 set(dependencies_bulletphysics_distr_dir "${third_party_root}/bulletphysics"
     CACHE PATH "Directory containing the Bullet Physics distribution.")
-set(dependencies_entity_dir "${fpl_root}/entity" CACHE PATH
-    "Directory containing the Entity library.")
-set(dependencies_component_library_dir
-    "${dependencies_entity_dir}/component_library" CACHE PATH
-    "Directory containing the entity system component library")
+set(dependencies_corgi_dir "${fpl_root}/corgi" CACHE PATH
+    "Directory containing the CORGI library.")
+set(dependencies_corgi_component_library_dir
+    "${dependencies_corgi_dir}/component_library" CACHE PATH
+    "Directory containing the CORGI component library")
 set(dependencies_fplbase_dir "${fpl_root}/fplbase" CACHE PATH
     "Directory containing the FPLBase library.")
 set(dependencies_mathfu_dir "${fpl_root}/mathfu" CACHE PATH
@@ -161,6 +161,12 @@ add_library(breadboard ${breadboard_SRCS} ${breadboard_common_modules_SRCS})
 target_link_libraries(breadboard)
 
 if (breadboard_build_module_library)
+  # Include FlatBuffers in this project.
+  if(NOT TARGET flatc)
+    set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "")
+    add_subdirectory("${dependencies_flatbuffers_dir}" ${tmp_dir}/flatbuffers)
+  endif()
+
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
@@ -206,20 +212,21 @@ if (breadboard_build_module_library)
     if (NOT TARGET fplbase)
       add_subdirectory("${dependencies_fplbase_dir}" ${tmp_dir}/fplbase)
     endif()
-    if (NOT TARGET entity)
-      add_subdirectory("${dependencies_entity_dir}" ${tmp_dir}/entity)
+    if (NOT TARGET corgi)
+      add_subdirectory(${dependencies_corgi_dir} ${tmp_dir}/corgi)
     endif()
-    get_property(COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-                 TARGET component_library_generated_includes
+    get_property(CORGI_COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
+                 TARGET corgi_component_library_generated_includes
                  PROPERTY GENERATED_INCLUDES_DIR)
-    include_directories(${COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
+    include_directories(
+      ${CORGI_COMPONENT_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR})
     get_property(FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR
                  TARGET fplbase_generated_includes
                  PROPERTY GENERATED_INCLUDES_DIR)
     include_directories(${FPLBASE_FLATBUFFERS_GENERATED_INCLUDES_DIR})
     include_directories(${dependencies_bulletphysics_distr_dir}/src)
-    include_directories(${dependencies_component_library_dir}/include)
-    include_directories(${dependencies_entity_dir}/include)
+    include_directories(${dependencies_corgi_component_library_dir}/include)
+    include_directories(${dependencies_corgi_dir}/include)
     include_directories(${dependencies_flatbuffers_dir}/include)
     include_directories(${dependencies_fplbase_dir}/include)
     include_directories(${dependencies_motive_dir}/include)
@@ -227,7 +234,7 @@ if (breadboard_build_module_library)
 
     set(breadboard_module_library_DEPS
         ${breadboard_module_library_DEPS}
-        component_library)
+        corgi_component_library)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
         module_library/include/module_library/animation.h

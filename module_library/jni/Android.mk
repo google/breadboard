@@ -19,7 +19,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := module_library
 LOCAL_ARM_MODE := arm
 LOCAL_STATIC_LIBRARIES := \
-  libcomponent_library \
+  libcorgi_component_library \
   libpindrop \
   libbreadboard \
   libmathfu
@@ -48,8 +48,8 @@ LOCAL_EXPORT_C_INCLUDES := \
 LOCAL_C_INCLUDES := \
   $(LOCAL_EXPORT_C_INCLUDES) \
   $(DEPENDENCIES_BULLETPHYSICS_DIR)/src \
-  $(DEPENDENCIES_ENTITY_DIR)/include \
-  $(DEPENDENCIES_ENTITY_DIR)/component_library/include \
+  $(DEPENDENCIES_CORGI_DIR)/include \
+  $(DEPENDENCIES_CORGI_DIR)/component_library/include \
   $(DEPENDENCIES_FLATBUFFERS_DIR)/include \
   $(DEPENDENCIES_MATHFU_DIR)/include \
   $(DEPENDENCIES_MOTIVE_DIR)/include \
@@ -84,6 +84,7 @@ $(call flatbuffers_header_build_rules,\
   $(BREADBOARD_MODULE_LIBRARY_SCHEMA_INCLUDE_DIRS),\
   $(LOCAL_SRC_FILES),\
   breadboard_module_library_generated_includes,\
+  corgi_component_library_generated_includes \
   fplbase_generated_includes)
 endif
 
@@ -94,11 +95,11 @@ $(call import-add-path,$(DEPENDENCIES_FPLBASE_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_FLATBUFFERS_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_MATHFU_DIR)/..)
 $(call import-add-path,$(DEPENDENCIES_PINDROP_DIR)/..)
-$(call import-add-path,$(DEPENDENCIES_ENTITY_DIR)/..)
+$(call import-add-path,$(DEPENDENCIES_CORGI_DIR)/..)
 
 $(call import-module,fplbase/jni)
 $(call import-module,flatbuffers/android/jni)
 $(call import-module,mathfu/jni)
 $(call import-module,breadboard/jni)
-$(call import-module,entity/component_library/jni)
+$(call import-module,corgi/component_library/jni)
 $(call import-module,android/cpufeatures)
