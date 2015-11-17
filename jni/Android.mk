@@ -40,6 +40,7 @@ LOCAL_SRC_FILES := \
   src/breadboard/node_arguments.cpp \
   src/breadboard/node_signature.cpp \
   src/breadboard/type_registry.cpp \
+  src/breadboard/version.cpp \
   src/modules/common.cpp \
   src/modules/debug.cpp \
   src/modules/logic.cpp \

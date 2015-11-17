@@ -14,8 +14,11 @@
 
 #include "breadboard/module_registry.h"
 #include "breadboard/log.h"
+#include "breadboard/version.h"
 
 namespace breadboard {
+
+ModuleRegistry::ModuleRegistry() : version_(&Version()) {}
 
 Module* ModuleRegistry::RegisterModule(const std::string& module_name) {
   auto result =

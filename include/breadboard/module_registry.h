@@ -19,6 +19,7 @@
 #include <unordered_map>
 
 #include "breadboard/module.h"
+#include "breadboard/version.h"
 
 namespace breadboard {
 
@@ -26,6 +27,8 @@ namespace breadboard {
 // are going to be used to construct graphs.
 class ModuleRegistry {
  public:
+  ModuleRegistry();
+
   // Adds a new module with the given name to the ModuleRegistry. A module is
   // simply a collection of related nodes.
   Module* RegisterModule(const std::string& module_name);
@@ -33,11 +36,17 @@ class ModuleRegistry {
   // Returns a pointer to a module given its name.
   const Module* GetModule(const std::string& module_name) const;
 
+  // Returns the current Breadboard version structure.
+  const BreadboardVersion* version() { return version_; }
+
  private:
   typedef std::unordered_map<std::string, Module> ModuleDictionary;
 
   // TODO: Consider changing over to using integer keys instead of std::strings.
   ModuleDictionary modules_;
+
+  // Current version of Breadboard.
+  const BreadboardVersion* version_;
 };
 
 }  // breadboard

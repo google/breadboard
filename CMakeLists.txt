@@ -96,6 +96,7 @@ set(dependencies_breadboard_dir "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH
 # Breadboard files.
 set(breadboard_SRCS
     include/breadboard/base_node.h
+    include/breadboard/breadboard.h
     include/breadboard/event.h
     include/breadboard/graph.h
     include/breadboard/graph_factory.h
@@ -109,6 +110,7 @@ set(breadboard_SRCS
     include/breadboard/node_signature.h
     include/breadboard/type.h
     include/breadboard/type_registry.h
+    include/breadboard/version.h
     src/breadboard/event.cpp
     src/breadboard/graph.cpp
     src/breadboard/graph_factory.cpp
@@ -119,7 +121,8 @@ set(breadboard_SRCS
     src/breadboard/node.cpp
     src/breadboard/node_arguments.cpp
     src/breadboard/node_signature.cpp
-    src/breadboard/type_registry.cpp)
+    src/breadboard/type_registry.cpp
+    src/breadboard/version.cpp)
 
 set(breadboard_common_modules_SRCS
     include/breadboard/modules/common.h
