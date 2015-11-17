@@ -96,7 +96,6 @@ set(dependencies_breadboard_dir "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH
 # Breadboard files.
 set(breadboard_SRCS
     include/breadboard/base_node.h
-    include/breadboard/breadboard.h
     include/breadboard/event.h
     include/breadboard/graph.h
     include/breadboard/graph_factory.h
