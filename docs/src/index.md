@@ -1,10 +1,10 @@
 Breadboard    {#breadboard_index}
 ==========
 
-Breadboard is a scripting system designed to be easy to use for both programmers
-and game designers. Once a library of nodes has been defined, anyone can take
-those nodes and connect them together to form more complex behaviors for their
-game.
+[Breadboard][] is a scripting system designed to be easy to use for both
+programmers and game designers. Once a library of nodes has been defined, anyone
+can take those nodes and connect them together to form more complex behaviors
+for their game.
 
 ## Features
 
@@ -33,6 +33,7 @@ modules in the `module_library` folder depend on the following libraries:
 ## Download
 
 [Breadboard][] can be downloaded from:
+
    * [GitHub][] (source)
    * [GitHub Releases Page][] (source)
 
@@ -52,6 +53,7 @@ depends upon, so download the source from [GitHub][] using:
 
 <br>
 
+  [Breadboard]: http://github.com/google/breadboard
   [Breadboard Google Group]: http://group.google.com/group/breadboard-scripting
   [Breadboard Issues Tracker]: http://github.com/google/breadboard/issues
   [Bullet Physics]: http://bulletphysics.org/

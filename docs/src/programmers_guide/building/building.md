@@ -1,8 +1,8 @@
 Building    {#breadboard_guide_building}
 ========
 
-Developers can build the library from source for [Android][], [Linux][], [OS
-X][] and [Windows][].
+Developers can build the library from source for [Android][], [Linux][],
+[OS X][] and [Windows][].
 
    * [Building for Android][]
    * [Building for Linux][]
