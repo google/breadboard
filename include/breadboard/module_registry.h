@@ -21,23 +21,39 @@
 #include "breadboard/module.h"
 #include "breadboard/version.h"
 
+/// @file breadboard/module_registry.h
+/// @brief The ModuleRegistry is a collection of Modules.
+
 namespace breadboard {
 
-// The event system keeps track of all registered types, modules and nodes that
-// are going to be used to construct graphs.
+/// @class ModuleRegistry
+///
+/// @brief The ModuleRegistry is a collection of Modules.
+///
+/// This acts as a central repository for all modules used in your project.
 class ModuleRegistry {
  public:
+  /// Construct a ModuleRegistry.
   ModuleRegistry();
 
-  // Adds a new module with the given name to the ModuleRegistry. A module is
-  // simply a collection of related nodes.
+  /// @brief Adds a new module with the given name to the ModuleRegistry.
+  ///
+  /// @param[in] module_name The name of the new Module.
+  ///
+  /// @return The new Module. Returns null if the module could not be created.
   Module* RegisterModule(const std::string& module_name);
 
-  // Returns a pointer to a module given its name.
+  /// @brief Returns a pointer to a module given its name.
+  ///
+  /// @param[in] module_name The name of the Module.
+  ///
+  /// @return a pointer to a module given its name.
   const Module* GetModule(const std::string& module_name) const;
 
-  // Returns the current Breadboard version structure.
-  const BreadboardVersion* version() { return version_; }
+  /// @brief Returns the current Breadboard version structure.
+  ///
+  /// @return The current Breadboard version structure.
+  const BreadboardVersion* version() const { return version_; }
 
  private:
   typedef std::unordered_map<std::string, Module> ModuleDictionary;

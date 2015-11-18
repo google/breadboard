@@ -72,6 +72,7 @@ class CaptureEvent : public BaseNode {
 //    pass counter value to output as std::string
 class CountEvent : public BaseNode {
  public:
+  CountEvent() : count_(0) {}
   virtual ~CountEvent() {}
 
   static void OnRegister(NodeSignature *node_sig) {
@@ -87,7 +88,7 @@ class CountEvent : public BaseNode {
   }
 
  private:
-  int count_{0};
+  int count_;
 };
 
 // PrintEvent Node:

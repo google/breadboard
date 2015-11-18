@@ -23,41 +23,79 @@
 #include "breadboard/memory_buffer.h"
 #include "breadboard/node.h"
 
+/// @file breadboard/graph_state.h
+///
+/// @brief A GraphState represents an instance of a Graph, and can be connected
+///        to game objects to script and execute behaviors.
+
 namespace breadboard {
 
-// A GraphState is used to execute the nodes on a graph. You can think of it as
-// an instance of the graph. It contains all of the state in the output edges
-// and nodes that update each time the graph executes.
+/// @class GraphState
+///
+/// @brief A GraphState represents an instance of a Graph, and can be connected
+///        to game objects to script and execute behaviors.
+///
+/// Once a GraphState has been initialized with a Graph, it can be used to
+/// execute various scripted behaviors.
 class GraphState {
  public:
+  /// @brief The default constructor for an empty GraphState object.
   GraphState() : graph_(nullptr), output_buffer_(), timestamp_(0) {}
+
+  /// @brief Destructor for a BaseNode.
   ~GraphState();
 
-  // Initialize the GraphState with a graph.
-  //
-  // All nodes in the graph will have their Initialize function run.  The order
-  // the nodes run Initialize is not specified except that nodes that have a
-  // dependency on other nodes will always run after their dependencies.
+  /// @brief Initialize the GraphState with a graph.
+  ///
+  /// All nodes in the graph will have their Initialize function run.  The order
+  /// the nodes run Initialize is not specified except that nodes that have a
+  /// dependency on other nodes will always run after their dependencies.
+  ///
+  /// @param[in] graph The Graph that defines this GraphState's nodes and edges.
   void Initialize(Graph* graph);
 
-  // Check if this GraphState has been initialized.
+  /// @brief Check if this GraphState has been initialized.
+  ///
+  /// @return Whether or not the Graph has been initialized.
   bool IsInitialized() const { return graph_ != nullptr; }
 
-  // Execute all Nodes that are considered 'dirty'. A dirty node is any node
-  // that has been updated since the last time Execute was called, or one that
-  // has an input edge pointing at data that has changed. Nodes that do not meet
-  // either of these requirements do not have their Execute function called.
-  //
-  // The order the nodes run Execute is not specified except that nodes that
-  // have a dependency on other nodes will always run after their dependencies.
+  /// @cond BREADBOARD_INTERNAL
+
+  /// @brief Execute all Nodes that are considered 'dirty'.
+  ///
+  /// A dirty node is any node that has been updated since the last time Execute
+  /// was called, or one that has an input edge pointing at data that has
+  /// changed. Nodes that do not meet either of these requirements do not have
+  /// their Execute function called.
+  ///
+  /// The order the nodes run Execute is not specified except that nodes that
+  /// have a dependency on other nodes will always run after their dependencies.
+  ///
+  /// @note This is for internal use only.
   void Execute();
 
-  // Return the current timestamp.
+  /// @brief Return the current timestamp.
+  ///
+  /// @note This is for internal use only.
+  ///
+  /// @return the current timestamp.
   Timestamp timestamp() const { return timestamp_; }
 
-  // Get the internal memory buffer for output edge objects.
+  /// @brief Returns the internal memory buffer for output edge objects.
+  ///
+  /// @note This is for internal use only.
+  ///
+  /// @return the internal memory buffer for output edge objects.
   MemoryBuffer* output_buffer() { return &output_buffer_; }
+
+  /// @brief Returns the internal memory buffer for output edge objects.
+  ///
+  /// @note This is for internal use only.
+  ///
+  /// @return the internal memory buffer for output edge objects.
   const MemoryBuffer* output_buffer() const { return &output_buffer_; }
+
+  /// @endcond
 
  private:
   // Disallow copying.

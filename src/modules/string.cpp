@@ -78,7 +78,7 @@ class FloatToStringNode : public BaseNode {
   }
 };
 
-// Contactenates the given strings.
+// Concatenates the given strings.
 class ConcatNode : public BaseNode {
  public:
   virtual ~ConcatNode() {}

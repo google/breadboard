@@ -22,20 +22,35 @@
 #include "breadboard/log.h"
 #include "breadboard/node_signature.h"
 
+/// @file breadboard/module.h
+///
+/// @brief A module represents a collection of nodes with a related purpose.
+
 namespace breadboard {
 
-// A module is a collection of related NodeSignatures. For example, it may make
-// sense to make a Math module for basic math operations, or an Entity module
-// for entity operations.
+/// @class Module
+///
+/// A module is a collection of related NodeSignatures. For example, it may make
+/// sense to make a Math module for basic math operations, or an Entity module
+/// for entity operations.
 class Module {
  public:
+  /// @brief Create a Module with the given name.
   explicit Module(const std::string& module_name) : module_name_(module_name) {}
 
-  // Add a new NodeSignature. The template argument to this function should be a
-  // class that implements BaseNode. Each BaseNode registered should have one
-  // NodeSignature associated with it. The NodeSignature defines how many input
-  // and output edges and the types of those edges.
-  template <typename T>
+  /// @brief Register a node of type DerivedNode.
+  ///
+  /// The template argument to this function should be a class that implements
+  /// BaseNode. Each BaseNode registered should have one NodeSignature
+  /// associated with it. The NodeSignature defines how many input and output
+  /// edges and the types of those edges.
+  ///
+  /// @param[in] node_name The name of the new node.
+  ///
+  /// @param[in] constructor A function used to construct a new DerivedNode.
+  ///
+  /// @param[in] destructor A function used to destruct a DerivedNode object.
+  template <typename DerivedNode>
   void RegisterNode(const std::string& node_name,
                     const NodeConstructor& constructor,
                     const NodeDestructor& destructor) {
@@ -52,29 +67,71 @@ class Module {
       return;
     }
     NodeSignature* signature = &iter->second;
-    T::OnRegister(signature);
+    DerivedNode::OnRegister(signature);
   }
 
-  template <typename T>
-  void RegisterNode(const std::string& name,
+  /// @brief Register a node of type DerivedNode.
+  ///
+  /// The template argument to this function should be a class that implements
+  /// BaseNode. Each BaseNode registered should have one NodeSignature
+  /// associated with it. The NodeSignature defines how many input and output
+  /// edges and the types of those edges.
+  ///
+  /// @note This version of the function assumes that DerivedNode needs no
+  /// special tear down logic. Instances of DerivedNode are deleted by calling
+  /// `delete obj;`. If the type requires any special or tear down consider
+  /// using one of the other variations of this function and supply a destructor
+  /// callback.
+  ///
+  /// @param[in] node_name The name of the new node.
+  ///
+  /// @param[in] constructor A function used to construct a new DerivedNode.
+  template <typename DerivedNode>
+  void RegisterNode(const std::string& node_name,
                     const NodeConstructor& constructor) {
-    return RegisterNode<T>(name, constructor, DefaultDelete);
+    return RegisterNode<DerivedNode>(node_name, constructor, DefaultDelete);
   }
 
-  template <typename T>
-  void RegisterNode(const std::string& name) {
-    return RegisterNode<T>(name, DefaultNew<T>);
+  /// @brief Register a node of type DerivedNode.
+  ///
+  /// The template argument to this function should be a class that implements
+  /// BaseNode. Each BaseNode registered should have one NodeSignature
+  /// associated with it. The NodeSignature defines how many input and output
+  /// edges and the types of those edges.
+  ///
+  /// @note This version of the function assumes that DerivedNode needs no
+  /// special set up or tear down logic. Instances of DerivedNode are created
+  /// with a by calling `new DerivedNode()` and deleted by calling `delete
+  /// obj;`. If the type requires any special set up or tear down consider using
+  /// one of the other variations of this function and supply a constructor
+  /// and/or destructor callback.
+  ///
+  /// @param[in] node_name The name of the new node.
+  template <typename DerivedNode>
+  void RegisterNode(const std::string& node_name) {
+    return RegisterNode<DerivedNode>(node_name, DefaultNew<DerivedNode>);
   }
 
-  NodeSignature* GetNodeSignature(const std::string& name);
-  const NodeSignature* GetNodeSignature(const std::string& name) const;
+  /// @brief Returns a pointer to the NodeSignature for a registered node.
+  ///
+  /// @param[in] node_name The name of the node.
+  ///
+  /// @return A pointer to the NodeSignature for the given node.
+  NodeSignature* GetNodeSignature(const std::string& node_name);
+
+  /// @brief Returns a pointer to the NodeSignature for a registered node.
+  ///
+  /// @param[in] node_name The name of the node.
+  ///
+  /// @return A pointer to the NodeSignature for the given node.
+  const NodeSignature* GetNodeSignature(const std::string& node_name) const;
 
  private:
   typedef std::unordered_map<std::string, NodeSignature> NodeDictionary;
 
-  template <typename T>
+  template <typename DerivedNode>
   static BaseNode* DefaultNew() {
-    return new T();
+    return new DerivedNode();
   }
 
   static void DefaultDelete(BaseNode* object) { delete object; }

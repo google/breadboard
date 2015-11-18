@@ -17,8 +17,16 @@
 
 #include "breadboard/module_registry.h"
 
+/// @file breadboard/modules/common.h
+///
+/// @brief Initialize the common modules (debug, logic, math, and string).
+
 namespace breadboard {
 
+/// @brief Initialize the common modules (debug, logic, math, and string).
+///
+/// @param[in,out] module_registry The ModuleRegistry that will hold the modules
+/// registered by this function.
 void InitializeCommonModules(ModuleRegistry* module_registry);
 
 }  // namespace breadboard
