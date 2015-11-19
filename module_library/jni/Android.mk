@@ -14,6 +14,15 @@
 
 LOCAL_PATH := $(call my-dir)/..
 
+BREADBOARD_MODULE_LIBRARY_DIR := $(LOCAL_PATH)
+
+include $(BREADBOARD_MODULE_LIBRARY_DIR)/jni/android_config.mk
+include $(DEPENDENCIES_FLATBUFFERS_DIR)/android/jni/include.mk
+
+# realpath-portable From flatbuffers/android/jni/include.mk
+LOCAL_PATH := $(call realpath-portable,$(LOCAL_PATH))
+BREADBOARD_MODULE_LIBRARY_DIR := $(LOCAL_PATH)
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := module_library
@@ -31,11 +40,6 @@ LOCAL_CPPFLAGS := \
   -DBREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
 
 LOCAL_EXPORT_CPPFLAGS := $(LOCAL_CPPFLAGS)
-
-BREADBOARD_MODULE_LIBRARY_DIR := $(LOCAL_PATH)
-
-include $(BREADBOARD_MODULE_LIBRARY_DIR)/jni/android_config.mk
-include $(DEPENDENCIES_FLATBUFFERS_DIR)/android/jni/include.mk
 
 BREADBOARD_MODULE_LIBRARY_GENERATED_OUTPUT_DIR := \
     $(BREADBOARD_MODULE_LIBRARY_DIR)/gen/include
