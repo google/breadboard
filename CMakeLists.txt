@@ -140,7 +140,7 @@ include_directories(include)
 include_directories(${dependencies_fplutil_dir}/libfplutil/include)
 
 # Detect clang
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
   set(CMAKE_COMPILER_IS_CLANGXX 1)
 endif()
 
@@ -260,12 +260,12 @@ if (breadboard_build_module_library)
   endif()
 
   include_directories(module_library/include)
-  add_library(module_library ${breadboard_module_library_SRCS})
-  add_dependencies(module_library ${breadboard_module_library_DEPS})
+  add_library(breadboard_module_library ${breadboard_module_library_SRCS})
+  add_dependencies(breadboard_module_library ${breadboard_module_library_DEPS})
   if (breadboard_build_mathfu_module)
-    mathfu_configure_flags(module_library)
+    mathfu_configure_flags(breadboard_module_library)
   endif()
-  target_link_libraries(module_library ${breadboard_module_library_DEPS})
+  target_link_libraries(breadboard_module_library ${breadboard_module_library_DEPS})
 
   # Macro defined here so that it can be used by all projects included
   function(breadboard_module_library_configure_flags project)
