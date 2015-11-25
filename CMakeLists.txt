@@ -22,7 +22,7 @@ set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
 # Build the common module library.
 set(breadboard_standalone_mode OFF)
-if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+if("${CMAKE_CURRENT_LIST_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
   set(breadboard_standalone_mode ON)
   message(STATUS "breadboard standalone: building library and samples")
 else()
@@ -49,19 +49,19 @@ option(breadboard_build_mathfu_module
 # Directory which contains the source for 3rd party libraries.
 if(NOT DEFINED third_party_root)
   get_filename_component(third_party_root
-      "${CMAKE_CURRENT_SOURCE_DIR}/../../../../external" REALPATH)
+      "${CMAKE_CURRENT_LIST_DIR}/../../../../external" REALPATH)
 endif()
 
 # Directory which contains source for FPL libraries.
 if(NOT DEFINED fpl_root)
-  get_filename_component(fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/../../libs"
+  get_filename_component(fpl_root "${CMAKE_CURRENT_LIST_DIR}/../../libs"
       REALPATH)
 endif()
 
 # If the dependencies directory exists, assume this is the root directory for
 # all libraries required by this project.
 if(NOT DEFINED dependencies_root)
-  set(dependencies_root "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
+  set(dependencies_root "${CMAKE_CURRENT_LIST_DIR}/dependencies")
   if(EXISTS "${dependencies_root}")
     set(third_party_root "${dependencies_root}")
     set(fpl_root "${dependencies_root}")
@@ -90,7 +90,7 @@ set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
     "Directory containing the Flatbuffers library.")
 # NOTE: This is only required as the breadboard module library and CORGI's
 # component library have a circular dependency.
-set(dependencies_breadboard_dir "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH
+set(dependencies_breadboard_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH
     "Directory containing the breadboard library.")
 
 # Breadboard files.
@@ -170,7 +170,7 @@ if (breadboard_build_module_library)
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
+    ${CMAKE_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
   file(GLOB_RECURSE
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
