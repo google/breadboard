@@ -22,7 +22,7 @@ set(tmp_dir ${CMAKE_CURRENT_BINARY_DIR}/obj)
 
 # Build the common module library.
 set(breadboard_standalone_mode OFF)
-if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+if("${CMAKE_CURRENT_LIST_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
   set(breadboard_standalone_mode ON)
   message(STATUS "breadboard standalone: building library and samples")
 else()
@@ -49,12 +49,12 @@ option(breadboard_build_mathfu_module
 # Directory which contains the source for 3rd party libraries.
 if(NOT DEFINED third_party_root)
   get_filename_component(third_party_root
-      "${CMAKE_CURRENT_SOURCE_DIR}/../../../../external" REALPATH)
+      "${CMAKE_CURRENT_LIST_DIR}/../../../../external" REALPATH)
 endif()
 
 # Directory which contains source for FPL libraries.
 if(NOT DEFINED fpl_root)
-  get_filename_component(fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/../../libs"
+  get_filename_component(fpl_root "${CMAKE_CURRENT_LIST_DIR}/../../libs"
       REALPATH)
 endif()
 
@@ -90,7 +90,7 @@ set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
     "Directory containing the Flatbuffers library.")
 # NOTE: This is only required as the breadboard module library and CORGI's
 # component library have a circular dependency.
-set(dependencies_breadboard_dir "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH
+set(dependencies_breadboard_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH
     "Directory containing the breadboard library.")
 
 # Breadboard files.
@@ -140,7 +140,7 @@ include_directories(include)
 include_directories(${dependencies_fplutil_dir}/libfplutil/include)
 
 # Detect clang
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
   set(CMAKE_COMPILER_IS_CLANGXX 1)
 endif()
 
@@ -170,7 +170,7 @@ if (breadboard_build_module_library)
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
+    ${CMAKE_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
   file(GLOB_RECURSE
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
@@ -260,12 +260,12 @@ if (breadboard_build_module_library)
   endif()
 
   include_directories(module_library/include)
-  add_library(module_library ${breadboard_module_library_SRCS})
-  add_dependencies(module_library ${breadboard_module_library_DEPS})
+  add_library(breadboard_module_library ${breadboard_module_library_SRCS})
+  add_dependencies(breadboard_module_library ${breadboard_module_library_DEPS})
   if (breadboard_build_mathfu_module)
-    mathfu_configure_flags(module_library)
+    mathfu_configure_flags(breadboard_module_library)
   endif()
-  target_link_libraries(module_library ${breadboard_module_library_DEPS})
+  target_link_libraries(breadboard_module_library ${breadboard_module_library_DEPS})
 
   # Macro defined here so that it can be used by all projects included
   function(breadboard_module_library_configure_flags project)

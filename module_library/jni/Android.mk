@@ -25,7 +25,7 @@ BREADBOARD_MODULE_LIBRARY_DIR := $(LOCAL_PATH)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := module_library
+LOCAL_MODULE := breadboard_module_library
 LOCAL_ARM_MODE := arm
 LOCAL_STATIC_LIBRARIES := \
   libcorgi_component_library \
