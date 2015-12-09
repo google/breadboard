@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstddef>
+
 #include "breadboard/node.h"
 #include "breadboard/node_signature.h"
 
@@ -52,11 +54,11 @@ Node::Node(const NodeSignature* signature)
       inserted_(false),
       visited_(false) {}
 
-const Type* GetInputEdgeType(const Node* node, int index) {
+const Type* GetInputEdgeType(const Node* node, std::size_t index) {
   return node->signature()->input_types()[index];
 }
 
-const Type* GetOutputEdgeType(const Node* node, int index) {
+const Type* GetOutputEdgeType(const Node* node, std::size_t index) {
   return node->signature()->output_types()[index];
 }
 

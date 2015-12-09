@@ -25,8 +25,6 @@ set(breadboard_standalone_mode OFF)
 if("${CMAKE_CURRENT_LIST_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
   set(breadboard_standalone_mode ON)
   message(STATUS "breadboard standalone: building library and samples")
-else()
-  message(STATUS "breadboard library: not building samples")
 endif()
 option(breadboard_build_samples "Build the breadboard sample executables."
        ${breadboard_standalone_mode})
@@ -170,7 +168,7 @@ if (breadboard_build_module_library)
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-    ${CMAKE_SOURCE_DIR}/module_library/${CMAKE_FILES_DIRECTORY}/include)
+      ${CMAKE_SOURCE_DIR}/${CMAKE_FILES_DIRECTORY}/include/module_library)
   file(GLOB_RECURSE
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
