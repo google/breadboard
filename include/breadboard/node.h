@@ -220,10 +220,10 @@ class Node {
 };
 
 /// @brief Convenience function to get the type of a node's input edges.
-const Type* GetInputEdgeType(const Node* node, int index);
+const Type* GetInputEdgeType(const Node* node, size_t index);
 
 /// @brief Convenience function to get the type of a node's output edges.
-const Type* GetOutputEdgeType(const Node* node, int index);
+const Type* GetOutputEdgeType(const Node* node, size_t index);
 
 /// @endcond
 
