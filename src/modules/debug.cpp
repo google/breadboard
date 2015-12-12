@@ -17,26 +17,30 @@
 #include <string>
 
 #include "breadboard/base_node.h"
-#include "breadboard/module_registry.h"
 #include "breadboard/log.h"
+#include "breadboard/module_registry.h"
 
 namespace breadboard {
 
 // Prints a string to the logger.
 class ConsolePrintNode : public BaseNode {
  public:
+  enum { kInputTrigger, kInputString };
+  enum { kOutputString };
+
   virtual ~ConsolePrintNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<std::string>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<std::string>(kInputString, "String");
+
+    node_sig->AddOutput<std::string>(kOutputString, "String");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto str = args->GetInput<std::string>(1);
+    auto str = args->GetInput<std::string>(kInputString);
     CallLogFunc("%s\n", str->c_str());
-    args->SetOutput(0, *str);
+    args->SetOutput(kOutputString, *str);
   }
 };
 

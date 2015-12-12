@@ -28,11 +28,11 @@ GraphState::~GraphState() {
     for (auto node = graph_->nodes().begin(); node != graph_->nodes().end();
          ++node) {
       const NodeSignature* signature = node->signature();
-      for (size_t i = 0; i < signature->output_types().size(); ++i) {
+      for (size_t i = 0; i < signature->output_parameters().size(); ++i) {
         const OutputEdge& output_edge = node->output_edges()[i];
         if (output_edge.connected()) {
           // If connected, it has a per-graph value.
-          const Type* type = signature->output_types()[i];
+          const Type* type = signature->output_parameters()[i].type;
 
           // Destruct timestamp.
           Timestamp* timestamp = output_buffer_.GetObject<Timestamp>(
@@ -70,10 +70,10 @@ void GraphState::Initialize(Graph* graph) {
     const NodeSignature* signature = node->signature();
 
     // Initialize the memory for the output edges.
-    for (size_t i = 0; i < signature->output_types().size(); ++i) {
+    for (size_t i = 0; i < signature->output_parameters().size(); ++i) {
       const OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = signature->output_types()[i];
+        const Type* type = signature->output_parameters()[i].type;
 
         // Initialize timestamp.
         ptr = output_buffer_.GetObjectPtr(output_edge.timestamp_offset());
@@ -92,7 +92,7 @@ void GraphState::Initialize(Graph* graph) {
 
     // Initialize the memory for the listeners.
     for (size_t i = 0; i < signature->event_listeners().size(); ++i) {
-      EventId event_id = signature->event_listeners()[i];
+      EventId event_id = signature->event_listeners()[i].event_id;
       ptr = output_buffer_.GetObjectPtr(node->listener_offsets()[i]);
       new (ptr) NodeEventListener(this, event_id);
     }

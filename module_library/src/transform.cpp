@@ -18,8 +18,8 @@
 
 #include "breadboard/base_node.h"
 #include "breadboard/module_registry.h"
-#include "corgi_component_library/transform.h"
 #include "corgi/entity_manager.h"
+#include "corgi_component_library/transform.h"
 #include "mathfu/glsl_mappings.h"
 
 using breadboard::BaseNode;
@@ -38,20 +38,22 @@ namespace module_library {
 // Returns the child at the given index.
 class ChildNode : public BaseNode {
  public:
+  enum { kInputParent, kInputChildIndex };
+  enum { kOutputChild };
+
   ChildNode(TransformComponent* transform_component)
       : transform_component_(transform_component) {}
-  virtual ~ChildNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddInput<int>();
-    node_sig->AddOutput<EntityRef>();
+    node_sig->AddInput<EntityRef>(kInputParent, "Parent");
+    node_sig->AddInput<int>(kInputChildIndex, "Child Index");
+    node_sig->AddOutput<EntityRef>(kOutputChild, "Child");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    auto entity = args->GetInput<EntityRef>(0);
+    auto entity = args->GetInput<EntityRef>(kInputParent);
     if (entity->IsValid()) {
-      auto child_index = *args->GetInput<int>(1);
+      auto child_index = *args->GetInput<int>(kInputChildIndex);
       TransformData* transform_data =
           transform_component_->GetComponentData(*entity);
       // Find the child at the given index.
@@ -60,10 +62,11 @@ class ChildNode : public BaseNode {
         ++iter;
         --child_index;
       }
-      args->SetOutput(0, iter != transform_data->children.end() ? iter->owner
-                                                                : EntityRef());
+      args->SetOutput(kOutputChild, iter != transform_data->children.end()
+                                        ? iter->owner
+                                        : EntityRef());
     } else {
-      args->SetOutput(0, EntityRef());
+      args->SetOutput(kOutputChild, EntityRef());
     }
   }
 
@@ -76,21 +79,22 @@ class ChildNode : public BaseNode {
 // Returns the position of the entity in world space.
 class WorldPositionNode : public BaseNode {
  public:
+  enum { kInputTrigger, kInputEntity };
+  enum { kOutputPosition };
   WorldPositionNode(TransformComponent* transform_component)
       : transform_component_(transform_component) {}
-  virtual ~WorldPositionNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddOutput<vec3>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddOutput<vec3>(kOutputPosition, "Position");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      auto entity = args->GetInput<EntityRef>(1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      auto entity = args->GetInput<EntityRef>(kInputEntity);
       vec3 position = transform_component_->WorldPosition(*entity);
-      args->SetOutput(0, position);
+      args->SetOutput(kOutputPosition, position);
     }
   }
 

@@ -55,11 +55,11 @@ Node::Node(const NodeSignature* signature)
       visited_(false) {}
 
 const Type* GetInputEdgeType(const Node* node, std::size_t index) {
-  return node->signature()->input_types()[index];
+  return node->signature()->input_parameters()[index].type;
 }
 
 const Type* GetOutputEdgeType(const Node* node, std::size_t index) {
-  return node->signature()->output_types()[index];
+  return node->signature()->output_parameters()[index].type;
 }
 
 }  // namespace breadboard

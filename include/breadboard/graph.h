@@ -130,7 +130,7 @@ class Graph {
       return;
     }
     const Type* type = TypeRegistry<EdgeType>::GetType();
-    const Type* expected_type = signature->input_types()[edge_index];
+    const Type* expected_type = signature->input_parameters()[edge_index].type;
     if (type != expected_type) {
       CallLogFunc(
           "%s: Attempting to assign a default value of the incorrect type to "

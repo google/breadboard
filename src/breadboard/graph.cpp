@@ -27,11 +27,11 @@ Graph::~Graph() {
   // Destruct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
     const NodeSignature* signature = node->signature();
-    for (size_t i = 0; i < signature->input_types().size(); ++i) {
+    for (size_t i = 0; i < signature->input_parameters().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = signature->input_types()[i];
+        const Type* type = signature->input_parameters()[i].type;
         // Only do this on non-void objects. Attempting to access a void edge
         // can be troublesome in the case where the last edge listed is of type
         // void.
@@ -71,9 +71,11 @@ bool Graph::InsertNode(Node* node) {
       InputEdge& edge = node->input_edges()[i];
       if (edge.connected()) {
         Node& dependency = edge.target().GetTargetNode(&nodes_);
-        const Type* input_type = node->signature()->input_types()[i];
+        const Type* input_type = node->signature()->input_parameters()[i].type;
         const Type* output_type =
-            dependency.signature()->output_types()[edge.target().edge_index()];
+            dependency.signature()
+                ->output_parameters()[edge.target().edge_index()]
+                .type;
         if (input_type != output_type) {
           int input_node_index = NodeIndex(nodes_, *node);
           CallLogFunc(
@@ -146,7 +148,7 @@ bool Graph::FinalizeNodes() {
   // Make sure each node has the proper number of output edges.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
     const NodeSignature* signature = node->signature();
-    node->output_edges().resize(signature->output_types().size());
+    node->output_edges().resize(signature->output_parameters().size());
   }
 
   // Keep track of the offsets for the input edges and output edges.
@@ -159,14 +161,14 @@ bool Graph::FinalizeNodes() {
   for (size_t i = 0; i < nodes_.size(); ++i) {
     Node* node = &nodes_[i];
     const NodeSignature* signature = node->signature();
-    if (signature->input_types().size() != node->input_edges().size()) {
+    if (signature->input_parameters().size() != node->input_edges().size()) {
       CallLogFunc(
           "Error in graph \"%s\": Node %d got %d edges, but expected %d",
           graph_name_.c_str(), i, node->input_edges().size(),
-          signature->input_types().size());
+          signature->input_parameters().size());
       return false;
     }
-    for (size_t j = 0; j < signature->input_types().size(); ++j) {
+    for (size_t j = 0; j < signature->input_parameters().size(); ++j) {
       InputEdge& input_edge = node->input_edges()[j];
 
       if (input_edge.connected()) {
@@ -178,7 +180,7 @@ bool Graph::FinalizeNodes() {
       } else {
         // If this is an input with a default value, keep track of where to
         // allocate it when our blob of memory has been allocated.
-        const Type* type = signature->input_types()[j];
+        const Type* type = signature->input_parameters()[j].type;
         ptrdiff_t data_offset = AdvanceOffset(&current_input_offset, type);
         input_edge.SetDataOffset(data_offset);
       }
@@ -191,11 +193,11 @@ bool Graph::FinalizeNodes() {
   // Construct the default values.
   for (auto node = nodes_.begin(); node != nodes_.end(); ++node) {
     const NodeSignature* signature = node->signature();
-    for (size_t i = 0; i < signature->input_types().size(); ++i) {
+    for (size_t i = 0; i < signature->input_parameters().size(); ++i) {
       InputEdge& input_edge = node->input_edges()[i];
       if (!input_edge.connected()) {
         // If not connected, it has a default value.
-        const Type* type = signature->input_types()[i];
+        const Type* type = signature->input_parameters()[i].type;
         assert(type);
         if (type->size > 0) {
           uint8_t* ptr = input_buffer_.GetObjectPtr(input_edge.data_offset());
@@ -213,10 +215,10 @@ bool Graph::FinalizeNodes() {
     node->set_timestamp_offset(node_timestamp_offset);
 
     const NodeSignature* signature = node->signature();
-    for (size_t i = 0; i < signature->output_types().size(); ++i) {
+    for (size_t i = 0; i < signature->output_parameters().size(); ++i) {
       OutputEdge& output_edge = node->output_edges()[i];
       if (output_edge.connected()) {
-        const Type* type = signature->output_types()[i];
+        const Type* type = signature->output_parameters()[i].type;
         ptrdiff_t timestamp_offset =
             AdvanceOffset<Timestamp>(&current_output_offset);
         ptrdiff_t data_offset = AdvanceOffset(&current_output_offset, type);

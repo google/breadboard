@@ -18,8 +18,8 @@
 
 #include "breadboard/base_node.h"
 #include "breadboard/module_registry.h"
-#include "corgi_component_library/physics.h"
 #include "corgi/entity_manager.h"
+#include "corgi_component_library/physics.h"
 
 using breadboard::BaseNode;
 using breadboard::Module;
@@ -37,25 +37,29 @@ namespace module_library {
 
 class OnCollisionNode : public BaseNode {
  public:
+  enum { kInputEntity };
+  enum { kOutputCollision };
+  enum { kListenerOnCollision };
+
   OnCollisionNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
-  virtual ~OnCollisionNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddOutput<void>();
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddOutput<void>(kOutputCollision, "Collision");
     node_sig->AddListener(kCollisionEventId);
   }
 
   virtual void Initialize(NodeArguments* args) {
-    auto entity = args->GetInput<EntityRef>(0);
-    args->BindBroadcaster(0, graph_component_->GetCreateBroadcaster(*entity));
+    auto entity = args->GetInput<EntityRef>(kInputEntity);
+    args->BindBroadcaster(kListenerOnCollision,
+                          graph_component_->GetCreateBroadcaster(*entity));
   }
 
   virtual void Execute(NodeArguments* args) {
     Initialize(args);
-    if (args->IsListenerDirty(0)) {
-      args->SetOutput(0);
+    if (args->IsListenerDirty(kListenerOnCollision)) {
+      args->SetOutput(kOutputCollision);
     }
   }
 
@@ -65,35 +69,44 @@ class OnCollisionNode : public BaseNode {
 
 class CollisionDataNode : public BaseNode {
  public:
+  enum { kInputTrigger };
+  enum {
+    kOutputEntityA,
+    kOutputPositionA,
+    kOutputTagA,
+    kOutputEntityB,
+    kOutputPositionB,
+    kOutputTagB
+  };
+
   CollisionDataNode(PhysicsComponent* physics_component)
       : physics_component_(physics_component) {}
-  virtual ~CollisionDataNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     // Fetch the collision data when triggered
-    node_sig->AddInput<void>();
+    node_sig->AddInput<void>(kInputTrigger);
 
     // One of the entities involved in the collision, the location of the
     // entity, and an arbitrary tag.
-    node_sig->AddOutput<EntityRef>();
-    node_sig->AddOutput<mathfu::vec3>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddOutput<EntityRef>(kOutputEntityA, "Entity A");
+    node_sig->AddOutput<mathfu::vec3>(kOutputPositionA, "Position A");
+    node_sig->AddOutput<std::string>(kOutputTagA, "Tag A");
 
     // The other entity involved in the collision, the location of the entity,
     // and an arbitrary tag.
-    node_sig->AddOutput<EntityRef>();
-    node_sig->AddOutput<mathfu::vec3>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddOutput<EntityRef>(kOutputEntityB, "Entity B");
+    node_sig->AddOutput<mathfu::vec3>(kOutputPositionB, "Position B");
+    node_sig->AddOutput<std::string>(kOutputTagB, "Tag B");
   }
 
   virtual void Initialize(NodeArguments* args) {
     CollisionData& collision_data = physics_component_->collision_data();
-    args->SetOutput(0, collision_data.this_entity);
-    args->SetOutput(1, collision_data.this_position);
-    args->SetOutput(2, collision_data.this_tag);
-    args->SetOutput(3, collision_data.other_entity);
-    args->SetOutput(4, collision_data.other_position);
-    args->SetOutput(5, collision_data.other_tag);
+    args->SetOutput(kOutputEntityA, collision_data.this_entity);
+    args->SetOutput(kOutputPositionA, collision_data.this_position);
+    args->SetOutput(kOutputTagA, collision_data.this_tag);
+    args->SetOutput(kOutputEntityB, collision_data.other_entity);
+    args->SetOutput(kOutputPositionB, collision_data.other_position);
+    args->SetOutput(kOutputTagB, collision_data.other_tag);
   }
 
   virtual void Execute(NodeArguments* args) { Initialize(args); }
@@ -104,21 +117,23 @@ class CollisionDataNode : public BaseNode {
 
 class VelocityNode : public BaseNode {
  public:
+  enum { kInputTrigger, kInputEntity };
+  enum { kOutputVelocity };
+
   VelocityNode(PhysicsComponent* physics_component)
       : physics_component_(physics_component) {}
-  virtual ~VelocityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddOutput<mathfu::vec3>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddOutput<mathfu::vec3>(kOutputVelocity, "Velocity");
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      auto entity = args->GetInput<EntityRef>(1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      auto entity = args->GetInput<EntityRef>(kInputEntity);
       auto physics_data = physics_component_->GetComponentData(*entity);
-      args->SetOutput(0, physics_data->Velocity());
+      args->SetOutput(kOutputVelocity, physics_data->Velocity());
     }
   }
 

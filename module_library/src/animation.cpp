@@ -18,10 +18,10 @@
 
 #include "breadboard/base_node.h"
 #include "breadboard/module_registry.h"
+#include "corgi/entity_manager.h"
 #include "corgi_component_library/animation.h"
 #include "corgi_component_library/meta.h"
 #include "corgi_component_library/transform.h"
-#include "corgi/entity_manager.h"
 
 namespace breadboard {
 namespace module_library {
@@ -48,27 +48,32 @@ static inline EntityRef ChildAnimEntity(TransformComponent* transform_component,
 // Executes when the animation on the given entity is complete.
 class AnimationCompleteNode : public BaseNode {
  public:
+  enum { kInputEntity };
+  enum { kOutputAnimationComplete };
+  enum { kListenerAnimationComplete };
+
   explicit AnimationCompleteNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
-  virtual ~AnimationCompleteNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddOutput<void>();
-    node_sig->AddListener(kAnimationCompleteEventId);
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddOutput<void>(kOutputAnimationComplete, "Animation Complete");
+    node_sig->AddListener(kListenerAnimationComplete,
+                          kAnimationCompleteEventId);
   }
 
   virtual void Initialize(NodeArguments* args) {
-    EntityRef entity = *args->GetInput<EntityRef>(0);
+    EntityRef entity = *args->GetInput<EntityRef>(kInputEntity);
     if (entity) {
-      args->BindBroadcaster(0, graph_component_->GetCreateBroadcaster(entity));
+      args->BindBroadcaster(kListenerAnimationComplete,
+                            graph_component_->GetCreateBroadcaster(entity));
     }
   }
 
   virtual void Execute(NodeArguments* args) {
     Initialize(args);
-    if (args->IsListenerDirty(0)) {
-      args->SetOutput(0);
+    if (args->IsListenerDirty(kListenerAnimationComplete)) {
+      args->SetOutput(kOutputAnimationComplete);
     }
   }
 
@@ -79,32 +84,36 @@ class AnimationCompleteNode : public BaseNode {
 // Starts the requested animation on the requested entity.
 class PlayAnimationNode : public BaseNode {
  public:
+  enum { kInputTrigger, kInputEntity, kInputAnimIndex };
+  enum { kOutputTrigger };
+
   PlayAnimationNode(AnimationComponent* anim_component,
                     TransformComponent* transform_component)
       : anim_component_(anim_component),
         transform_component_(transform_component) {}
-  virtual ~PlayAnimationNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
     // Void to trigger the animation,
     // the entity to be animated,
     // and the index into the AnimTable for this entity.
-    node_sig->AddInput<void>();
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddInput<int>();
-    node_sig->AddOutput<void>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger", "Trigger the animation");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity",
+                                  "The entity to animate");
+    node_sig->AddInput<int>(kInputAnimIndex, "Animation Index",
+                            "The animation index to play");
+    node_sig->AddOutput<void>(kOutputTrigger);
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      EntityRef entity = *args->GetInput<EntityRef>(1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      EntityRef entity = *args->GetInput<EntityRef>(kInputEntity);
       EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
       const int current_anim_idx = anim_component_->LastAnimIdx(anim_entity);
-      int anim_idx = *args->GetInput<int>(2);
+      int anim_idx = *args->GetInput<int>(kInputAnimIndex);
       if (current_anim_idx != anim_idx) {
         anim_component_->AnimateFromTable(anim_entity, anim_idx);
       }
-      args->SetOutput(0);
+      args->SetOutput(kOutputTrigger);
     }
   }
 
@@ -116,27 +125,29 @@ class PlayAnimationNode : public BaseNode {
 // Returns the index of the last animation played.
 class AnimationIndexNode : public breadboard::BaseNode {
  public:
+  enum { kInputTrigger, kInputEntity };
+  enum { kOutputAnimIndex };
+
   AnimationIndexNode(AnimationComponent* anim_component,
                      TransformComponent* transform_component)
       : anim_component_(anim_component),
         transform_component_(transform_component) {}
-  virtual ~AnimationIndexNode() {}
 
   static void OnRegister(breadboard::NodeSignature* node_sig) {
     // Void to trigger the animation,
     // the entity to be animated,
     // and the index into the AnimTable for this entity.
-    node_sig->AddInput<void>();
-    node_sig->AddInput<EntityRef>();
-    node_sig->AddOutput<int>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddOutput<int>(kOutputAnimIndex, "Trigger");
   }
 
   virtual void Execute(breadboard::NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      EntityRef entity = *args->GetInput<EntityRef>(1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      EntityRef entity = *args->GetInput<EntityRef>(kInputEntity);
       EntityRef anim_entity = ChildAnimEntity(transform_component_, entity);
       const int anim_idx = anim_component_->LastAnimIdx(anim_entity);
-      args->SetOutput(0, anim_idx);
+      args->SetOutput(kOutputAnimIndex, anim_idx);
     }
   }
 
