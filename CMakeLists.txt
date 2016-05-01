@@ -191,10 +191,12 @@ if (breadboard_build_module_library)
         module_library/include/module_library/animation.h
         module_library/include/module_library/entity.h
         module_library/include/module_library/physics.h
+        module_library/include/module_library/rendermesh.h
         module_library/include/module_library/transform.h
         module_library/src/animation.cpp
         module_library/src/entity.cpp
         module_library/src/physics.cpp
+        module_library/src/rendermesh.cpp
         module_library/src/transform.cpp)
   endif()
 

@@ -142,6 +142,27 @@ class MinNode : public BaseNode {
 };
 
 template <typename T>
+class ClampNode : public BaseNode {
+ public:
+  enum { kInputValue, kInputMin, kInputMax };
+  enum { kOutputValue };
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<T>(kInputValue);
+    node_sig->AddInput<T>(kInputMin);
+    node_sig->AddInput<T>(kInputMax);
+    node_sig->AddOutput<T>(kOutputValue);
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    auto a = args->GetInput<T>(kInputValue);
+    auto b = args->GetInput<T>(kInputMin);
+    auto c = args->GetInput<T>(kInputMax);
+    args->SetOutput(kOutputValue, std::min(std::max(*a, *b), *c));
+  }
+};
+
+template <typename T>
 void InitializeMathModuleType(ModuleRegistry* module_registry,
                               const char* name) {
   Module* module = module_registry->RegisterModule(name);
@@ -157,6 +178,7 @@ void InitializeMathModuleType(ModuleRegistry* module_registry,
   module->RegisterNode<DivideNode<T>>("divide");
   module->RegisterNode<MaxNode<T>>("max");
   module->RegisterNode<MinNode<T>>("min");
+  module->RegisterNode<ClampNode<T>>("clamp");
 }
 
 void InitializeIntegerMathModule(ModuleRegistry* module_registry) {

@@ -104,10 +104,39 @@ class WorldPositionNode : public BaseNode {
   TransformComponent* transform_component_;
 };
 
+class SetScaleNode : public BaseNode {
+ public:
+  enum { kInputEntity, kInputScale };
+  SetScaleNode(TransformComponent* transform_component)
+      : transform_component_(transform_component) {}
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddInput<vec3>(kInputScale, "Scale");
+  }
+
+  virtual void Initialize(NodeArguments* args) {
+    auto entity = args->GetInput<EntityRef>(kInputEntity);
+    if (entity->IsValid()) {
+      TransformData* transform_data =
+          transform_component_->GetComponentData(*entity);
+      transform_data->scale = *args->GetInput<vec3>(kInputScale);
+    }
+  }
+
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
+
+ private:
+  TransformComponent* transform_component_;
+};
+
 void InitializeTransformModule(ModuleRegistry* module_registry,
                                TransformComponent* transform_component) {
   auto world_position_ctor = [transform_component]() {
     return new WorldPositionNode(transform_component);
+  };
+  auto set_scale_ctor = [transform_component]() {
+    return new SetScaleNode(transform_component);
   };
   auto child_ctor = [transform_component]() {
     return new ChildNode(transform_component);
@@ -116,6 +145,7 @@ void InitializeTransformModule(ModuleRegistry* module_registry,
   module->RegisterNode<ChildNode>("child", child_ctor);
   module->RegisterNode<WorldPositionNode>("world_position",
                                           world_position_ctor);
+  module->RegisterNode<SetScaleNode>("set_scale", set_scale_ctor);
 }
 
 }  // namespace module_library

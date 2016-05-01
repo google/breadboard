@@ -65,6 +65,7 @@ LOCAL_SRC_FILES := \
   src/audio.cpp \
   src/entity.cpp \
   src/physics.cpp \
+  src/rendermesh.cpp \
   src/transform.cpp \
   src/vec3.cpp
 
