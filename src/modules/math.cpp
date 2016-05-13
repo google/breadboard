@@ -163,8 +163,46 @@ class ClampNode : public BaseNode {
 };
 
 template <typename T>
-void InitializeMathModuleType(ModuleRegistry* module_registry,
-                              const char* name) {
+class LerpNode : public BaseNode {
+ public:
+  enum { kInputStart, kInputFinish, kInputRatio };
+  enum { kOutputValue };
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<T>(kInputStart);
+    node_sig->AddInput<T>(kInputFinish);
+    node_sig->AddInput<float>(kInputRatio);
+    node_sig->AddOutput<T>(kOutputValue);
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    auto a = args->GetInput<T>(kInputStart);
+    auto b = args->GetInput<T>(kInputFinish);
+    auto c = args->GetInput<float>(kInputRatio);
+    args->SetOutput(kOutputValue,
+                    *a + static_cast<T>(static_cast<float>(*b - *a) * (*c)));
+  }
+};
+
+class IntToFloatNode : public BaseNode {
+ public:
+  enum { kInputValue };
+  enum { kOutputValue };
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<int>(kInputValue);
+    node_sig->AddOutput<float>(kOutputValue);
+  }
+
+  virtual void Execute(NodeArguments* args) {
+    auto value = args->GetInput<int>(kInputValue);
+    args->SetOutput(kOutputValue, static_cast<float>(*value));
+  }
+};
+
+template <typename T>
+Module* InitializeMathModuleType(ModuleRegistry* module_registry,
+                                 const char* name) {
   Module* module = module_registry->RegisterModule(name);
   module->RegisterNode<EqualsNode<T>>("equals");
   module->RegisterNode<NotEqualsNode<T>>("not_equals");
@@ -179,10 +217,14 @@ void InitializeMathModuleType(ModuleRegistry* module_registry,
   module->RegisterNode<MaxNode<T>>("max");
   module->RegisterNode<MinNode<T>>("min");
   module->RegisterNode<ClampNode<T>>("clamp");
+  module->RegisterNode<LerpNode<T>>("lerp");
+  return module;
 }
 
 void InitializeIntegerMathModule(ModuleRegistry* module_registry) {
-  InitializeMathModuleType<int>(module_registry, "integer_math");
+  Module* module =
+      InitializeMathModuleType<int>(module_registry, "integer_math");
+  module->RegisterNode<IntToFloatNode>("int_to_float");
 }
 
 void InitializeFloatMathModule(ModuleRegistry* module_registry) {
