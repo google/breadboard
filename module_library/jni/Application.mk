@@ -14,9 +14,9 @@
 
 APP_STL:=gnustl_static
 APP_ABI := armeabi-v7a x86 armeabi
-NDK_TOOLCHAIN_VERSION := 4.8
+
 APP_CPPFLAGS += -std=c++11 -Wno-literal-suffix
 
-APP_MODULES:=libmodule_library
+APP_MODULES:=libbreadboard_module_library
 
 APP_PLATFORM := android-15
