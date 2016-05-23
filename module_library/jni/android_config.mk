@@ -34,7 +34,7 @@ DEPENDENCIES_FLATBUFFERS_DIR?=$(FPL_ROOT)/flatbuffers
 # Location of the fplutil library.
 DEPENDENCIES_FPLUTIL_DIR?=$(FPL_ROOT)/fplutil
 # Location of the googletest library.
-DEPENDENCIES_GTEST_DIR?=$(FPL_ROOT)/googletest
+DEPENDENCIES_GTEST_DIR?=$(FPL_ROOT)/fplutil/libfplutil/jni/libs/googletest
 # Location of the fplbase library.
 DEPENDENCIES_FPLBASE_DIR?=$(FPL_ROOT)/fplbase
 # Location of the MathFu library.
