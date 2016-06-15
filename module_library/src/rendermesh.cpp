@@ -55,13 +55,47 @@ class SetVisibleNode : public BaseNode {
   RenderMeshComponent* render_mesh_component_;
 };
 
+// Sets the tint color of RenderMesh.
+class SetTintNode : public BaseNode {
+ public:
+  enum { kInputTrigger, kInputEntity, kInputTint };
+  SetTintNode(RenderMeshComponent* render_mesh_component)
+      : render_mesh_component_(render_mesh_component) {}
+
+  static void OnRegister(NodeSignature* node_sig) {
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
+    node_sig->AddInput<mathfu::vec4>(kInputTint, "Tint");
+  }
+
+  virtual void Initialize(NodeArguments* args) {
+    if (args->IsInputDirty(kInputTrigger)) {
+      auto entity = args->GetInput<EntityRef>(kInputEntity);
+      if (entity->IsValid()) {
+        RenderMeshData* render_mesh_data =
+            render_mesh_component_->GetComponentData(*entity);
+        render_mesh_data->tint = *args->GetInput<mathfu::vec4>(kInputTint);
+      }
+    }
+  }
+
+  virtual void Execute(NodeArguments* args) { Initialize(args); }
+
+ private:
+  RenderMeshComponent* render_mesh_component_;
+};
+
 void InitializeRenderMeshModule(ModuleRegistry* module_registry,
                                 RenderMeshComponent* render_mesh_component) {
   auto set_visible_ctor = [render_mesh_component]() {
     return new SetVisibleNode(render_mesh_component);
   };
+  auto set_tint_ctor = [render_mesh_component]() {
+    return new SetTintNode(render_mesh_component);
+  };
   Module* module = module_registry->RegisterModule("rendermesh");
   module->RegisterNode<SetVisibleNode>("set_visible", set_visible_ctor);
+  module->RegisterNode<SetTintNode>("set_tint", set_tint_ctor);
 }
 
 }  // namespace module_library

@@ -19,3 +19,7 @@ namespace breadboard.module_library;
 table Vec3 {
   value:fplbase.Vec3;
 }
+
+table Vec4 {
+  value:fplbase.Vec4;
+}

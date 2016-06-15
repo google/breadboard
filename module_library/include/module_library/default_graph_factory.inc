@@ -43,6 +43,7 @@
 ///   breadboard.module_library.String,
 ///   breadboard.module_library.Entity,
 ///   breadboard.module_library.Vec3,
+///   breadboard.module_library.Vec4,
 ///   breadboard.module_library.SoundHandle,
 ///   breadboard.module_library.AudioChannel,
 ///   [... list all input edge types here...]
@@ -159,6 +160,15 @@ static bool ParseType(
       mathfu::vec3 vec(default_vec3->value()->x(), default_vec3->value()->y(),
                        default_vec3->value()->z());
       graph->SetDefaultValue<mathfu::vec3>(node_index, edge_index, vec);
+      break;
+    }
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Vec4: {
+      const breadboard::module_library::Vec4* default_vec4 =
+          static_cast<const breadboard::module_library::Vec4*>(
+              edge_def->edge());
+      mathfu::vec4 vec(default_vec4->value()->x(), default_vec4->value()->y(),
+                       default_vec4->value()->z(), default_vec4->value()->w());
+      graph->SetDefaultValue<mathfu::vec4>(node_index, edge_index, vec);
       break;
     }
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU

@@ -67,7 +67,7 @@ LOCAL_SRC_FILES := \
   src/physics.cpp \
   src/rendermesh.cpp \
   src/transform.cpp \
-  src/vec3.cpp
+  src/vec.cpp
 
 BREADBOARD_MODULE_LIBRARY_SCHEMA_DIR := \
     $(BREADBOARD_MODULE_LIBRARY_DIR)/schemas

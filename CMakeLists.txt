@@ -154,8 +154,8 @@ if (breadboard_build_module_library)
     include_directories(${dependencies_mathfu_dir}/include)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
-        module_library/include/module_library/vec3.h
-        module_library/src/vec3.cpp)
+        module_library/include/module_library/vec.h
+        module_library/src/vec.cpp)
   endif()
 
   # Include modules for the components in the component library.
