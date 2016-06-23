@@ -105,16 +105,16 @@ static bool ParseType(
     const BREADBOARD_FACTORY_TYPE_NAMESPACE::InputEdgeDef* edge_def) {
   (void)graph_factory;
   switch (edge_def->edge_type()) {
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_OutputEdgeTarget: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_OutputEdgeTarget: {
       // OutputEdgeTargets are a special case - they point at the output of
       // another node and so they do not need to store any default value.
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Pulse: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Pulse: {
       // Pulses have no data associated with them.
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Bool: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Bool: {
       const breadboard::module_library::Bool* default_bool =
           static_cast<const breadboard::module_library::Bool*>(
               edge_def->edge());
@@ -122,13 +122,13 @@ static bool ParseType(
                                    default_bool->value() != 0);
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Int: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Int: {
       const breadboard::module_library::Int* default_int =
           static_cast<const breadboard::module_library::Int*>(edge_def->edge());
       graph->SetDefaultValue<int>(node_index, edge_index, default_int->value());
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Float: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Float: {
       const breadboard::module_library::Float* default_float =
           static_cast<const breadboard::module_library::Float*>(
               edge_def->edge());
@@ -136,7 +136,7 @@ static bool ParseType(
                                     default_float->value());
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_String: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_String: {
       const breadboard::module_library::String* default_string =
           static_cast<const breadboard::module_library::String*>(
               edge_def->edge());
@@ -145,7 +145,7 @@ static bool ParseType(
       break;
     }
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_CORGI_COMPONENT_LIBRARY
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Entity: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Entity: {
       // Entities can not be specified directly. Generally you would attach
       // to an output edge that supplied an entity, but it is legal to
       // leave an entity unspecified.
@@ -153,7 +153,7 @@ static bool ParseType(
     }
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_CORGI
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Vec3: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Vec3: {
       const breadboard::module_library::Vec3* default_vec3 =
           static_cast<const breadboard::module_library::Vec3*>(
               edge_def->edge());
@@ -162,7 +162,7 @@ static bool ParseType(
       graph->SetDefaultValue<mathfu::vec3>(node_index, edge_index, vec);
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Vec4: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_Vec4: {
       const breadboard::module_library::Vec4* default_vec4 =
           static_cast<const breadboard::module_library::Vec4*>(
               edge_def->edge());
@@ -173,7 +173,7 @@ static bool ParseType(
     }
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_SoundHandle: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_SoundHandle: {
       pindrop::AudioEngine* audio_engine = graph_factory->audio_engine();
       const breadboard::module_library::SoundHandle* default_sound_handle =
           static_cast<const breadboard::module_library::SoundHandle*>(
@@ -184,7 +184,7 @@ static bool ParseType(
                                                    sound_handle);
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_AudioChannel: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_AudioChannel: {
       // AudioChannels can not be specified directly. Generally you would attach
       // to an output edge that supplied an audio channel, but it is legal to
       // leave an audio channel unspecified.
@@ -230,7 +230,7 @@ bool DefaultGraphFactory::ParseData(breadboard::ModuleRegistry* module_registry,
         const BREADBOARD_FACTORY_TYPE_NAMESPACE::InputEdgeDef* edge_def = *iter;
         node->input_edges().push_back(breadboard::InputEdge());
         if (edge_def->edge_type() ==
-            BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_OutputEdgeTarget) {
+            BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_breadboard_module_library_OutputEdgeTarget) {
           const breadboard::module_library::OutputEdgeTarget* target =
               static_cast<const breadboard::module_library::OutputEdgeTarget*>(
                   edge_def->edge());
