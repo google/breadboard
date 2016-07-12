@@ -38,6 +38,7 @@ GraphState::~GraphState() {
           Timestamp* timestamp = output_buffer_.GetObject<Timestamp>(
               output_edge.timestamp_offset());
           timestamp->~Timestamp();
+          (void)timestamp;  // Avoid erroneous "not referenced" warning in VS.
 
           // Destruct object.
           // Only do this on non-void objects. Attempting to access a void edge

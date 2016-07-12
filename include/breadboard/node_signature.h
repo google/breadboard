@@ -477,7 +477,7 @@ class NodeSignature {
   ///
   /// @param[in] event_id The event id that this listener should listen for.
   void AddListener(const EventId event_id) {
-    AddListener(event_listeners_.size(), event_id, "");
+    AddListener(static_cast<int>(event_listeners_.size()), event_id, "");
   }
 
   /// @brief Returns the list of input types.
