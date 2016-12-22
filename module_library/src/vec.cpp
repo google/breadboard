@@ -66,9 +66,9 @@ class ElementsVec3Node : public BaseNode {
 
   virtual void Execute(NodeArguments* args) {
     auto vec = args->GetInput<vec3>(kInputVector);
-    args->SetOutput(kOutputX, vec->x());
-    args->SetOutput(kOutputY, vec->y());
-    args->SetOutput(kOutputZ, vec->z());
+    args->SetOutput(kOutputX, vec->x);
+    args->SetOutput(kOutputY, vec->y);
+    args->SetOutput(kOutputZ, vec->z);
   }
 };
 
@@ -111,10 +111,10 @@ class ElementsVec4Node : public BaseNode {
 
   virtual void Execute(NodeArguments* args) {
     auto vec = args->GetInput<vec4>(kInputVector);
-    args->SetOutput(kOutputX, vec->x());
-    args->SetOutput(kOutputY, vec->y());
-    args->SetOutput(kOutputZ, vec->z());
-    args->SetOutput(kOutputW, vec->w());
+    args->SetOutput(kOutputX, vec->x);
+    args->SetOutput(kOutputY, vec->y);
+    args->SetOutput(kOutputZ, vec->z);
+    args->SetOutput(kOutputW, vec->w);
   }
 };
 
