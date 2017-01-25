@@ -44,23 +44,10 @@ option(breadboard_build_pindrop_module
 option(breadboard_build_mathfu_module
     "Build a library of standard components along with the entity system" ON)
 
-# Configurable locations of other dependencies of this project.
-if(NOT DEFINED fpl_root)
-  get_filename_component(fpl_root "${CMAKE_CURRENT_LIST_DIR}/../../libs"
-       REALPATH)
-  if(NOT EXISTS "${fpl_root}")
-    set(fpl_root "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
-  endif ()
-endif()
-
-# Set up common build variables and compiler flags
-include(${fpl_root}/fplutil/buildutil/cmake_common.txt)
+# Call fplutil to get locations of dependencies and set common build settings.
+include("cmake/find_fplutil.cmake")
+include("${fplutil_dir}/buildutil/cmake_common.txt")
 set_common_build_variables()
-
-# NOTE: This is only required as the breadboard module library and CORGI's
-# component library have a circular dependency.
-set(dependencies_breadboard_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH
-    "Directory containing the breadboard library.")
 
 # Breadboard files.
 set(breadboard_SRCS
@@ -121,7 +108,7 @@ if (breadboard_build_module_library)
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-      ${CMAKE_SOURCE_DIR}/${CMAKE_FILES_DIRECTORY}/include/module_library)
+      ${CMAKE_CURRENT_BINARY_DIR}/include/module_library)
   file(GLOB_RECURSE
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
