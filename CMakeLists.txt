@@ -190,9 +190,6 @@ if (breadboard_build_module_library)
   # Include pindrop audio module.
   if (breadboard_build_pindrop_module)
     include_directories(${dependencies_pindrop_dir}/include)
-    set(breadboard_module_library_DEPS
-        ${breadboard_module_library_DEPS}
-        pindrop)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
         module_library/include/module_library/audio.h
