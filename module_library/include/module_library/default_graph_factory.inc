@@ -93,7 +93,7 @@
 #include "fplbase/utilities.h"
 #include "graph_generated.h"
 #include "mathfu/glsl_mappings.h"
-#include "mathfu/vector_3.h"
+#include "mathfu/vector.h"
 #include "pindrop/pindrop.h"
 
 namespace breadboard {
