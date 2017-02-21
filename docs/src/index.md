@@ -49,8 +49,7 @@ depends upon, so download the source from [GitHub][] using:
    * Discuss Breadboard with other developers and users on the
      [Breadboard Google Group][].
    * File issues on the [Breadboard Issues Tracker][].
-   * Post your questions to [stackoverflow.com][] with a mention of
-     **fpl breadboard**.
+   * Post your questions to [stackoverflow.com][] with a mention of **breadboard**.
 
 <br>
 
@@ -65,4 +64,4 @@ depends upon, so download the source from [GitHub][] using:
   [GitHub]: http://github.com/google/breadboard
   [Mathfu]: http://google.github.io/mathfu/
   [Pindrop]: http://google.github.io/pindrop/
-  [stackoverflow.com]: http://stackoverflow.com/search?q=fpl+breadboard
+  [stackoverflow.com]: http://www.stackoverflow.com
