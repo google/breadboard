@@ -18,7 +18,7 @@ namespace breadboard {
 
 #define BREADBOARD_VERSION_MAJOR 1
 #define BREADBOARD_VERSION_MINOR 0
-#define BREADBOARD_VERSION_REVISION 1
+#define BREADBOARD_VERSION_REVISION 2
 
 // Turn X into a string literal.
 #define BREADBOARD_STRING_EXPAND(X) #X
