@@ -54,7 +54,7 @@ depends upon, so download the source from [GitHub][] using:
 <br>
 
   [Breadboard]: http://github.com/google/breadboard
-  [Breadboard Google Group]: http://group.google.com/group/breadboard-scripting
+  [Breadboard Google Group]: http://groups.google.com/group/breadboard-scripting
   [Breadboard Issues Tracker]: http://github.com/google/breadboard/issues
   [Bullet Physics]: http://bulletphysics.org/
   [CORGI]: http://google.github.io/corgi/
