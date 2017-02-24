@@ -37,21 +37,22 @@ namespace module_library {
 // Given an input string, return the named entity.
 class EntityNode : public BaseNode {
  public:
-  EntityNode(MetaComponent* meta_component) : meta_component_(meta_component) {}
-  virtual ~EntityNode() {}
+  enum { kInputTrigger, kInputEntityId };
+  enum { kOutputEntity };
 
+  EntityNode(MetaComponent* meta_component) : meta_component_(meta_component) {}
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<std::string>();
-    node_sig->AddOutput<EntityRef>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<std::string>(kInputEntityId, "Entity ID");
+    node_sig->AddOutput<EntityRef>(kOutputEntity, "Entity");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto entity_id = args->GetInput<std::string>(1);
+    auto entity_id = args->GetInput<std::string>(kInputEntityId);
     EntityRef entity =
         meta_component_->GetEntityFromDictionary(entity_id->c_str());
     assert(entity.IsValid());
-    args->SetOutput(0, entity);
+    args->SetOutput(kOutputEntity, entity);
   }
 
  private:
@@ -61,16 +62,17 @@ class EntityNode : public BaseNode {
 // Return the entity that owns this graph.
 class GraphEntityNode : public BaseNode {
  public:
+  enum { kOutputEntity };
+
   GraphEntityNode(GraphComponent* graph_component)
       : graph_component_(graph_component) {}
-  virtual ~GraphEntityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddOutput<EntityRef>();
+    node_sig->AddOutput<EntityRef>(kOutputEntity, "Entity");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    args->SetOutput(0, graph_component_->graph_entity());
+    args->SetOutput(kOutputEntity, graph_component_->graph_entity());
   }
 
  private:
@@ -80,18 +82,19 @@ class GraphEntityNode : public BaseNode {
 // Delete the given entity.
 class DeleteEntityNode : public BaseNode {
  public:
+  enum { kInputTrigger, kInputEntity };
+
   DeleteEntityNode(::EntityManager* entity_manager)
       : entity_manager_(entity_manager) {}
-  virtual ~DeleteEntityNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<EntityRef>();
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<EntityRef>(kInputEntity, "Entity");
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      auto entity_ref = args->GetInput<EntityRef>(1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      auto entity_ref = args->GetInput<EntityRef>(kInputEntity);
       entity_manager_->DeleteEntity(*entity_ref);
     }
   }

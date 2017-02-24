@@ -25,18 +25,19 @@ namespace breadboard {
 // Compares two strings.
 class EqualsNode : public BaseNode {
  public:
-  virtual ~EqualsNode() {}
+  enum { kInputA, kInputB };
+  enum { kOutputResult };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<std::string>();
-    node_sig->AddInput<std::string>();
-    node_sig->AddOutput<bool>();
+    node_sig->AddInput<std::string>(kInputA, "A");
+    node_sig->AddInput<std::string>(kInputB, "B");
+    node_sig->AddOutput<bool>(kOutputResult, "Result");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    auto str_a = args->GetInput<std::string>(0);
-    auto str_b = args->GetInput<std::string>(1);
-    args->SetOutput(0, *str_a == *str_b);
+    auto str_a = args->GetInput<std::string>(kInputA);
+    auto str_b = args->GetInput<std::string>(kInputB);
+    args->SetOutput(kOutputResult, *str_a == *str_b);
   }
 
   virtual void Execute(NodeArguments* args) { Initialize(args); }
@@ -45,54 +46,57 @@ class EqualsNode : public BaseNode {
 // Converts the given int to a string.
 class IntToStringNode : public BaseNode {
  public:
-  virtual ~IntToStringNode() {}
+  enum { kInputInt };
+  enum { kOutputString };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<int>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddInput<int>(kInputInt, "Int");
+    node_sig->AddOutput<std::string>(kOutputString, "String");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto i = args->GetInput<int>(0);
+    auto i = args->GetInput<int>(kInputInt);
     std::stringstream stream;
     stream << *i;
-    args->SetOutput(0, stream.str());
+    args->SetOutput(kOutputString, stream.str());
   }
 };
 
 // Converts the given float to a string.
 class FloatToStringNode : public BaseNode {
  public:
-  virtual ~FloatToStringNode() {}
+  enum { kInputFloat };
+  enum { kOutputString };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<float>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddInput<float>(kInputFloat, "Float");
+    node_sig->AddOutput<std::string>(kOutputString, "String");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto f = args->GetInput<float>(0);
+    auto f = args->GetInput<float>(kInputFloat);
     std::stringstream stream;
     stream << *f;
-    args->SetOutput(0, stream.str());
+    args->SetOutput(kOutputString, stream.str());
   }
 };
 
 // Concatenates the given strings.
 class ConcatNode : public BaseNode {
  public:
-  virtual ~ConcatNode() {}
+  enum { kInputA, kInputB };
+  enum { kOutputResult };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<std::string>();
-    node_sig->AddInput<std::string>();
-    node_sig->AddOutput<std::string>();
+    node_sig->AddInput<std::string>(kInputA, "A");
+    node_sig->AddInput<std::string>(kInputB, "B");
+    node_sig->AddOutput<std::string>(kOutputResult, "Result");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto str_a = args->GetInput<std::string>(0);
-    auto str_b = args->GetInput<std::string>(1);
-    args->SetOutput(0, *str_a + *str_b);
+    auto str_a = args->GetInput<std::string>(kInputA);
+    auto str_b = args->GetInput<std::string>(kInputB);
+    args->SetOutput(kOutputResult, *str_a + *str_b);
   }
 };
 

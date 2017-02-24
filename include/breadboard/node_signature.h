@@ -43,6 +43,55 @@ typedef std::function<BaseNode*()> NodeConstructor;
 /// object that extends BaseNode.
 typedef std::function<void(BaseNode*)> NodeDestructor;
 
+/// @class NodeParameter
+///
+/// @brief A struct that holds data about input and output parameters, such as
+/// the parameters name and type.
+struct NodeParameter {
+  NodeParameter() : type(nullptr), name(), comment() {}
+
+  /// @brief Construct a NodeParameter object with the given data.
+  ///
+  /// @param[in] type_ The type of the parameter.
+  ///
+  /// @param[in] name_ The name of the parameter.
+  ///
+  /// @param[in] comment_ A short description of the purpose of the parameter.
+  NodeParameter(const Type* type_, std::string name_, std::string comment_)
+      : type(type_), name(name_), comment(comment_) {}
+
+  /// @brief The type of this parameter.
+  const Type* type;
+
+  /// @brief The name of this parameter.
+  std::string name;
+
+  /// @brief A short description of the purpose of this parameter.
+  std::string comment;
+};
+
+/// @class ListenerParameter
+///
+/// @brief A struct that holds data about listener parameters, such as what
+/// events are listened for and why.
+struct ListenerParameter {
+  ListenerParameter() : event_id(nullptr), comment() {}
+
+  /// @brief Construct a ListenerParameter object with the given data.
+  ///
+  /// @param[in] event_id_ The event id of this parameter.
+  ///
+  /// @param[in] comment_ A short description of the purpose of this listener.
+  ListenerParameter(EventId event_id_, std::string comment_)
+      : event_id(event_id_), comment(comment_) {}
+
+  /// @brief The event id of this parameter.
+  EventId event_id;
+
+  /// @brief A short description of the purpose of this listener.
+  std::string comment;
+};
+
 /// @class NodeSignature
 ///
 /// @brief A NodeSignature is a class that represents the various input and
@@ -61,16 +110,16 @@ class NodeSignature {
  public:
   /// @brief Construct a NodeSignature.
   ///
-  /// param[in] module_name The name of the module of the node type that this
+  /// @param[in] module_name The name of the module of the node type that this
   /// NodeSignature represents.
   ///
-  /// param[in] node_name The name of the node that this NodeSignature
+  /// @param[in] node_name The name of the node that this NodeSignature
   /// represents.
   ///
-  /// param[in] constructor A function that returns a new instance of the node
+  /// @param[in] constructor A function that returns a new instance of the node
   /// type that this NodeSignature represents.
   ///
-  /// param[in] destructor A function that deletes an existing instance of the
+  /// @param[in] destructor A function that deletes an existing instance of the
   /// node type that this NodeSignature represents.
   NodeSignature(const std::string* module_name, const std::string& node_name,
                 const NodeConstructor& constructor,
@@ -100,18 +149,223 @@ class NodeSignature {
   /// ~~~{.cpp}
   ///     class EqualsNode : public BaseNode {
   ///      public:
+  ///       enum { kInputA, kInputB };
   ///       static void OnRegister(NodeSignature* node_sig) {
-  ///         // Adds two inut arguments of type std::string and one output
-  ///         // argument of type bool.
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(kInputA, "A",
+  ///                                         "A description of this input");
+  ///         node_sig->AddInput<std::string>(kInputA, "B",
+  ///                                         "A description of this input");
+  ///         node_sig->AddOutput<bool>(...);
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] name The name of the parameter. This is used for error
+  /// messages, and is exposed so that editor GUIs can label inputs and outputs.
+  ///
+  /// @param[in] comment A comment string that describes the purpose of the
+  /// input. This is generally intended to be used in editor GUIs.
+  template <typename EdgeType>
+  void AddInput(int index, const std::string& name,
+                const std::string& comment) {
+    if (index >= static_cast<int>(input_parameters_.size())) {
+      input_parameters_.resize(index + 1);
+    }
+    input_parameters_[index] =
+        NodeParameter(TypeRegistry<EdgeType>::GetType(), name, comment);
+  }
+
+  /// @brief Adds an input edge to a node signature.
+  ///
+  /// Call this function once for each input edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       enum { kInputA, kInputB };
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(kInputA, "A");
+  ///         node_sig->AddInput<std::string>(kInputA, "B");
+  ///         node_sig->AddOutput<bool>(...);
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] name The name of the parameter. This is used for error
+  /// messages, and is exposed so that editor GUIs can label inputs and outputs.
+  template <typename EdgeType>
+  void AddInput(int index, const std::string& name) {
+    AddInput<EdgeType>(index, name, "");
+  }
+
+  /// @brief Adds an input edge to a node signature.
+  ///
+  /// Call this function once for each input edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       enum { kInputA, kInputB };
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(kInputA);
+  ///         node_sig->AddInput<std::string>(kInputB);
+  ///         node_sig->AddOutput<bool>(...);
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  template <typename EdgeType>
+  void AddInput(int index) {
+    AddInput<EdgeType>(index, "");
+  }
+
+  /// @brief Adds an input edge to a node signature.
+  ///
+  /// Call this function once for each input edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
   ///         node_sig->AddInput<std::string>();
   ///         node_sig->AddInput<std::string>();
-  ///         node_sig->AddOutput<bool>();
+  ///         node_sig->AddOutput<bool>(...);
   ///       }
   ///     }
   /// ~~~
   template <typename EdgeType>
   void AddInput() {
-    input_types_.push_back(TypeRegistry<EdgeType>::GetType());
+    AddInput<EdgeType>(static_cast<int>(input_parameters_.size()));
+  }
+
+  /// @brief Adds an output edge to a node signature.
+  ///
+  /// Call this function once for each output edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       enum { kOutputResult };
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddOutput<bool>(kOutputResult, "Result",
+  ///                                   "A description of the result");
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] name The name of the parameter. This is used for error
+  /// messages, and is exposed so that editor GUIs can label outputs.
+  ///
+  /// @param[in] comment A comment string that describes the purpose of the
+  /// output. This is generally intended to be used in editor GUIs.
+  template <typename EdgeType>
+  void AddOutput(int index, const std::string& name,
+                 const std::string& comment) {
+    if (index >= static_cast<int>(output_parameters_.size())) {
+      output_parameters_.resize(index + 1);
+    }
+    output_parameters_[index] =
+        NodeParameter(TypeRegistry<EdgeType>::GetType(), name, comment);
+  }
+
+  /// @brief Adds an output edge to a node signature.
+  ///
+  /// Call this function once for each output edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       enum { kOutputResult };
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddOutput<bool>(kOutputResult, "Result");
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] name The name of the parameter. This is used for error
+  /// messages, and is exposed so that editor GUIs can label outputs.
+  template <typename EdgeType>
+  void AddOutput(int index, const std::string& name) {
+    AddOutput<EdgeType>(index, name, "");
+  }
+
+  /// @brief Adds an output edge to a node signature.
+  ///
+  /// Call this function once for each output edge parameter on the node,
+  /// supplying the type of the parameter as the template parameter each
+  /// time. Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class EqualsNode : public BaseNode {
+  ///      public:
+  ///       enum { kOutputResult };
+  ///       static void OnRegister(NodeSignature* node_sig) {
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddOutput<bool>(kOutputResult);
+  ///       }
+  ///     }
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  template <typename EdgeType>
+  void AddOutput(int index) {
+    AddOutput<EdgeType>(index, "");
   }
 
   /// @brief Adds an output edge to a node signature.
@@ -124,17 +378,82 @@ class NodeSignature {
   ///     class EqualsNode : public BaseNode {
   ///      public:
   ///       static void OnRegister(NodeSignature* node_sig) {
-  ///         // Adds two inut arguments of type std::string and one output
-  ///         // argument of type bool.
-  ///         node_sig->AddInput<std::string>();
-  ///         node_sig->AddInput<std::string>();
+  ///         // Adds two input parameters of type std::string and one output
+  ///         // parameter of type bool.
+  ///         node_sig->AddInput<std::string>(...);
+  ///         node_sig->AddInput<std::string>(...);
   ///         node_sig->AddOutput<bool>();
   ///       }
   ///     }
   /// ~~~
   template <typename EdgeType>
   void AddOutput() {
-    output_types_.push_back(TypeRegistry<EdgeType>::GetType());
+    AddOutput<EdgeType>(static_cast<int>(output_parameters_.size()));
+  }
+
+  /// @brief Adds a listener to a node signature.
+  ///
+  /// A node can have any number of listeners associated with it. Each listener
+  /// may listen for one and exactly one EventId. A NodeEventListener must be
+  /// registered with a NodeEventBroadcaster to recieve events.
+  ///
+  /// Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class ExampleNode : public breadboard::BaseNode {
+  ///      public:
+  ///       static void OnRegister(NodeSignature* signature) {
+  ///         signature->AddInput<GameEntity>();
+  ///         // The NodeEventListener is created and tracked internally here.
+  ///         signature->AddListener(kMyEventId);
+  ///       }
+  ///     };
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] event_id The event id that this listener should listen for.
+  ///
+  /// @param[in] comment A comment string that describes the purpose of the
+  /// listener. This is generally intended to be used in editor GUIs.
+  void AddListener(int index, const EventId event_id,
+                   const std::string& comment) {
+    if (index >= static_cast<int>(event_listeners_.size())) {
+      event_listeners_.resize(index + 1);
+    }
+    event_listeners_[index] = ListenerParameter(event_id, comment);
+  }
+
+  /// @brief Adds a listener to a node signature.
+  ///
+  /// A node can have any number of listeners associated with it. Each listener
+  /// may listen for one and exactly one EventId. A NodeEventListener must be
+  /// registered with a NodeEventBroadcaster to recieve events.
+  ///
+  /// Typical usage would look like this:
+  ///
+  /// ~~~{.cpp}
+  ///     class ExampleNode : public breadboard::BaseNode {
+  ///      public:
+  ///       static void OnRegister(NodeSignature* signature) {
+  ///         signature->AddInput<GameEntity>();
+  ///         // The NodeEventListener is created and tracked internally here.
+  ///         signature->AddListener(kMyEventId);
+  ///       }
+  ///     };
+  /// ~~~
+  ///
+  /// @param[in] index The index of the parameter. It is generally advised that
+  /// you define an enum local to the class and index based on the enum values.
+  /// This makes the code easier to read and ensures that you always get the
+  /// correct index, even if parameters are added or removed.
+  ///
+  /// @param[in] event_id The event id that this listener should listen for.
+  void AddListener(int index, const EventId event_id) {
+    AddListener(index, event_id, "");
   }
 
   /// @brief Adds a listener to a node signature.
@@ -158,23 +477,27 @@ class NodeSignature {
   ///
   /// @param[in] event_id The event id that this listener should listen for.
   void AddListener(const EventId event_id) {
-    event_listeners_.push_back(event_id);
+    AddListener(static_cast<int>(event_listeners_.size()), event_id, "");
   }
 
   /// @brief Returns the list of input types.
   ///
-  /// @return The list of input types.
-  const std::vector<const Type*>& input_types() const { return input_types_; }
+  /// @return The list of output types.
+  const std::vector<NodeParameter>& input_parameters() const {
+    return input_parameters_;
+  }
 
   /// @brief Returns the list of output types.
   ///
   /// @return The list of output types.
-  const std::vector<const Type*>& output_types() const { return output_types_; }
+  const std::vector<NodeParameter>& output_parameters() const {
+    return output_parameters_;
+  }
 
   /// @brief Returns the list of NodeEventListeners.
   ///
   /// @return The list of NodeEventListeners.
-  const std::vector<EventId>& event_listeners() const {
+  const std::vector<ListenerParameter>& event_listeners() const {
     return event_listeners_;
   }
 
@@ -201,9 +524,9 @@ class NodeSignature {
   std::string node_name_;
   NodeConstructor constructor_;
   NodeDestructor destructor_;
-  std::vector<const Type*> input_types_;
-  std::vector<const Type*> output_types_;
-  std::vector<EventId> event_listeners_;
+  std::vector<NodeParameter> input_parameters_;
+  std::vector<NodeParameter> output_parameters_;
+  std::vector<ListenerParameter> event_listeners_;
 };
 
 }  // namespaced breadboard

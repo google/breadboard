@@ -43,6 +43,7 @@
 ///   breadboard.module_library.String,
 ///   breadboard.module_library.Entity,
 ///   breadboard.module_library.Vec3,
+///   breadboard.module_library.Vec4,
 ///   breadboard.module_library.SoundHandle,
 ///   breadboard.module_library.AudioChannel,
 ///   [... list all input edge types here...]
@@ -92,28 +93,31 @@
 #include "fplbase/utilities.h"
 #include "graph_generated.h"
 #include "mathfu/glsl_mappings.h"
-#include "mathfu/vector_3.h"
+#include "mathfu/vector.h"
 #include "pindrop/pindrop.h"
 
 namespace breadboard {
 namespace module_library {
 
 static bool ParseType(
-    DefaultGraphFactory* graph_factory, size_t node_index, size_t edge_index,
-    breadboard::Graph* graph,
+    DefaultGraphFactory* graph_factory, unsigned int node_index,
+    unsigned int edge_index, breadboard::Graph* graph,
     const BREADBOARD_FACTORY_TYPE_NAMESPACE::InputEdgeDef* edge_def) {
   (void)graph_factory;
   switch (edge_def->edge_type()) {
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_OutputEdgeTarget: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_OutputEdgeTarget: {
       // OutputEdgeTargets are a special case - they point at the output of
       // another node and so they do not need to store any default value.
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Pulse: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Pulse: {
       // Pulses have no data associated with them.
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Bool: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Bool: {
       const breadboard::module_library::Bool* default_bool =
           static_cast<const breadboard::module_library::Bool*>(
               edge_def->edge());
@@ -121,13 +125,15 @@ static bool ParseType(
                                    default_bool->value() != 0);
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Int: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Int: {
       const breadboard::module_library::Int* default_int =
           static_cast<const breadboard::module_library::Int*>(edge_def->edge());
       graph->SetDefaultValue<int>(node_index, edge_index, default_int->value());
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Float: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Float: {
       const breadboard::module_library::Float* default_float =
           static_cast<const breadboard::module_library::Float*>(
               edge_def->edge());
@@ -135,7 +141,8 @@ static bool ParseType(
                                     default_float->value());
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_String: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_String: {
       const breadboard::module_library::String* default_string =
           static_cast<const breadboard::module_library::String*>(
               edge_def->edge());
@@ -144,7 +151,8 @@ static bool ParseType(
       break;
     }
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_CORGI_COMPONENT_LIBRARY
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Entity: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Entity: {
       // Entities can not be specified directly. Generally you would attach
       // to an output edge that supplied an entity, but it is legal to
       // leave an entity unspecified.
@@ -152,7 +160,8 @@ static bool ParseType(
     }
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_CORGI
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_Vec3: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Vec3: {
       const breadboard::module_library::Vec3* default_vec3 =
           static_cast<const breadboard::module_library::Vec3*>(
               edge_def->edge());
@@ -161,9 +170,20 @@ static bool ParseType(
       graph->SetDefaultValue<mathfu::vec3>(node_index, edge_index, vec);
       break;
     }
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_Vec4: {
+      const breadboard::module_library::Vec4* default_vec4 =
+          static_cast<const breadboard::module_library::Vec4*>(
+              edge_def->edge());
+      mathfu::vec4 vec(default_vec4->value()->x(), default_vec4->value()->y(),
+                       default_vec4->value()->z(), default_vec4->value()->w());
+      graph->SetDefaultValue<mathfu::vec4>(node_index, edge_index, vec);
+      break;
+    }
 #endif  // BREADBOARD_MODULE_LIBRARY_BUILD_MATHFU
 #ifdef BREADBOARD_MODULE_LIBRARY_BUILD_PINDROP
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_SoundHandle: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_SoundHandle: {
       pindrop::AudioEngine* audio_engine = graph_factory->audio_engine();
       const breadboard::module_library::SoundHandle* default_sound_handle =
           static_cast<const breadboard::module_library::SoundHandle*>(
@@ -174,7 +194,8 @@ static bool ParseType(
                                                    sound_handle);
       break;
     }
-    case BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_AudioChannel: {
+    case BREADBOARD_FACTORY_TYPE_NAMESPACE::
+        InputType_breadboard_module_library_AudioChannel: {
       // AudioChannels can not be specified directly. Generally you would attach
       // to an output edge that supplied an audio channel, but it is legal to
       // leave an audio channel unspecified.
@@ -185,8 +206,8 @@ static bool ParseType(
       // Not all types can necessarily be loaded from data. Error out if
       // attempting to load these types.
       fplbase::LogError(
-        "Cannot load data of unknown type from data files. (Got %i)",
-        edge_def->edge_type());
+          "Cannot load data of unknown type from data files. (Got %i)",
+          edge_def->edge_type());
       return false;
     }
   }
@@ -201,7 +222,7 @@ bool DefaultGraphFactory::ParseData(breadboard::ModuleRegistry* module_registry,
   for (size_t i = 0; i != graph_def->node_list()->size(); ++i) {
     // Get Module.
     const BREADBOARD_FACTORY_TYPE_NAMESPACE::NodeDef* node_def =
-        graph_def->node_list()->Get(i);
+        graph_def->node_list()->Get(static_cast<flatbuffers::uoffset_t>(i));
     const char* module_name = node_def->module()->c_str();
     const breadboard::Module* module = module_registry->GetModule(module_name);
     if (module == nullptr) return false;
@@ -220,7 +241,8 @@ bool DefaultGraphFactory::ParseData(breadboard::ModuleRegistry* module_registry,
         const BREADBOARD_FACTORY_TYPE_NAMESPACE::InputEdgeDef* edge_def = *iter;
         node->input_edges().push_back(breadboard::InputEdge());
         if (edge_def->edge_type() ==
-            BREADBOARD_FACTORY_TYPE_NAMESPACE::InputType_OutputEdgeTarget) {
+            BREADBOARD_FACTORY_TYPE_NAMESPACE::
+                InputType_breadboard_module_library_OutputEdgeTarget) {
           const breadboard::module_library::OutputEdgeTarget* target =
               static_cast<const breadboard::module_library::OutputEdgeTarget*>(
                   edge_def->edge());
@@ -235,13 +257,16 @@ bool DefaultGraphFactory::ParseData(breadboard::ModuleRegistry* module_registry,
   if (!graph->FinalizeNodes()) return false;
 
   // Set up default values.
-  for (size_t node_index = 0; node_index != graph_def->node_list()->size();
+  for (unsigned int node_index = 0;
+       node_index != static_cast<unsigned int>(graph_def->node_list()->size());
        ++node_index) {
     const BREADBOARD_FACTORY_TYPE_NAMESPACE::NodeDef* node_def =
         graph_def->node_list()->Get(node_index);
     auto edges = node_def->input_edge_list();
     if (edges != nullptr) {
-      for (size_t edge_index = 0; edge_index < edges->size(); ++edge_index) {
+      for (unsigned int edge_index = 0;
+           edge_index < static_cast<unsigned int>(edges->size());
+           ++edge_index) {
         const BREADBOARD_FACTORY_TYPE_NAMESPACE::InputEdgeDef* edge_def =
             edges->Get(edge_index);
         if (!ParseType(this, node_index, edge_index, graph, edge_def)) {

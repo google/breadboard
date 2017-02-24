@@ -23,19 +23,20 @@ namespace breadboard {
 #define LOGICAL_NODE(name, op)                        \
   class name : public BaseNode {                      \
    public:                                            \
-    virtual ~name() {}                                \
+    enum { kInputA, kInputB };                        \
+    enum { kOutputResult };                           \
                                                       \
     static void OnRegister(NodeSignature* node_sig) { \
-      node_sig->AddInput<bool>();                     \
-      node_sig->AddInput<bool>();                     \
-      node_sig->AddOutput<bool>();                    \
+      node_sig->AddInput<bool>(kInputA);              \
+      node_sig->AddInput<bool>(kInputB);              \
+      node_sig->AddOutput<bool>(kOutputResult);       \
     }                                                 \
                                                       \
     virtual void Initialize(NodeArguments* args) {    \
-      auto a = args->GetInput<bool>(0);               \
-      auto b = args->GetInput<bool>(1);               \
+      auto a = args->GetInput<bool>(kInputA);         \
+      auto b = args->GetInput<bool>(kInputB);         \
       bool result = *a op *b;                         \
-      args->SetOutput(0, result);                     \
+      args->SetOutput(kOutputResult, result);         \
     }                                                 \
                                                       \
     virtual void Execute(NodeArguments* args) {       \
@@ -53,17 +54,18 @@ LOGICAL_NODE(XorNode, ^);
 // false.
 class IfNode : public BaseNode {
  public:
-  virtual ~IfNode() {}
+  enum { kInputCondition };
+  enum { kOutputTrue, kOutputFalse };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<bool>();
-    node_sig->AddOutput<void>();  // Fires a pulse when input is true.
-    node_sig->AddOutput<void>();  // Fires a pulse when input is false.
+    node_sig->AddInput<bool>(kInputCondition, "Condition");
+    node_sig->AddOutput<void>(kOutputTrue, "True");
+    node_sig->AddOutput<void>(kOutputFalse, "False");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto value = args->GetInput<bool>(0);
-    args->SetOutput(*value ? 0 : 1);
+    auto value = args->GetInput<bool>(kInputCondition);
+    args->SetOutput(*value ? kOutputTrue : kOutputFalse);
   }
 };
 
@@ -72,19 +74,20 @@ class IfNode : public BaseNode {
 // evaluates true, the second is triggered when the result evaluates false.
 class IfGateNode : public BaseNode {
  public:
-  virtual ~IfGateNode() {}
+  enum { kInputTrigger, kInputCondition };
+  enum { kOutputTrue, kOutputFalse };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();
-    node_sig->AddInput<bool>();
-    node_sig->AddOutput<void>();  // Fires a pulse when input is true.
-    node_sig->AddOutput<void>();  // Fires a pulse when input is false.
+    node_sig->AddInput<void>(kInputTrigger, "Trigger");
+    node_sig->AddInput<bool>(kInputCondition, "Condition");
+    node_sig->AddOutput<void>(kOutputTrue, "True");
+    node_sig->AddOutput<void>(kOutputFalse, "False");
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      auto value = args->GetInput<bool>(1);
-      args->SetOutput(*value ? 0 : 1);
+    if (args->IsInputDirty(kInputTrigger)) {
+      auto value = args->GetInput<bool>(kInputCondition);
+      args->SetOutput(*value ? kOutputTrue : kOutputFalse);
     }
   }
 };
@@ -92,17 +95,18 @@ class IfGateNode : public BaseNode {
 // Logical Not.
 class NotNode : public BaseNode {
  public:
-  virtual ~NotNode() {}
+  enum { kInput };
+  enum { kOutput };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<bool>();
-    node_sig->AddOutput<bool>();
+    node_sig->AddInput<bool>(kInput, "In");
+    node_sig->AddOutput<bool>(kOutput, "Out");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    auto value = args->GetInput<bool>(0);
+    auto value = args->GetInput<bool>(kInput);
     bool result = !*value;
-    args->SetOutput(0, result);
+    args->SetOutput(kOutput, result);
   }
 
   virtual void Execute(NodeArguments* args) { Initialize(args); }
@@ -111,23 +115,24 @@ class NotNode : public BaseNode {
 // Stay Latch, to store boolean results.
 class StayLatchNode : public BaseNode {
  public:
-  virtual ~StayLatchNode() {}
+  enum { kInputTrue, kInputFalse };
+  enum { kOutputBoolean };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();  // Set to True
-    node_sig->AddInput<void>();  // Set to False
-    node_sig->AddOutput<bool>();
+    node_sig->AddInput<void>(kInputTrue, "True");
+    node_sig->AddInput<void>(kInputFalse, "False");
+    node_sig->AddOutput<bool>(kOutputBoolean, "Boolean");
   }
 
   virtual void Initialize(NodeArguments* args) {
-    args->SetOutput(0, false);
+    args->SetOutput(kOutputBoolean, false);
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      args->SetOutput(0, true);
-    } else if (args->IsInputDirty(1)) {
-      args->SetOutput(0, false);
+    if (args->IsInputDirty(kInputTrue)) {
+      args->SetOutput(kOutputBoolean, true);
+    } else if (args->IsInputDirty(kInputFalse)) {
+      args->SetOutput(kOutputBoolean, false);
     }
   }
 };

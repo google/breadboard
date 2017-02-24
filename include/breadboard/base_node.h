@@ -33,7 +33,7 @@ namespace breadboard {
 /// @brief A BaseNode is the common class that all nodes that are to be used in
 /// a graph must extend.
 ///
-/// Each class that implements BaseNode must be registered in a Module before it 
+/// Each class that implements BaseNode must be registered in a Module before it
 /// may be used in a graph.
 ///
 /// Nodes are the primary method of performing actions in Breadboard. Nodes can
@@ -58,7 +58,7 @@ class BaseNode {
   ///                          listeners for this kind of node.
   static void OnRegister(NodeSignature* signature) {
     (void)signature;
-    assert(!"This function should be implemented in the derived class");
+    assert(false); // This function should be implemented in the derived class
   }
 
   /// @brief Initialize is called once upon when an instance of a GraphState is

@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
-#define FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
+#ifndef FPL_BREADBOARD_MODULE_LIBRARY_VEC_H_
+#define FPL_BREADBOARD_MODULE_LIBRARY_VEC_H_
 
 #include "breadboard/module_registry.h"
 
 namespace breadboard {
 namespace module_library {
 
-void InitializeVec3Module(breadboard::ModuleRegistry* module_registry);
+void InitializeVecModule(breadboard::ModuleRegistry* module_registry);
 
 }  // namespace module_library
 }  // namespace breadboard
 
-#endif  // FPL_BREADBOARD_MODULE_LIBRARY_VEC3_H_
+#endif  // FPL_BREADBOARD_MODULE_LIBRARY_VEC_H_

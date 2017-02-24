@@ -38,24 +38,26 @@ namespace module_library {
 // Returns the channel the sound is playing on as an output.
 class PlaySoundNode : public BaseNode {
  public:
+  enum { kInputPlay, kInputSoundHandle, kInputLocation, kInputGain };
+  enum { kOutputChannel };
+
   PlaySoundNode(AudioEngine* audio_engine) : audio_engine_(audio_engine) {}
-  virtual ~PlaySoundNode() {}
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<void>();         // Play the sound.
-    node_sig->AddInput<SoundHandle>();  // The sound to play.
-    node_sig->AddInput<vec3>();         // Where to play the sound.
-    node_sig->AddInput<float>();        // The gain of the sound.
-    node_sig->AddOutput<Channel>();     // The sound's channel.
+    node_sig->AddInput<void>(kInputPlay, "Play");
+    node_sig->AddInput<SoundHandle>(kInputSoundHandle, "Sound");
+    node_sig->AddInput<vec3>(kInputLocation, "Location");
+    node_sig->AddInput<float>(kInputGain, "Gain");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
   }
 
   virtual void Execute(NodeArguments* args) {
-    if (args->IsInputDirty(0)) {
-      auto handle = args->GetInput<SoundHandle>(1);
-      auto location = args->GetInput<vec3>(2);
-      auto gain = args->GetInput<float>(3);
+    if (args->IsInputDirty(kInputPlay)) {
+      auto handle = args->GetInput<SoundHandle>(kInputSoundHandle);
+      auto location = args->GetInput<vec3>(kInputLocation);
+      auto gain = args->GetInput<float>(kInputGain);
       Channel channel = audio_engine_->PlaySound(*handle, *location, *gain);
-      args->SetOutput(0, channel);
+      args->SetOutput(kOutputChannel, channel);
     }
   }
 
@@ -66,101 +68,109 @@ class PlaySoundNode : public BaseNode {
 // Checks if a given audio channel is playing.
 class PlayingNode : public BaseNode {
  public:
-  virtual ~PlayingNode() {}
+  enum { kInputChannel };
+  enum { kOutputChannel, kOutputPlaying };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddOutput<Channel>();
-    node_sig->AddOutput<bool>();
+    node_sig->AddInput<Channel>(kInputChannel, "Channel");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
+    node_sig->AddOutput<bool>(kOutputPlaying, "Result");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto channel = args->GetInput<Channel>(0);
-    args->SetOutput(0, *channel);
-    args->SetOutput(1, channel->Playing());
+    auto channel = args->GetInput<Channel>(kInputChannel);
+    args->SetOutput(kOutputChannel, *channel);
+    args->SetOutput(kOutputPlaying, channel->Playing());
   }
 };
 
 // Stops the given audio channel.
 class StopNode : public BaseNode {
  public:
+  enum { kInputChannel };
+  enum { kOutputChannel };
+
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddOutput<Channel>();
+    node_sig->AddInput<Channel>(kInputChannel, "Channel");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto channel = args->GetInput<Channel>(0);
+    auto channel = args->GetInput<Channel>(kInputChannel);
     channel->Stop();
-    args->SetOutput(0, *channel);
+    args->SetOutput(kOutputChannel, *channel);
   }
 };
 
 // Set the gain on the given audio channel.
 class SetGainNode : public BaseNode {
  public:
-  virtual ~SetGainNode() {}
+  enum { kInputChannel, kInputGain };
+  enum { kOutputChannel };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddInput<float>();
-    node_sig->AddOutput<Channel>();
+    node_sig->AddInput<Channel>(kInputChannel, "Channel");
+    node_sig->AddInput<float>(kInputGain, "Gain");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto channel = args->GetInput<Channel>(0);
-    auto gain = args->GetInput<float>(0);
+    auto channel = args->GetInput<Channel>(kInputChannel);
+    auto gain = args->GetInput<float>(kInputGain);
     channel->SetGain(*gain);
-    args->SetOutput(0, *channel);
+    args->SetOutput(kOutputChannel, *channel);
   }
 };
 
 // Returns the gain of the given audio channel.
 class GainNode : public BaseNode {
  public:
-  virtual ~GainNode() {}
+  enum { kInputChannel };
+  enum { kOutputChannel, kOutputGain };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddOutput<Channel>();
-    node_sig->AddOutput<float>();
+    node_sig->AddInput<Channel>(kInputChannel, "Channel");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
+    node_sig->AddOutput<float>(kOutputGain, "Gain");
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto channel = args->GetInput<Channel>(0);
-    args->SetOutput(0, *channel);
-    args->SetOutput(1, channel->Gain());
+    auto channel = args->GetInput<Channel>(kInputChannel);
+    args->SetOutput(kOutputChannel, *channel);
+    args->SetOutput(kOutputGain, channel->Gain());
   }
 };
 
 // Sets the location of the given sound channel.
 class SetLocationNode : public BaseNode {
  public:
-  virtual ~SetLocationNode() {}
+  enum { kInputChannel, kInputLocation };
+  enum { kOutputChannel };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddInput<vec3>();
-    node_sig->AddOutput<Channel>();
+    node_sig->AddInput<Channel>(kInputChannel);
+    node_sig->AddInput<vec3>(kInputLocation);
+    node_sig->AddOutput<Channel>(kOutputChannel);
   }
 
   virtual void Execute(NodeArguments* args) {
-    auto channel = args->GetInput<Channel>(0);
-    auto location = args->GetInput<vec3>(1);
+    auto channel = args->GetInput<Channel>(kInputChannel);
+    auto location = args->GetInput<vec3>(kInputChannel);
     channel->SetLocation(*location);
-    args->SetOutput(0, *channel);
+    args->SetOutput(kOutputChannel, *channel);
   }
 };
 
 // Returns the location of the given audio channel.
 class LocationNode : public BaseNode {
  public:
-  virtual ~LocationNode() {}
+  enum { kInputChannel };
+  enum { kOutputChannel, kOutputLocation };
 
   static void OnRegister(NodeSignature* node_sig) {
-    node_sig->AddInput<Channel>();
-    node_sig->AddOutput<Channel>();
-    node_sig->AddOutput<vec3>();
+    node_sig->AddInput<Channel>(kInputChannel, "Channel");
+    node_sig->AddOutput<Channel>(kOutputChannel, "Channel");
+    node_sig->AddOutput<vec3>(kOutputLocation, "Location");
   }
 
   virtual void Execute(NodeArguments* args) {

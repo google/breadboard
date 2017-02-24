@@ -44,52 +44,10 @@ option(breadboard_build_pindrop_module
 option(breadboard_build_mathfu_module
     "Build a library of standard components along with the entity system" ON)
 
-# Directory which contains the source for 3rd party libraries.
-if(NOT DEFINED third_party_root)
-  get_filename_component(third_party_root
-      "${CMAKE_CURRENT_LIST_DIR}/../../../../external" REALPATH)
-endif()
-
-# Directory which contains source for FPL libraries.
-if(NOT DEFINED fpl_root)
-  get_filename_component(fpl_root "${CMAKE_CURRENT_LIST_DIR}/../../libs"
-      REALPATH)
-endif()
-
-# If the dependencies directory exists, assume this is the root directory for
-# all libraries required by this project.
-if(NOT DEFINED dependencies_root)
-  set(dependencies_root "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
-  if(EXISTS "${dependencies_root}")
-    set(third_party_root "${dependencies_root}")
-    set(fpl_root "${dependencies_root}")
-  endif()
-endif()
-
-# Configurable locations of dependencies of this project.
-set(dependencies_fplutil_dir "${fpl_root}/fplutil" CACHE PATH
-    "Directory containing the fplutil library.")
-set(dependencies_bulletphysics_distr_dir "${third_party_root}/bulletphysics"
-    CACHE PATH "Directory containing the Bullet Physics distribution.")
-set(dependencies_corgi_dir "${fpl_root}/corgi" CACHE PATH
-    "Directory containing the CORGI library.")
-set(dependencies_corgi_component_library_dir
-    "${dependencies_corgi_dir}/component_library" CACHE PATH
-    "Directory containing the CORGI component library")
-set(dependencies_fplbase_dir "${fpl_root}/fplbase" CACHE PATH
-    "Directory containing the FPLBase library.")
-set(dependencies_mathfu_dir "${fpl_root}/mathfu" CACHE PATH
-    "Directory containing the MathFu library.")
-set(dependencies_motive_dir "${fpl_root}/motive" CACHE PATH
-    "Directory containing the motive animation library.")
-set(dependencies_pindrop_dir "${fpl_root}/pindrop" CACHE PATH
-    "Directory containing the pindrop library.")
-set(dependencies_flatbuffers_dir "${fpl_root}/flatbuffers" CACHE PATH
-    "Directory containing the Flatbuffers library.")
-# NOTE: This is only required as the breadboard module library and CORGI's
-# component library have a circular dependency.
-set(dependencies_breadboard_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH
-    "Directory containing the breadboard library.")
+# Call fplutil to get locations of dependencies and set common build settings.
+include("cmake/find_fplutil.cmake")
+include("${fplutil_dir}/buildutil/cmake_common.txt")
+set_common_build_variables()
 
 # Breadboard files.
 set(breadboard_SRCS
@@ -137,24 +95,6 @@ set(breadboard_common_modules_SRCS
 include_directories(include)
 include_directories(${dependencies_fplutil_dir}/libfplutil/include)
 
-# Detect clang
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-  set(CMAKE_COMPILER_IS_CLANGXX 1)
-endif()
-
-# Compiler flags.
-set(C_FLAGS_WARNINGS "")
-if(MSVC)
-  set(C_FLAGS_WARNINGS "/W4 /WX")
-elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR
-       CMAKE_COMPILER_IS_CLANGXX)
-  add_definitions(-g)
-  set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -pedantic -Werror -Wextra -Wno-unused-function")
-endif()
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS_WARNINGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_FLAGS_WARNINGS}")
-
 add_library(breadboard ${breadboard_SRCS} ${breadboard_common_modules_SRCS})
 target_link_libraries(breadboard)
 
@@ -168,7 +108,7 @@ if (breadboard_build_module_library)
   # Generate rules to build the set of output files from the set of input
   # schema files.
   set(MODULE_LIBRARY_FLATBUFFERS_GENERATED_INCLUDES_DIR
-      ${CMAKE_SOURCE_DIR}/${CMAKE_FILES_DIRECTORY}/include/module_library)
+      ${CMAKE_CURRENT_BINARY_DIR}/include/module_library)
   file(GLOB_RECURSE
     MODULE_LIBRARY_FLATBUFFERS_SCHEMAS
     module_library/schemas/*.fbs)
@@ -201,8 +141,8 @@ if (breadboard_build_module_library)
     include_directories(${dependencies_mathfu_dir}/include)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
-        module_library/include/module_library/vec3.h
-        module_library/src/vec3.cpp)
+        module_library/include/module_library/vec.h
+        module_library/src/vec.cpp)
   endif()
 
   # Include modules for the components in the component library.
@@ -238,19 +178,18 @@ if (breadboard_build_module_library)
         module_library/include/module_library/animation.h
         module_library/include/module_library/entity.h
         module_library/include/module_library/physics.h
+        module_library/include/module_library/rendermesh.h
         module_library/include/module_library/transform.h
         module_library/src/animation.cpp
         module_library/src/entity.cpp
         module_library/src/physics.cpp
+        module_library/src/rendermesh.cpp
         module_library/src/transform.cpp)
   endif()
 
   # Include pindrop audio module.
   if (breadboard_build_pindrop_module)
     include_directories(${dependencies_pindrop_dir}/include)
-    set(breadboard_module_library_DEPS
-        ${breadboard_module_library_DEPS}
-        pindrop)
     set(breadboard_module_library_SRCS
         ${breadboard_module_library_SRCS}
         module_library/include/module_library/audio.h
