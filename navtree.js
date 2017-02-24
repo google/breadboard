@@ -16,15 +16,6 @@ var NAVTREE =
       ] ]
     ] ],
     [ "API Reference", "breadboard_api_reference.html", [
-      [ "Class List", null, [
-        [ "Class List", "annotated.html", "annotated" ],
-        [ "Class Index", "classes.html", null ],
-        [ "Class Members", "functions.html", [
-          [ "All", "functions.html", null ],
-          [ "Functions", "functions_func.html", null ],
-          [ "Variables", "functions_vars.html", null ]
-        ] ]
-      ] ],
       [ "File List", null, [
         [ "File List", "files.html", "files" ],
         [ "File Members", "globals.html", [
@@ -40,7 +31,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html"
+"base__node_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('node__signature_8h.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -197,9 +196,6 @@ $(document).ready(function(){initNavTree('node__signature_8h.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">node_signature.h File Reference</div>  </div>
 </div><!--header-->
@@ -216,26 +212,7 @@ $(document).ready(function(){initNavTree('node__signature_8h.html','');});
 <p><a href="node__signature_8h_source.html">Go to the source code of this file.</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A NodeSignature is a class that represents the various input and output edges of a node, as well as other metadata about the node itself. </p>
-</div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbreadboard_1_1_node_signature.html">breadboard::NodeSignature</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classbreadboard_1_1_node_signature.html" title="A NodeSignature is a class that represents the various input and output edges of a node...">NodeSignature</a> is a class that represents the various input and output edges of a node, as well as other metadata about the node itself.  <a href="classbreadboard_1_1_node_signature.html#details">More...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a57b9cd432251dfc3fb496c86cd1ad58d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57b9cd432251dfc3fb496c86cd1ad58d"></a>
-typedef std::function<br class="typebreak"/>
-&lt; BaseNode *()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>breadboard::NodeConstructor</b></td></tr>
-<tr class="memdesc:a57b9cd432251dfc3fb496c86cd1ad58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A typedef for a function (or functor) that constructs a new object that extends <a class="el" href="classbreadboard_1_1_base_node.html" title="A BaseNode is the common class that all nodes that are to be used in a graph must extend...">BaseNode</a>. <br/></td></tr>
-<tr class="separator:a57b9cd432251dfc3fb496c86cd1ad58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9e7ea85863b4cedb13582da535406e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9e7ea85863b4cedb13582da535406e9"></a>
-typedef std::function&lt; void(BaseNode *)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>breadboard::NodeDestructor</b></td></tr>
-<tr class="memdesc:ac9e7ea85863b4cedb13582da535406e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A typedef for a function (or functor) that destructs an existing object that extends <a class="el" href="classbreadboard_1_1_base_node.html" title="A BaseNode is the common class that all nodes that are to be used in a graph must extend...">BaseNode</a>. <br/></td></tr>
-<tr class="separator:ac9e7ea85863b4cedb13582da535406e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- Google Analytics -->
 <script>

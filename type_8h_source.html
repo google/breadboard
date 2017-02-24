@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('type_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -253,8 +252,8 @@ $(document).ready(function(){initNavTree('type_8h_source.html','');});
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">///</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">/// @note This class should not be instantiated directly. Instead, Types should</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">/// be registered through the TypeRegistry.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html">   53</a></span>&#160;<span class="comment"></span><span class="keyword">struct </span><a class="code" href="structbreadboard_1_1_type.html">Type</a> {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <a class="code" href="structbreadboard_1_1_type.html">Type</a>() {}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"></span><span class="keyword">struct </span>Type {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  Type() {}</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">  /// @brief Construct a Type object with the given metadata.</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">  ///</span></div>
@@ -269,41 +268,34 @@ $(document).ready(function(){initNavTree('type_8h_source.html','');});
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">  /// @param[in] operator_delete_func_ The function used to delete and instance</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">  /// of the Type.</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#a57b0f29a1541a2de37b40d8cfdbccfec">   69</a></span>&#160;<span class="comment"></span>  <a class="code" href="structbreadboard_1_1_type.html#a57b0f29a1541a2de37b40d8cfdbccfec">Type</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name_, <span class="keywordtype">size_t</span> size_, <span class="keywordtype">size_t</span> alignment_,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"></span>  Type(<span class="keyword">const</span> <span class="keywordtype">char</span>* name_, <span class="keywordtype">size_t</span> size_, <span class="keywordtype">size_t</span> alignment_,</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;       PlacementNewFunc placement_new_func_,</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;       OperatorDeleteFunc operator_delete_func_)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      : <a class="code" href="structbreadboard_1_1_type.html#a873b03dd6d2a393fc8593c9fa89e91f1">name</a>(name_),</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="structbreadboard_1_1_type.html#ac79f38763e1f4227079c871c5cf12e9a">size</a>(size_),</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="structbreadboard_1_1_type.html#ae382a50a1755fb6787da7fda0317f032">alignment</a>(alignment_),</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <a class="code" href="structbreadboard_1_1_type.html#ae7707ac316477a27e88d55f7dcb3e3a1">placement_new_func</a>(placement_new_func_),</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="structbreadboard_1_1_type.html#a6d9c62e609f61bb9a10b1a484544c21a">operator_delete_func</a>(operator_delete_func_) {}</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      : name(name_),</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        size(size_),</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        alignment(alignment_),</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        placement_new_func(placement_new_func_),</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        operator_delete_func(operator_delete_func_) {}</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">  /// @brief The name of the type.</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#a873b03dd6d2a393fc8593c9fa89e91f1">   79</a></span>&#160;<span class="comment"></span>  <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structbreadboard_1_1_type.html#a873b03dd6d2a393fc8593c9fa89e91f1">name</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment"></span>  <span class="keyword">const</span> <span class="keywordtype">char</span>* name;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">  /// @brief The size of the type in bytes.</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#ac79f38763e1f4227079c871c5cf12e9a">   82</a></span>&#160;<span class="comment"></span>  <span class="keywordtype">size_t</span> <a class="code" href="structbreadboard_1_1_type.html#ac79f38763e1f4227079c871c5cf12e9a">size</a>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment"></span>  <span class="keywordtype">size_t</span> size;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">  /// @brief The byte alignment of the type.</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#ae382a50a1755fb6787da7fda0317f032">   85</a></span>&#160;<span class="comment"></span>  <span class="keywordtype">size_t</span> <a class="code" href="structbreadboard_1_1_type.html#ae382a50a1755fb6787da7fda0317f032">alignment</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment"></span>  <span class="keywordtype">size_t</span> alignment;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">  /// @brief The function used to construct an instance of the type.</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#ae7707ac316477a27e88d55f7dcb3e3a1">   88</a></span>&#160;<span class="comment"></span>  PlacementNewFunc <a class="code" href="structbreadboard_1_1_type.html#ae7707ac316477a27e88d55f7dcb3e3a1">placement_new_func</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment"></span>  PlacementNewFunc placement_new_func;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">  /// @brief The function used to delete and instance of the Type.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="structbreadboard_1_1_type.html#a6d9c62e609f61bb9a10b1a484544c21a">   91</a></span>&#160;<span class="comment"></span>  OperatorDeleteFunc <a class="code" href="structbreadboard_1_1_type.html#a6d9c62e609f61bb9a10b1a484544c21a">operator_delete_func</a>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"></span>  OperatorDeleteFunc operator_delete_func;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;};</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}  <span class="comment">// namespace breadboard</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif  // BREADBOARD_TYPE_H_</span></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_ac79f38763e1f4227079c871c5cf12e9a"><div class="ttname"><a href="structbreadboard_1_1_type.html#ac79f38763e1f4227079c871c5cf12e9a">breadboard::Type::size</a></div><div class="ttdeci">size_t size</div><div class="ttdoc">The size of the type in bytes. </div><div class="ttdef"><b>Definition:</b> type.h:82</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_a873b03dd6d2a393fc8593c9fa89e91f1"><div class="ttname"><a href="structbreadboard_1_1_type.html#a873b03dd6d2a393fc8593c9fa89e91f1">breadboard::Type::name</a></div><div class="ttdeci">const char * name</div><div class="ttdoc">The name of the type. </div><div class="ttdef"><b>Definition:</b> type.h:79</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_ae382a50a1755fb6787da7fda0317f032"><div class="ttname"><a href="structbreadboard_1_1_type.html#ae382a50a1755fb6787da7fda0317f032">breadboard::Type::alignment</a></div><div class="ttdeci">size_t alignment</div><div class="ttdoc">The byte alignment of the type. </div><div class="ttdef"><b>Definition:</b> type.h:85</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_a6d9c62e609f61bb9a10b1a484544c21a"><div class="ttname"><a href="structbreadboard_1_1_type.html#a6d9c62e609f61bb9a10b1a484544c21a">breadboard::Type::operator_delete_func</a></div><div class="ttdeci">OperatorDeleteFunc operator_delete_func</div><div class="ttdoc">The function used to delete and instance of the Type. </div><div class="ttdef"><b>Definition:</b> type.h:91</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_a57b0f29a1541a2de37b40d8cfdbccfec"><div class="ttname"><a href="structbreadboard_1_1_type.html#a57b0f29a1541a2de37b40d8cfdbccfec">breadboard::Type::Type</a></div><div class="ttdeci">Type(const char *name_, size_t size_, size_t alignment_, PlacementNewFunc placement_new_func_, OperatorDeleteFunc operator_delete_func_)</div><div class="ttdoc">Construct a Type object with the given metadata. </div><div class="ttdef"><b>Definition:</b> type.h:69</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html_ae7707ac316477a27e88d55f7dcb3e3a1"><div class="ttname"><a href="structbreadboard_1_1_type.html#ae7707ac316477a27e88d55f7dcb3e3a1">breadboard::Type::placement_new_func</a></div><div class="ttdeci">PlacementNewFunc placement_new_func</div><div class="ttdoc">The function used to construct an instance of the type. </div><div class="ttdef"><b>Definition:</b> type.h:88</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html"><div class="ttname"><a href="structbreadboard_1_1_type.html">breadboard::Type</a></div><div class="ttdoc">Metadata about types that are used as input and output edge parameters on nodes. </div><div class="ttdef"><b>Definition:</b> type.h:53</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- Google Analytics -->

@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['finalizenodes',['FinalizeNodes',['../classbreadboard_1_1_graph.html#a2ee61e5b18e91b04108408b7d4d90a51',1,'breadboard::Graph']]]
+  ['graphs',['Graphs',['../breadboard_guide_graphs.html',1,'']]],
+  ['graph_2eh',['graph.h',['../graph_8h.html',1,'']]],
+  ['graph_5ffactory_2eh',['graph_factory.h',['../graph__factory_8h.html',1,'']]],
+  ['graph_5fstate_2eh',['graph_state.h',['../graph__state_8h.html',1,'']]]
 ];

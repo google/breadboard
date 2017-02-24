@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('graph__state_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -240,13 +239,13 @@ $(document).ready(function(){initNavTree('graph__state_8h_source.html','');});
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">///</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/// Once a GraphState has been initialized with a Graph, it can be used to</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">/// execute various scripted behaviors.</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_state.html">   40</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classbreadboard_1_1_graph_state.html">GraphState</a> {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"></span><span class="keyword">class </span>GraphState {</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; <span class="keyword">public</span>:<span class="comment"></span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">  /// @brief The default constructor for an empty GraphState object.</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">   43</a></span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>() : graph_(nullptr), output_buffer_(), timestamp_(0) {}</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"></span>  GraphState() : graph_(nullptr), output_buffer_(), timestamp_(0) {}</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">  /// @brief Destructor for a BaseNode.</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_graph_state.html#ac1e2c97abbe54204422ce5ccf95c95fd">~GraphState</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"></span>  ~GraphState();</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">  /// @brief Initialize the GraphState with a graph.</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">  ///</span></div>
@@ -255,12 +254,12 @@ $(document).ready(function(){initNavTree('graph__state_8h_source.html','');});
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">  /// dependency on other nodes will always run after their dependencies.</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">  /// @param[in] graph The Graph that defines this GraphState&#39;s nodes and edges.</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classbreadboard_1_1_graph_state.html#ada00863cdc89c97de90569ce5792748f">Initialize</a>(<a class="code" href="classbreadboard_1_1_graph.html">Graph</a>* graph);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> Initialize(Graph* graph);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">  /// @brief Check if this GraphState has been initialized.</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">  /// @return Whether or not the Graph has been initialized.</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_state.html#a7ba4905d752f7fbeabcc96de65d96331">   60</a></span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classbreadboard_1_1_graph_state.html#a7ba4905d752f7fbeabcc96de65d96331">IsInitialized</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> graph_ != <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> IsInitialized()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> graph_ != <span class="keyword">nullptr</span>; }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">  /// @cond BREADBOARD_INTERNAL</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"></span><span class="comment"></span></div>
@@ -302,10 +301,10 @@ $(document).ready(function(){initNavTree('graph__state_8h_source.html','');});
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="comment">// Disallow copying.</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>(<a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp;);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp; operator=(<a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp;);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>(<a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp;&amp;);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp; operator=(<a class="code" href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">GraphState</a>&amp;&amp;);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  GraphState(GraphState&amp;);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  GraphState&amp; operator=(GraphState&amp;);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  GraphState(GraphState&amp;&amp;);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  GraphState&amp; operator=(GraphState&amp;&amp;);</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="comment">// Return true if any of the input edges on this node point to data that has</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="comment">// been updated.</span></div>
@@ -320,14 +319,8 @@ $(document).ready(function(){initNavTree('graph__state_8h_source.html','');});
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#endif  // BREADBOARD_GRAPH_STATE_H_</span></div>
 <div class="ttc" id="memory__buffer_8h_html"><div class="ttname"><a href="memory__buffer_8h.html">memory_buffer.h</a></div><div class="ttdoc">MemoryBuffer is a simple buffer for holding and accessing raw bytes. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_state_html_a8e9e1c4d7c1537991c062ad86bd6860d"><div class="ttname"><a href="classbreadboard_1_1_graph_state.html#a8e9e1c4d7c1537991c062ad86bd6860d">breadboard::GraphState::GraphState</a></div><div class="ttdeci">GraphState()</div><div class="ttdoc">The default constructor for an empty GraphState object. </div><div class="ttdef"><b>Definition:</b> graph_state.h:43</div></div>
 <div class="ttc" id="node_8h_html"><div class="ttname"><a href="node_8h.html">node.h</a></div><div class="ttdoc">A Node is what graphs are built up from. Each Node defines a set of connections to other Nodes betwee...</div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_state_html_ac1e2c97abbe54204422ce5ccf95c95fd"><div class="ttname"><a href="classbreadboard_1_1_graph_state.html#ac1e2c97abbe54204422ce5ccf95c95fd">breadboard::GraphState::~GraphState</a></div><div class="ttdeci">~GraphState()</div><div class="ttdoc">Destructor for a BaseNode. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_html"><div class="ttname"><a href="classbreadboard_1_1_graph.html">breadboard::Graph</a></div><div class="ttdoc">A Graph represents the relationship between a variety of nodes. It contains a collection of nodes tha...</div><div class="ttdef"><b>Definition:</b> graph.h:48</div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_state_html"><div class="ttname"><a href="classbreadboard_1_1_graph_state.html">breadboard::GraphState</a></div><div class="ttdoc">A GraphState represents an instance of a Graph, and can be connected to game objects to script and ex...</div><div class="ttdef"><b>Definition:</b> graph_state.h:40</div></div>
 <div class="ttc" id="graph_8h_html"><div class="ttname"><a href="graph_8h.html">graph.h</a></div><div class="ttdoc">A Graph is a collection of nodes that are linked together at their edges. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_state_html_ada00863cdc89c97de90569ce5792748f"><div class="ttname"><a href="classbreadboard_1_1_graph_state.html#ada00863cdc89c97de90569ce5792748f">breadboard::GraphState::Initialize</a></div><div class="ttdeci">void Initialize(Graph *graph)</div><div class="ttdoc">Initialize the GraphState with a graph. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_state_html_a7ba4905d752f7fbeabcc96de65d96331"><div class="ttname"><a href="classbreadboard_1_1_graph_state.html#a7ba4905d752f7fbeabcc96de65d96331">breadboard::GraphState::IsInitialized</a></div><div class="ttdeci">bool IsInitialized() const </div><div class="ttdoc">Check if this GraphState has been initialized. </div><div class="ttdef"><b>Definition:</b> graph_state.h:60</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- Google Analytics -->

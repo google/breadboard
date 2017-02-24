@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -244,7 +243,7 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">/// the same file is requested multiple times, the cached graph is returned. To</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/// use this class ParseData must be overridden to translate the data into nodes</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">/// and edges, and to parse default values.</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_factory.html">   44</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classbreadboard_1_1_graph_factory.html">GraphFactory</a> {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"></span><span class="keyword">class </span>GraphFactory {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; <span class="keyword">public</span>:<span class="comment"></span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">  /// @brief Construct a graph factory using the given modules.</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">  ///</span></div>
@@ -252,13 +251,13 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">  ///            available nodes for the graph.</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">  /// @param[in] load_file_callback The function to use to load the file from</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">  ///            disk.</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_factory.html#add6ae59010b830d769d8eab86548cef8">   52</a></span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_graph_factory.html#add6ae59010b830d769d8eab86548cef8">GraphFactory</a>(<a class="code" href="classbreadboard_1_1_module_registry.html">ModuleRegistry</a>* module_registry,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"></span>  GraphFactory(ModuleRegistry* module_registry,</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;               LoadFileCallback load_file_callback)</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      : module_registry_(module_registry),</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        load_file_callback_(load_file_callback) {}</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">  /// @brief Destructor for a GraphFactory.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_graph_factory.html#abae246a7f8e47a5e0c3f6bd71cd4f283">   58</a></span>&#160;<span class="comment"></span>  <span class="keyword">virtual</span> <a class="code" href="classbreadboard_1_1_graph_factory.html#abae246a7f8e47a5e0c3f6bd71cd4f283">~GraphFactory</a>() {}</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"></span>  <span class="keyword">virtual</span> ~GraphFactory() {}</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">  /// @brief Load a graph given its filename.</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">  ///</span></div>
@@ -268,7 +267,7 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">  /// @param[in] filename The name of the file to load.</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">  /// @return The loaded Graph.</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_graph.html">Graph</a>* <a class="code" href="classbreadboard_1_1_graph_factory.html#afaed217ce7f0d647d706885881a31b6a">LoadGraph</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"></span>  Graph* LoadGraph(<span class="keyword">const</span> <span class="keywordtype">char</span>* filename);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <span class="keyword">typedef</span> std::unordered_map&lt;std::string, std::unique_ptr&lt;Graph&gt;&gt; GraphMap;</div>
@@ -277,10 +276,10 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">  /// std::string. This function is responsible for filling in the graph (both</span></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">  /// the edges and the nodes) using the nodes registered with the</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">  /// module_registry.</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> ParseData(<a class="code" href="classbreadboard_1_1_module_registry.html">ModuleRegistry</a>* module_registry, <a class="code" href="classbreadboard_1_1_graph.html">Graph</a>* graph,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> ParseData(ModuleRegistry* module_registry, Graph* graph,</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                         <span class="keyword">const</span> std::string* data) = 0;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <a class="code" href="classbreadboard_1_1_module_registry.html">ModuleRegistry</a>* module_registry_;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  ModuleRegistry* module_registry_;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  LoadFileCallback load_file_callback_;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  GraphMap loaded_graphs_;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
@@ -289,13 +288,7 @@ $(document).ready(function(){initNavTree('graph__factory_8h_source.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif  // BREADBOARD_GRAPH_FACTORY_H_</span></div>
 <div class="ttc" id="module__registry_8h_html"><div class="ttname"><a href="module__registry_8h.html">module_registry.h</a></div><div class="ttdoc">The ModuleRegistry is a collection of Modules. </div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html">breadboard::ModuleRegistry</a></div><div class="ttdoc">The ModuleRegistry is a collection of Modules. </div><div class="ttdef"><b>Definition:</b> module_registry.h:34</div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_factory_html_afaed217ce7f0d647d706885881a31b6a"><div class="ttname"><a href="classbreadboard_1_1_graph_factory.html#afaed217ce7f0d647d706885881a31b6a">breadboard::GraphFactory::LoadGraph</a></div><div class="ttdeci">Graph * LoadGraph(const char *filename)</div><div class="ttdoc">Load a graph given its filename. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_html"><div class="ttname"><a href="classbreadboard_1_1_graph.html">breadboard::Graph</a></div><div class="ttdoc">A Graph represents the relationship between a variety of nodes. It contains a collection of nodes tha...</div><div class="ttdef"><b>Definition:</b> graph.h:48</div></div>
 <div class="ttc" id="graph_8h_html"><div class="ttname"><a href="graph_8h.html">graph.h</a></div><div class="ttdoc">A Graph is a collection of nodes that are linked together at their edges. </div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_factory_html_add6ae59010b830d769d8eab86548cef8"><div class="ttname"><a href="classbreadboard_1_1_graph_factory.html#add6ae59010b830d769d8eab86548cef8">breadboard::GraphFactory::GraphFactory</a></div><div class="ttdeci">GraphFactory(ModuleRegistry *module_registry, LoadFileCallback load_file_callback)</div><div class="ttdoc">Construct a graph factory using the given modules. </div><div class="ttdef"><b>Definition:</b> graph_factory.h:52</div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_factory_html"><div class="ttname"><a href="classbreadboard_1_1_graph_factory.html">breadboard::GraphFactory</a></div><div class="ttdoc">The GraphFactory is a base class that can be used to load Graphs. </div><div class="ttdef"><b>Definition:</b> graph_factory.h:44</div></div>
-<div class="ttc" id="classbreadboard_1_1_graph_factory_html_abae246a7f8e47a5e0c3f6bd71cd4f283"><div class="ttname"><a href="classbreadboard_1_1_graph_factory.html#abae246a7f8e47a5e0c3f6bd71cd4f283">breadboard::GraphFactory::~GraphFactory</a></div><div class="ttdeci">virtual ~GraphFactory()</div><div class="ttdoc">Destructor for a GraphFactory. </div><div class="ttdef"><b>Definition:</b> graph_factory.h:58</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- Google Analytics -->

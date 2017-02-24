@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('module__registry_8h_source.html','');}
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -234,29 +233,29 @@ $(document).ready(function(){initNavTree('module__registry_8h_source.html','');}
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">/// @brief The ModuleRegistry is a collection of Modules.</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">///</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">/// This acts as a central repository for all modules used in your project.</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_module_registry.html">   34</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classbreadboard_1_1_module_registry.html">ModuleRegistry</a> {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"></span><span class="keyword">class </span>ModuleRegistry {</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; <span class="keyword">public</span>:<span class="comment"></span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">  /// Construct a ModuleRegistry.</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_module_registry.html#a1e6761cc6456fd94246679f7d4331e99">ModuleRegistry</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"></span>  ModuleRegistry();</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">  /// @brief Adds a new module with the given name to the ModuleRegistry.</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">  /// @param[in] module_name The name of the new Module.</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">  /// @return The new Module. Returns null if the module could not be created.</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_module.html">Module</a>* <a class="code" href="classbreadboard_1_1_module_registry.html#a8c303b65d7b2f49199f06bb5b53afd6f">RegisterModule</a>(<span class="keyword">const</span> std::string&amp; module_name);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"></span>  Module* RegisterModule(<span class="keyword">const</span> std::string&amp; module_name);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">  /// @brief Returns a pointer to a module given its name.</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">  /// @param[in] module_name The name of the Module.</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">  /// @return a pointer to a module given its name.</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"></span>  <span class="keyword">const</span> <a class="code" href="classbreadboard_1_1_module.html">Module</a>* <a class="code" href="classbreadboard_1_1_module_registry.html#a4c5ee681e003588a3658f4e25405176a">GetModule</a>(<span class="keyword">const</span> std::string&amp; module_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"></span>  <span class="keyword">const</span> Module* GetModule(<span class="keyword">const</span> std::string&amp; module_name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">  /// @brief Returns the current Breadboard version structure.</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">  /// @return The current Breadboard version structure.</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_module_registry.html#adbe78aedbb64b328bb9caffff020f858">   56</a></span>&#160;<span class="comment"></span>  <span class="keyword">const</span> <a class="code" href="structbreadboard_1_1_breadboard_version.html">BreadboardVersion</a>* <a class="code" href="classbreadboard_1_1_module_registry.html#adbe78aedbb64b328bb9caffff020f858">version</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> version_; }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"></span>  <span class="keyword">const</span> BreadboardVersion* version()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> version_; }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">typedef</span> std::unordered_map&lt;std::string, Module&gt; ModuleDictionary;</div>
@@ -265,20 +264,13 @@ $(document).ready(function(){initNavTree('module__registry_8h_source.html','');}
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  ModuleDictionary modules_;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="comment">// Current version of Breadboard.</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keyword">const</span> <a class="code" href="structbreadboard_1_1_breadboard_version.html">BreadboardVersion</a>* version_;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keyword">const</span> BreadboardVersion* version_;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}  <span class="comment">// namespace breadboard</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif  // BREADBOARD_MODULE_REGISTRY_H_</span></div>
-<div class="ttc" id="structbreadboard_1_1_breadboard_version_html"><div class="ttname"><a href="structbreadboard_1_1_breadboard_version.html">breadboard::BreadboardVersion</a></div><div class="ttdoc">A structure containing the version number of the Breadboard library. </div><div class="ttdef"><b>Definition:</b> version.h:26</div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html_a1e6761cc6456fd94246679f7d4331e99"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html#a1e6761cc6456fd94246679f7d4331e99">breadboard::ModuleRegistry::ModuleRegistry</a></div><div class="ttdeci">ModuleRegistry()</div><div class="ttdoc">Construct a ModuleRegistry. </div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html_a4c5ee681e003588a3658f4e25405176a"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html#a4c5ee681e003588a3658f4e25405176a">breadboard::ModuleRegistry::GetModule</a></div><div class="ttdeci">const Module * GetModule(const std::string &amp;module_name) const </div><div class="ttdoc">Returns a pointer to a module given its name. </div></div>
-<div class="ttc" id="classbreadboard_1_1_module_html"><div class="ttname"><a href="classbreadboard_1_1_module.html">breadboard::Module</a></div><div class="ttdef"><b>Definition:</b> module.h:36</div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html_a8c303b65d7b2f49199f06bb5b53afd6f"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html#a8c303b65d7b2f49199f06bb5b53afd6f">breadboard::ModuleRegistry::RegisterModule</a></div><div class="ttdeci">Module * RegisterModule(const std::string &amp;module_name)</div><div class="ttdoc">Adds a new module with the given name to the ModuleRegistry. </div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html">breadboard::ModuleRegistry</a></div><div class="ttdoc">The ModuleRegistry is a collection of Modules. </div><div class="ttdef"><b>Definition:</b> module_registry.h:34</div></div>
 <div class="ttc" id="version_8h_html"><div class="ttname"><a href="version_8h.html">version.h</a></div><div class="ttdoc">A structure containing the version number of the Breadboard library. </div></div>
-<div class="ttc" id="classbreadboard_1_1_module_registry_html_adbe78aedbb64b328bb9caffff020f858"><div class="ttname"><a href="classbreadboard_1_1_module_registry.html#adbe78aedbb64b328bb9caffff020f858">breadboard::ModuleRegistry::version</a></div><div class="ttdeci">const BreadboardVersion * version() const </div><div class="ttdoc">Returns the current Breadboard version structure. </div><div class="ttdef"><b>Definition:</b> module_registry.h:56</div></div>
 <div class="ttc" id="module_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div><div class="ttdoc">A module represents a collection of nodes with a related purpose. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

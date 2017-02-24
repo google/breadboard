@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('event_8h.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -198,9 +197,7 @@ $(document).ready(function(){initNavTree('event_8h.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">event.h File Reference</div>  </div>
 </div><!--header-->
@@ -216,32 +213,12 @@ $(document).ready(function(){initNavTree('event_8h.html','');});
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>NodeEventListener and NodeEventBroadcaster are classes that are used to notify GraphState instances when events they care about have occured. </p>
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbreadboard_1_1_node_event_listener.html">breadboard::NodeEventListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classbreadboard_1_1_node_event_listener.html" title="A NodeEventListener ensures a node is marked dirty for reevaluation when events it cares about has be...">NodeEventListener</a> ensures a node is marked dirty for reevaluation when events it cares about has been broadcast to it.  <a href="classbreadboard_1_1_node_event_listener.html#details">More...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbreadboard_1_1_node_event_broadcaster.html">breadboard::NodeEventBroadcaster</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classbreadboard_1_1_node_event_broadcaster.html" title="A NodeEventBroadcaster is used to notify NodeEventListeners that a specific event has occured so that...">NodeEventBroadcaster</a> is used to notify NodeEventListeners that a specific event has occured so that the appropriate nodes can be marked dirty for re-evaluation.  <a href="classbreadboard_1_1_node_event_broadcaster.html#details">More...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a4549d138f1c1fa797319d84bb8bd3408"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="event_8h.html#a4549d138f1c1fa797319d84bb8bd3408">BREADBOARD_DECLARE_EVENT</a>(event_id)&#160;&#160;&#160;extern ::breadboard::EventId event_id;</td></tr>
 <tr class="separator:a4549d138f1c1fa797319d84bb8bd3408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4008cecacbda7f64f7e2b9c9597bdd1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="event_8h.html#ad4008cecacbda7f64f7e2b9c9597bdd1">BREADBOARD_DEFINE_EVENT</a>(event_id)</td></tr>
 <tr class="separator:ad4008cecacbda7f64f7e2b9c9597bdd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a349ae8b2fc541b020a0ead66131ab052"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a349ae8b2fc541b020a0ead66131ab052"></a>
-typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>breadboard::Timestamp</b></td></tr>
-<tr class="memdesc:a349ae8b2fc541b020a0ead66131ab052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timestamp is a type used internally by Breadboard to keep track of which nodes in a graph require a call to Evaluate. <br/></td></tr>
-<tr class="separator:a349ae8b2fc541b020a0ead66131ab052"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19f0d2a31a4cab094dbba2b9a13b4419"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19f0d2a31a4cab094dbba2b9a13b4419"></a>
-typedef const char **&#160;</td><td class="memItemRight" valign="bottom"><b>breadboard::EventId</b></td></tr>
-<tr class="memdesc:a19f0d2a31a4cab094dbba2b9a13b4419"><td class="mdescLeft">&#160;</td><td class="mdescRight">An EventID is an opaque pointer that is used as a unique identifier for node events. <br/></td></tr>
-<tr class="separator:a19f0d2a31a4cab094dbba2b9a13b4419"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a4549d138f1c1fa797319d84bb8bd3408"></a>

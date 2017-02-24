@@ -157,7 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
@@ -187,7 +186,7 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -241,7 +240,7 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/// Functionality is provided to get inputs and set outputs. Additionally, this</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">/// contains the list of listeners on a given node so that you can connect a</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">/// listener to a broadcaster.</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_node_arguments.html">   41</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classbreadboard_1_1_node_arguments.html">NodeArguments</a> {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"></span><span class="keyword">class </span>NodeArguments {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; <span class="keyword">public</span>:<span class="comment"></span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">  /// @cond BREADBOARD_INTERNAL</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">  /// @brief Construct a NodeArguments object for the given node.</span></div>
@@ -257,7 +256,7 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">  /// @param[in] output_memory The MemoryBuffer for the output edges.</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">  /// @param[in] timestamp The current timestamp.</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"></span>  <a class="code" href="classbreadboard_1_1_node_arguments.html">NodeArguments</a>(<span class="keyword">const</span> Node* node, <span class="keyword">const</span> std::vector&lt;Node&gt;* nodes,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"></span>  NodeArguments(<span class="keyword">const</span> Node* node, <span class="keyword">const</span> std::vector&lt;Node&gt;* nodes,</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                MemoryBuffer* input_memory, MemoryBuffer* output_memory,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                Timestamp timestamp)</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      : node_(node),</div>
@@ -289,8 +288,8 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">  /// @return A pointer to the value of the given input edge.</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment"></span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> EdgeType&gt;</div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_node_arguments.html#a69c0c5c56b26b87f83e1b66425dc6c34">   89</a></span>&#160;  EdgeType* <a class="code" href="classbreadboard_1_1_node_arguments.html#a69c0c5c56b26b87f83e1b66425dc6c34">GetInput</a>(<span class="keywordtype">size_t</span> argument_index)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    VerifyInputPreconditions(argument_index, <a class="code" href="structbreadboard_1_1_type_registry.html">TypeRegistry&lt;EdgeType&gt;::GetType</a>());</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  EdgeType* GetInput(<span class="keywordtype">size_t</span> argument_index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    VerifyInputPreconditions(argument_index, TypeRegistry&lt;EdgeType&gt;::GetType());</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">const</span> InputEdge&amp; input_edge = node_-&gt;input_edges()[argument_index];</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">if</span> (input_edge.connected()) {</div>
@@ -307,14 +306,14 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">  /// @return True if the given input argument index has been modified since the</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">  /// last execution of this graph.</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classbreadboard_1_1_node_arguments.html#acc0cd69e2a4c50fb6b74fe12c9dd98da">IsInputDirty</a>(<span class="keywordtype">size_t</span> argument_index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> IsInputDirty(<span class="keywordtype">size_t</span> argument_index) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">  /// @brief Returns true if the given listener index has been signaled by a</span></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">  /// broadcaster since the last execution of this graph.</span></div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">  /// @return True if the given listener index has been signaled by a</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">  /// broadcaster since the last execution of this graph.</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classbreadboard_1_1_node_arguments.html#a6b8162bd10e6d978455e154707747233">IsListenerDirty</a>(<span class="keywordtype">size_t</span> listener_index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"></span>  <span class="keywordtype">bool</span> IsListenerDirty(<span class="keywordtype">size_t</span> listener_index) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">  /// @brief Sets the value of the specified output edge.</span></div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">  ///</span></div>
@@ -342,9 +341,9 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment">  /// @param value The value to set this output edge to.</span></div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"></span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> EdgeType&gt;</div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_node_arguments.html#affc2da31a2a1723f407a1df63afcaded">  142</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classbreadboard_1_1_node_arguments.html#affc2da31a2a1723f407a1df63afcaded">SetOutput</a>(<span class="keywordtype">size_t</span> argument_index, <span class="keyword">const</span> EdgeType&amp; value) {</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  <span class="keywordtype">void</span> SetOutput(<span class="keywordtype">size_t</span> argument_index, <span class="keyword">const</span> EdgeType&amp; value) {</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    VerifyOutputPreconditions(argument_index,</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                              <a class="code" href="structbreadboard_1_1_type_registry.html">TypeRegistry&lt;EdgeType&gt;::GetType</a>());</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                              TypeRegistry&lt;EdgeType&gt;::GetType());</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keyword">const</span> OutputEdge&amp; output_edge = node_-&gt;output_edges()[argument_index];</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordflow">if</span> (!output_edge.connected()) {</div>
@@ -376,8 +375,8 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="comment">  /// @param argument_index The index of the input edge. Node that the template</span></div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment">  /// argument of this index must be `void`.</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_node_arguments.html#ab00bf19854d61372df44497fb84d83ce">  176</a></span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classbreadboard_1_1_node_arguments.html#ab00bf19854d61372df44497fb84d83ce">SetOutput</a>(<span class="keywordtype">size_t</span> argument_index) {</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    VerifyOutputPreconditions(argument_index, <a class="code" href="structbreadboard_1_1_type_registry.html">TypeRegistry&lt;void&gt;::GetType</a>());</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> SetOutput(<span class="keywordtype">size_t</span> argument_index) {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    VerifyOutputPreconditions(argument_index, TypeRegistry&lt;void&gt;::GetType());</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keyword">const</span> OutputEdge&amp; output_edge = node_-&gt;output_edges()[argument_index];</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordflow">if</span> (!output_edge.connected()) {</div>
@@ -400,23 +399,23 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">  /// @param listener_index The index of the listener.</span></div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">  ///</span></div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="comment">  /// @param broadcaster The broadcaster to bind the given listener to.</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classbreadboard_1_1_node_arguments.html#a96448b11dac6d5926b19c77d49cf9908">  200</a></span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classbreadboard_1_1_node_arguments.html#a96448b11dac6d5926b19c77d49cf9908">BindBroadcaster</a>(<span class="keywordtype">size_t</span> listener_index,</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                       <a class="code" href="classbreadboard_1_1_node_event_broadcaster.html">NodeEventBroadcaster</a>* broadcaster) {</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <a class="code" href="classbreadboard_1_1_node_event_listener.html">NodeEventListener</a>* listener = output_memory_-&gt;GetObject&lt;<a class="code" href="classbreadboard_1_1_node_event_listener.html">NodeEventListener</a>&gt;(</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="comment"></span>  <span class="keywordtype">void</span> BindBroadcaster(<span class="keywordtype">size_t</span> listener_index,</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                       NodeEventBroadcaster* broadcaster) {</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    NodeEventListener* listener = output_memory_-&gt;GetObject&lt;NodeEventListener&gt;(</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        node_-&gt;listener_offsets()[listener_index]);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    broadcaster-&gt;<a class="code" href="classbreadboard_1_1_node_event_broadcaster.html#ad9115a085374e3377ce18aadefd6f386">RegisterListener</a>(listener);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    broadcaster-&gt;RegisterListener(listener);</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  }</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  <span class="comment">// Check to make sure the argument index is in range and the type being</span></div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  <span class="comment">// retrieved is the type expected.</span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="keywordtype">void</span> VerifyInputPreconditions(<span class="keywordtype">size_t</span> argument_index,</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                                <span class="keyword">const</span> <a class="code" href="structbreadboard_1_1_type.html">Type</a>* requested_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                                <span class="keyword">const</span> Type* requested_type) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;  <span class="comment">// Check to make sure the argument index is in range and the type being set is</span></div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  <span class="comment">// the type expected.</span></div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;  <span class="keywordtype">void</span> VerifyOutputPreconditions(<span class="keywordtype">size_t</span> argument_index,</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                                 <span class="keyword">const</span> <a class="code" href="structbreadboard_1_1_type.html">Type</a>* requested_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                                 <span class="keyword">const</span> Type* requested_type) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;  <span class="keywordtype">void</span> VerifyListenerPreconditions(<span class="keywordtype">size_t</span> listener_index) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
@@ -432,21 +431,9 @@ $(document).ready(function(){initNavTree('node__arguments_8h_source.html','');})
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="preprocessor">#endif  // BREADBOARD_NODE_ARGUMENTS_H_</span></div>
 <div class="ttc" id="memory__buffer_8h_html"><div class="ttname"><a href="memory__buffer_8h.html">memory_buffer.h</a></div><div class="ttdoc">MemoryBuffer is a simple buffer for holding and accessing raw bytes. </div></div>
 <div class="ttc" id="node_8h_html"><div class="ttname"><a href="node_8h.html">node.h</a></div><div class="ttdoc">A Node is what graphs are built up from. Each Node defines a set of connections to other Nodes betwee...</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_event_listener_html"><div class="ttname"><a href="classbreadboard_1_1_node_event_listener.html">breadboard::NodeEventListener</a></div><div class="ttdoc">A NodeEventListener ensures a node is marked dirty for reevaluation when events it cares about has be...</div><div class="ttdef"><b>Definition:</b> event.h:78</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_event_broadcaster_html_ad9115a085374e3377ce18aadefd6f386"><div class="ttname"><a href="classbreadboard_1_1_node_event_broadcaster.html#ad9115a085374e3377ce18aadefd6f386">breadboard::NodeEventBroadcaster::RegisterListener</a></div><div class="ttdeci">void RegisterListener(NodeEventListener *listener)</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_acc0cd69e2a4c50fb6b74fe12c9dd98da"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#acc0cd69e2a4c50fb6b74fe12c9dd98da">breadboard::NodeArguments::IsInputDirty</a></div><div class="ttdeci">bool IsInputDirty(size_t argument_index) const </div><div class="ttdoc">Returns true if the given input argument index has been modified since the last execution of this gra...</div></div>
 <div class="ttc" id="type__registry_8h_html"><div class="ttname"><a href="type__registry_8h.html">type_registry.h</a></div><div class="ttdoc">The TypeRegistry class acts as a static type id storage. </div></div>
-<div class="ttc" id="classbreadboard_1_1_node_event_broadcaster_html"><div class="ttname"><a href="classbreadboard_1_1_node_event_broadcaster.html">breadboard::NodeEventBroadcaster</a></div><div class="ttdoc">A NodeEventBroadcaster is used to notify NodeEventListeners that a specific event has occured so that...</div><div class="ttdef"><b>Definition:</b> event.h:136</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_ab00bf19854d61372df44497fb84d83ce"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#ab00bf19854d61372df44497fb84d83ce">breadboard::NodeArguments::SetOutput</a></div><div class="ttdeci">void SetOutput(size_t argument_index)</div><div class="ttdoc">Marks an output edge as dirty without updating its value. </div><div class="ttdef"><b>Definition:</b> node_arguments.h:176</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_registry_html"><div class="ttname"><a href="structbreadboard_1_1_type_registry.html">breadboard::TypeRegistry</a></div><div class="ttdoc">Types that are to be used as input and output edge parameters on nodes must be registered with the Ty...</div><div class="ttdef"><b>Definition:</b> type_registry.h:47</div></div>
 <div class="ttc" id="event_8h_html"><div class="ttname"><a href="event_8h.html">event.h</a></div><div class="ttdoc">NodeEventListener and NodeEventBroadcaster are classes that are used to notify GraphState instances w...</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_a6b8162bd10e6d978455e154707747233"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#a6b8162bd10e6d978455e154707747233">breadboard::NodeArguments::IsListenerDirty</a></div><div class="ttdeci">bool IsListenerDirty(size_t listener_index) const </div><div class="ttdoc">Returns true if the given listener index has been signaled by a broadcaster since the last execution ...</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_affc2da31a2a1723f407a1df63afcaded"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#affc2da31a2a1723f407a1df63afcaded">breadboard::NodeArguments::SetOutput</a></div><div class="ttdeci">void SetOutput(size_t argument_index, const EdgeType &amp;value)</div><div class="ttdoc">Sets the value of the specified output edge. </div><div class="ttdef"><b>Definition:</b> node_arguments.h:142</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_a69c0c5c56b26b87f83e1b66425dc6c34"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#a69c0c5c56b26b87f83e1b66425dc6c34">breadboard::NodeArguments::GetInput</a></div><div class="ttdeci">BREADBOARD_INTERNAL EdgeType * GetInput(size_t argument_index) const </div><div class="ttdoc">Returns the value of this input edge. </div><div class="ttdef"><b>Definition:</b> node_arguments.h:89</div></div>
 <div class="ttc" id="log_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div><div class="ttdoc">This file contains functions to register and call logging function. The log function is used for vari...</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html_a96448b11dac6d5926b19c77d49cf9908"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html#a96448b11dac6d5926b19c77d49cf9908">breadboard::NodeArguments::BindBroadcaster</a></div><div class="ttdeci">void BindBroadcaster(size_t listener_index, NodeEventBroadcaster *broadcaster)</div><div class="ttdoc">Binds the given broadcasater to the listener at the given index. </div><div class="ttdef"><b>Definition:</b> node_arguments.h:200</div></div>
-<div class="ttc" id="classbreadboard_1_1_node_arguments_html"><div class="ttname"><a href="classbreadboard_1_1_node_arguments.html">breadboard::NodeArguments</a></div><div class="ttdoc">NodeArguments is a class that represents the state of all input and output edges connected to a node...</div><div class="ttdef"><b>Definition:</b> node_arguments.h:41</div></div>
-<div class="ttc" id="structbreadboard_1_1_type_html"><div class="ttname"><a href="structbreadboard_1_1_type.html">breadboard::Type</a></div><div class="ttdoc">Metadata about types that are used as input and output edge parameters on nodes. </div><div class="ttdef"><b>Definition:</b> type.h:53</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- Google Analytics -->
