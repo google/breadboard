@@ -3,8 +3,8 @@ Breadboard   {#breadboard_readme}
 
 ## Overview
 
-The Breadboard scripting library is a graph based scripting system designed with
-games in mind. Complex behvaiors for game entities can be organized by
+The Breadboard scripting library is a graph-based scripting system designed with
+games in mind. Complex behaviors for game entities can be organized by
 interlinking nodes representing game actions.
 
 ## Features
@@ -13,7 +13,7 @@ interlinking nodes representing game actions.
     code. Just arrange nodes in a graph and connect them together.
   * Extensible: Breadboard can be extended with user-defined Nodes that interact
     with your game
-  * Cross-platform: Breadboard can be incorperated in to projects on all major
+  * Cross-platform: Breadboard can be incorporated into projects on all major
     platforms.
 
 ## Dependencies
@@ -22,7 +22,7 @@ Breadboard depends on the following library:
 
   * [fplutil][]
 
-fplutil provides a number of useful utilities. Breadboard makes use of
+fplutil provides several useful utilities. Breadboard makes use of
 `fplutil::intrusive_list` internally to build lists to track various structures
 without doing unnecessary allocations.
 
@@ -47,7 +47,7 @@ This tracking is done automatically using the embedded version string (see
 consuming a few extra bytes in your application binary, it shouldn't affect your
 application at all.  We use this information to let us know if Pindrop is useful
 and if we should continue to invest in it. Since this is open source, you are
-free to remove the version string but we would appreciate if you would leave it
+free to remove the version string but we would appreciate it if you would leave it
 in.
 
   [Bullet Physics]: http://bulletphysics.org/
